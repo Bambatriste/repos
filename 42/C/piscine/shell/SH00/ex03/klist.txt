@@ -1,0 +1,5 @@
+Credentials cache: API:9D04B919-5679-4FDF-9E87-AEE85CB2FD4B
+        Principal: aedouard@42.FR
+
+  Issued                Expires               Principal
+Jul 29 16:36:53 2019  Aug  5 16:36:40 2019  krbtgt/42.FR@42.FR
