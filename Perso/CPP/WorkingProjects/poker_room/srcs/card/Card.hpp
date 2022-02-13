@@ -34,12 +34,14 @@ class Card
 	public:
 	
 		Card();
+		Card(Card const &src);
 		Card(unsigned int id, unsigned int value, unsigned int color);
 		~Card();
 		unsigned int getId(void)const;
 		unsigned int getValue(void)const;
 		unsigned int getColor(void)const;
 		bool operator==(Card const &rhs);
+
 
 	private:
 		unsigned int _id;

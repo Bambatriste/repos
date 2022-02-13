@@ -16,15 +16,16 @@ _color(color)
 {
 }
 
+Card::Card(const Card &src)
+{
+	*this = src;
+}
+
+
 Card::~Card()
 {
 }
 
-// std::ostream &operator<<(std::ostream &o, Card const &i)
-// {
-// 	o << "ID:" << i.getId() << " VALUE:" << i.getValue() << "COLOR:" << i.getColor ();
-// 	return o;
-// }
 std::ostream &operator<<(std::ostream &o, Card const &i)
 {
 	typedef struct { std::string name; unsigned int id; } t_names;

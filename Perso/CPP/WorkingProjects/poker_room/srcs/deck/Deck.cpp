@@ -22,6 +22,8 @@ std::ostream &operator<<(std::ostream &o, Deck const &instance)
 	{
 		o << "|" <<instance.getCards()[i] ;
 		i++;
+		if (i%13 == 0)
+			std::cout << std::endl;
 	}
 
 	return o;
