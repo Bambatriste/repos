@@ -7,6 +7,9 @@
 #include <stdio.h>
 
 
+#define STDIN 0
+#define STDOUT 1
+
 #define TYPE_PIPE 1
 #define TYPE_BREAK 2
 #define TYPE_END 3
@@ -113,33 +116,48 @@ char **get_args(char **av, int index, int last_index)
 	return (args);
 }
 
-// void display_args(char **args)
-// {
-// 	int i = 0;
-// 	while (args[i])
-// 	{
-// 		printf("%s", args[i]);
-// 		printf(" ");
-// 		i++;
-// 	}
-// }
+void display_args(char **args)
+{
+	int i = 0;
+	while (args[i])
+	{
+		printf("%s", args[i]);
+		printf(" ");
+		i++;
+	}
+}
 
 void	exec_cmd(t_list *cmd, char **envp)
 {
 	int pid;
 	int status;
 
-	pipe(cmd->pipe);
+
 	pid = fork();
+	pipe(cmd->pipe);
+	//cmd type == pipe : open write
+	//cmd prev == pipe : open read
 	if (pid == 0)
 	{
+		if (cmd->type == TYPE_PIPE)
+		{
+			dup2(cmd->pipe[1], STDOUT);
+		}
+		if (cmd->prev && cmd->prev->type == TYPE_PIPE)
+		{
+			dup2(cmd->prev->pipe[0], STDIN);
+		}
 		execve(cmd->args[0], cmd->args, envp);
+		printf("execve failed\n");
+		exit(1);
 	}
 	else
 	{
 		waitpid(pid, &status, 0);
+		close(cmd->pipe[1]);
+		if (cmd->prev && cmd->prev->type == TYPE_PIPE)
+			close(cmd->prev->pipe[0]);
 	}
-
 }
 
 int main(int ac, char **av, char **envp)
@@ -161,6 +179,7 @@ int main(int ac, char **av, char **envp)
 			ft_lstaddback(&cmds, new);
 			last = i + 1;
 		}
+		type = 0;
 		i++;
 	}
 	if (last != ac)
