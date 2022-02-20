@@ -4,6 +4,7 @@
 #include <sys/wait.h>
 #include <signal.h>
 #include <string.h>
+#include <stdio.h>
 
 
 #define TYPE_PIPE 1
@@ -75,7 +76,7 @@ int ft_strlen(char *str)
 	return (i);
 }
 
-char	*ft_strdup(const char *s1)
+char	*ft_strdup(char *s1)
 {
 	char	*scpy;
 	int		len;
@@ -105,11 +106,40 @@ char **get_args(char **av, int index, int last_index)
 	while (last_index < index)
 	{
 		args[i] = ft_strdup(av[last_index]);
-		index++;
+		last_index++;
 		i++;
 	}
 	args[diff] = NULL;
 	return (args);
+}
+
+// void display_args(char **args)
+// {
+// 	int i = 0;
+// 	while (args[i])
+// 	{
+// 		printf("%s", args[i]);
+// 		printf(" ");
+// 		i++;
+// 	}
+// }
+
+void	exec_cmd(t_list *cmd, char **envp)
+{
+	int pid;
+	int status;
+
+	pipe(cmd->pipe);
+	pid = fork();
+	if (pid == 0)
+	{
+		execve(cmd->args[0], cmd->args, envp);
+	}
+	else
+	{
+		waitpid(pid, &status, 0);
+	}
+
 }
 
 int main(int ac, char **av, char **envp)
@@ -129,9 +159,27 @@ int main(int ac, char **av, char **envp)
 			args = get_args(av, i, last);
 			new = ft_lstnew(type, args);
 			ft_lstaddback(&cmds, new);
-			last = i + 1; 
+			last = i + 1;
 		}
 		i++;
+	}
+	if (last != ac)
+	{
+		args = get_args(av, i, last);
+		new = ft_lstnew(TYPE_END, args);
+		ft_lstaddback(&cmds, new);
+	}
+	// while (cmds)
+	// {
+	// 	display_args(cmds->args);
+	// 	printf(" ->type : %d", cmds->type);
+	// 	printf("\n");
+	// 	cmds = cmds->next;
+	// }
+	while (cmds)
+	{
+		exec_cmd(cmds, envp);
+		cmds = cmds->next;
 	}
 	return  (0);
 }
