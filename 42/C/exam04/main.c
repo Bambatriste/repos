@@ -132,9 +132,8 @@ void	exec_cmd(t_list *cmd, char **envp)
 	int pid;
 	int status;
 
-
-	pid = fork();
 	pipe(cmd->pipe);
+	pid = fork();
 	//cmd type == pipe : open write
 	//cmd prev == pipe : open read
 	if (pid == 0)
@@ -147,6 +146,8 @@ void	exec_cmd(t_list *cmd, char **envp)
 		{
 			dup2(cmd->prev->pipe[0], STDIN);
 		}
+		close(cmd->pipe[0]);
+		close(cmd->pipe[1]);
 		execve(cmd->args[0], cmd->args, envp);
 		printf("execve failed\n");
 		exit(1);
@@ -155,8 +156,6 @@ void	exec_cmd(t_list *cmd, char **envp)
 	{
 		waitpid(pid, &status, 0);
 		close(cmd->pipe[1]);
-		if (cmd->prev && cmd->prev->type == TYPE_PIPE)
-			close(cmd->prev->pipe[0]);
 	}
 }
 
