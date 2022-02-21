@@ -16,7 +16,6 @@
 
 #define CD_BADARGS "error: cd: bad arguments\n"
 
-
 typedef struct s_list
 {
 	char **args;
@@ -27,7 +26,20 @@ typedef struct s_list
 	struct s_list *prev; 
 }	t_list;
 
-t_list *ft_lstnew(int type, char **args)
+int ft_strlen(char *str)
+{
+	int i = 0;
+	while (str[i])
+		i++;
+	return (i);
+}
+
+void	ft_putstr_fd(char *str, int fd)
+{
+	write(fd, str, ft_strlen(str));
+}
+
+t_list *ft_lstnew(int type, char **args, int lenght)
 {
 	int size;
 	t_list *list;
@@ -39,6 +51,7 @@ t_list *ft_lstnew(int type, char **args)
 	list->type = type;
 	list->pipe[0] = 0;
 	list->pipe[1] = 0;
+	list->lenght = lenght;
 	list->next = NULL;
 	list->prev = NULL;
 	return (list);
@@ -59,6 +72,25 @@ void	ft_lstaddback(t_list **list, t_list *new)
 	new->prev = last;
 }
 
+void	ft_free_lst(t_list *cmds)
+{
+	t_list *tmp;
+	int i = 0;
+	while (cmds)
+	{ 
+		tmp = cmds->next;
+		while(cmds->args[i])
+		{
+			free(cmds->args[i]);
+			i++;
+		}
+		i = 0;
+		free(cmds->args);
+		free(cmds);
+		cmds = tmp;
+	}
+}
+
 int is_sep(char *arg)
 {
 	if (strcmp(";", arg) == 0)
@@ -69,14 +101,6 @@ int is_sep(char *arg)
 	}
 	else
 		return (0);
-}
-
-int ft_strlen(char *str)
-{
-	int i = 0;
-	while (str[i])
-		i++;
-	return (i);
 }
 
 char	*ft_strdup(char *s1)
@@ -116,18 +140,7 @@ char **get_args(char **av, int index, int last_index)
 	return (args);
 }
 
-void display_args(char **args)
-{
-	int i = 0;
-	while (args[i])
-	{
-		printf("%s", args[i]);
-		printf(" ");
-		i++;
-	}
-}
-
-void	exec_cmd(t_list *cmd, char **envp)
+void	exec_cmd(t_list *cmd, char **envp, t_list *head)
 {
 	int pid;
 	int status;
@@ -150,12 +163,41 @@ void	exec_cmd(t_list *cmd, char **envp)
 		close(cmd->pipe[1]);
 		execve(cmd->args[0], cmd->args, envp);
 		printf("execve failed\n");
+		ft_free_lst(head);
 		exit(1);
 	}
 	else
 	{
 		waitpid(pid, &status, 0);
 		close(cmd->pipe[1]);
+		if (cmd->prev && cmd->prev->type == TYPE_PIPE)
+			close(cmd->prev->pipe[0]);
+		if(cmd->type == TYPE_END || cmd->type == TYPE_BREAK)
+			close(cmd->pipe[0]);
+	}
+}
+
+void exec_all(t_list *cmds, char **envp)
+{
+	t_list *head = cmds;
+	while (cmds)
+	{
+		if (strcmp("cd", cmds->args[0]) == 0)
+		{
+			if (cmds->lenght != 2)
+			{
+				ft_putstr_fd("error: cd: bad arguments\n", 2);
+			}
+			else if (chdir(cmds->args[1]))
+			{
+				ft_putstr_fd("error: cd: cannot change directory to ", 2);
+				ft_putstr_fd(cmds->args[1], 2);
+				ft_putstr_fd("\n", 2);
+			}
+		}
+		else
+			exec_cmd(cmds, envp, head);
+		cmds = cmds->next;
 	}
 }
 
@@ -174,7 +216,7 @@ int main(int ac, char **av, char **envp)
 		if (type)
 		{
 			args = get_args(av, i, last);
-			new = ft_lstnew(type, args);
+			new = ft_lstnew(type, args, i - last);
 			ft_lstaddback(&cmds, new);
 			last = i + 1;
 		}
@@ -184,20 +226,10 @@ int main(int ac, char **av, char **envp)
 	if (last != ac)
 	{
 		args = get_args(av, i, last);
-		new = ft_lstnew(TYPE_END, args);
+		new = ft_lstnew(TYPE_END, args, i - last);
 		ft_lstaddback(&cmds, new);
 	}
-	// while (cmds)
-	// {
-	// 	display_args(cmds->args);
-	// 	printf(" ->type : %d", cmds->type);
-	// 	printf("\n");
-	// 	cmds = cmds->next;
-	// }
-	while (cmds)
-	{
-		exec_cmd(cmds, envp);
-		cmds = cmds->next;
-	}
+	exec_all(cmds, envp);
+	ft_free_lst(cmds);
 	return  (0);
 }
