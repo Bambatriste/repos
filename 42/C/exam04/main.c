@@ -2,19 +2,13 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <signal.h>
 #include <string.h>
-#include <stdio.h>
-
 
 #define STDIN 0
 #define STDOUT 1
-
 #define TYPE_PIPE 1
 #define TYPE_BREAK 2
 #define TYPE_END 3
-
-#define CD_BADARGS "error: cd: bad arguments\n"
 
 typedef struct s_list
 {
@@ -147,8 +141,6 @@ void	exec_cmd(t_list *cmd, char **envp, t_list *head)
 
 	pipe(cmd->pipe);
 	pid = fork();
-	//cmd type == pipe : open write
-	//cmd prev == pipe : open read
 	if (pid == 0)
 	{
 		if (cmd->type == TYPE_PIPE)
@@ -162,9 +154,11 @@ void	exec_cmd(t_list *cmd, char **envp, t_list *head)
 		close(cmd->pipe[0]);
 		close(cmd->pipe[1]);
 		execve(cmd->args[0], cmd->args, envp);
-		printf("execve failed\n");
+		ft_putstr_fd("error: cannot execute ", 2);
+		ft_putstr_fd(cmd->args[0], 2);
+		ft_putstr_fd("\n", 2);
 		ft_free_lst(head);
-		exit(1);
+		exit(2);
 	}
 	else
 	{
