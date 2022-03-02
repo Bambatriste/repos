@@ -1,15 +1,18 @@
 
+
+#include "Stack.hpp"
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
 
 Stack::Stack()
 {
+	this->value = 0;
 }
 
-Stack::Stack(const Stack&src)
+Stack::Stack(int value)
 {
-	*this = src;
+	this->value = value;
 }
 
 
@@ -26,19 +29,32 @@ Stack::~Stack()
 ** --------------------------------- OVERLOAD ---------------------------------
 */
 
-Stack	&Stack::operator=(Stack const &rhs)
+std::ostream &operator<<(std::ostream &o, Stack const &instance)
 {
-	return *this;
+	o << instance.value;
+	return (o);
 }
 
 /*
 ** --------------------------------- METHODS ----------------------------------
 */
 
+void	Stack::receive(int value)
+{
+	this->value = this->value + value;
+}
+
+void	Stack::remove(int value)
+{
+	this->value = this->value - value;
+}
+
 
 /*
 ** --------------------------------- ACCESSOR ---------------------------------
 */
+
+
 
 
 /* ************************************************************************** */

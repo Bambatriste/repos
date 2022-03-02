@@ -8,11 +8,15 @@ class Stack
 {
 	public:
 		Stack();
-		Stack(Stack const &src);
+		Stack(int value);
 		~Stack();
-		Stack &operator=(Stack const &rhs);
-	private:
+		int value;
+		double chips_amount;
+		void remove(int value);
+		void receive(int value);
 };
+
+std::ostream &operator<<(std::ostream &o, Stack const &instance);
 
 
 #endif /* ************************************************************* STACK_HPP */

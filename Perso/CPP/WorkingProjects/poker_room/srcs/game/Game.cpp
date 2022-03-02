@@ -1,4 +1,6 @@
 
+
+#include "Game.hpp"
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
@@ -6,12 +8,6 @@
 Game::Game()
 {
 }
-
-Game::Game(const Game&src)
-{
-	*this = src;
-}
-
 
 /*
 ** -------------------------------- DESTRUCTOR --------------------------------
@@ -21,14 +17,14 @@ Game::~Game()
 {
 }
 
-
 /*
 ** --------------------------------- OVERLOAD ---------------------------------
 */
 
-Game	&Game::operator=(Game const &rhs)
+std::ostream &operator<<(std::ostream &o, Game const &instance)
 {
-	return *this;
+	// o << instance.value;
+	// return (o);
 }
 
 /*

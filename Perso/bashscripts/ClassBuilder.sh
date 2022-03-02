@@ -39,7 +39,7 @@ std::ostream &operator<<(std::ostream &o, $st1 const &instance);
 
 echo "
 
-#include "$hpp_name"
+#include \"$hpp_name\"
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
@@ -72,6 +72,11 @@ $st1	&$st1::operator=($st1 const &rhs)
 	return *this;
 }
 
+std::ostream &operator<<(std::ostream &o, $st1 const &instance)
+{
+	//o << instance.value;
+	//return (o);
+}
 /*
 ** --------------------------------- METHODS ----------------------------------
 */

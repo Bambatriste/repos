@@ -1,17 +1,27 @@
 
+
+#include "Player.hpp"
+
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
 
 Player::Player()
+:
+Stack(0),
+Hand(),
+name("default")
 {
 }
 
-Player::Player(const Player&src)
+Player::Player(int chips_value, std::string name)
+:
+Stack(chips_value),
+Hand()
 {
-	*this = src;
-}
+	this->name = name;
 
+}
 
 /*
 ** -------------------------------- DESTRUCTOR --------------------------------
@@ -21,14 +31,13 @@ Player::~Player()
 {
 }
 
-
 /*
 ** --------------------------------- OVERLOAD ---------------------------------
 */
-
-Player	&Player::operator=(Player const &rhs)
+std::ostream &operator<<(std::ostream &o, Player const &instance)
 {
-	return *this;
+	o << instance.name << instance.Stack << instance.Hand;
+	return o;
 }
 
 /*

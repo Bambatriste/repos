@@ -4,7 +4,9 @@ SRCS = srcs/main.cpp\
 		srcs/card/Card.cpp\
 		srcs/deck/Deck.cpp\
 		srcs/board/board.cpp\
-		srcs/hand/Hand.cpp
+		srcs/hand/Hand.cpp\
+		srcs/stack/Stack.cpp\
+		srcs/player/Player.cpp\
 
 
 CC = clang++

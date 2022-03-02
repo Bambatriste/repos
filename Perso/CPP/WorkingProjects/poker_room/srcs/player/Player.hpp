@@ -4,15 +4,21 @@
 # include <iostream>
 # include <string>
 
+#include "../bot.hpp"
+
 class Player
 {
 	public:
 		Player();
-		Player(Player const &src);
+		Player(int chips_value, std::string name);
 		~Player();
-		Player &operator=(Player const &rhs);
-	private:
+		Stack Stack;
+		Hand Hand;
+		//int timer;
+		std::string name;
 };
+
+std::ostream &operator<<(std::ostream &o, Player const &instance);
 
 
 #endif /* ************************************************************* PLAYER_HPP */
