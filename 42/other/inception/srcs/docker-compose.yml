@@ -1,20 +1,28 @@
 version: "2.2"
 services:
+  MariaDB:
+    image: "mariadb"
+    container_name: db_inception
+    networks:
+      - back-end
+  wordpress:
+    image: "wordpress"
+    container_name: wordpress_inception
+    networks:
+      - front-end
+      - back-end
+    depends_on:
+      - MariaDB
   nginx:
-    image: "nginx"
+    build: ./requierements/nginx
+    #image: "nginx"
+    container_name: nginx_inception
     ports:
       - "5000:80"
     networks:
       - front-end
-  wordpress:
-    image: "wordpress"
-    networks:
-      - front-end
-      - back-end
-  MariaDB:
-    image: "mariadb"
-    networks:
-      - back-end
+    depends_on:
+      - wordpress
 networks:
   front-end:
   back-end:
