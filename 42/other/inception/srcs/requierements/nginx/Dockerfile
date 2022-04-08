@@ -1,5 +1,11 @@
 FROM debian:buster
 
-RUN apt-get update && apt-get upgrade;apt-get install nginx -y;
+RUN apt-get update -y
 
-CMD nginx -g 'daemon off';
+RUN apt-get upgrade -y
+
+RUN apt-get install nginx -y
+
+COPY nginx.conf ./etc/nginx/nginx.conf
+
+CMD nginx -g 'daemon off;'
