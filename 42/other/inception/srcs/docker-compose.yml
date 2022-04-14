@@ -1,18 +1,31 @@
 version: "2.2"
 services:
-  MariaDB:
-    image: "mariadb"
+  mariadb:
+    build: ./requierements/mariadb
+    ports:
+      - "3306:3306"
     container_name: db_inception
     networks:
       - back-end
+    env_file:
+      - .env
+    #volumes: /home/aedouard/data/database:/var/lib/mysql
+    restart: always
   wordpress:
-    image: "wordpress"
+    #image: "wordpress"
+    build: ./requierements/wordpress
+    ports:
+      - "9000:9000"
     container_name: wordpress_inception
     networks:
       - front-end
       - back-end
     depends_on:
-      - MariaDB
+      - mariadb
+    env_file:
+      - .env
+    #volumes: /home/aedouard/data/wordpress:/var/www/html
+    restart: always
   nginx:
     build: ./requierements/nginx
     container_name: nginx_inception
@@ -22,6 +35,8 @@ services:
       - front-end
     depends_on:
       - wordpress
+    #volumes: /home/aedouard/data/wordpress:/var/www/html
+    restart: always
 networks:
   front-end:
   back-end:
