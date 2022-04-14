@@ -9,14 +9,13 @@ services:
       - back-end
     env_file:
       - .env
-    #volumes:
-    #  - /home/aedouard/data/database:/var/lib/mysql
+    volumes:
+      - /home/aedouard/data/database:/var/lib/mysql
     restart: always
   wordpress:
-    #image: "wordpress"
     build: ./requierements/wordpress
-    #ports:
-    #  - "9000:9000"
+    ports:
+      - "9000:9000"
     container_name: wordpress_inception
     networks:
       - front-end
@@ -25,8 +24,8 @@ services:
       - mariadb
     env_file:
       - .env
-    #volumes:
-      #- /home/aedouard/data/wordpress:/var/www/html
+    volumes:
+      - /home/aedouard/data/wordpress:/var/www/html
     restart: always
   nginx:
     build: ./requierements/nginx
@@ -37,8 +36,8 @@ services:
       - front-end
     depends_on:
       - wordpress
-    #volumes:
-      #- /home/aedouard/data/wordpress:/var/www/html
+    volumes:
+      - /home/aedouard/data/wordpress:/var/www/html
     restart: always
 networks:
   front-end:
