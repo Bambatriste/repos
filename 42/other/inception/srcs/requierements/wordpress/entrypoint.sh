@@ -6,3 +6,7 @@ until mysqladmin -hmariadb -u${SQL_ROOT_USER} -p${SQL_ROOT_PWD} ping && mariadb 
 done
 echo "SQL ADMIN REACHED"
 wp core install --url="aedouard.42.fr" --allow-root
+
+php-fpm -F -R
+root
+
