@@ -6,8 +6,9 @@ RUN apt-get update -y;\
 
 RUN mysql_install_db;
 
-#ENTRYPOINT ["bash", "/entrypoint.sh"]
-    #/usr/bin/mysql_secure_installation;\
-    #/usr/bin/mysqld_safe --datadir='/var/lib/mysql';
-    #/etc/mysql/mariadb.conf.d/50-server.cnf
+COPY entrypoint.sh /
+
+COPY 50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
+
+ENTRYPOINT ["bash", "/entrypoint.sh"]
 
