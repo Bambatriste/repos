@@ -2,11 +2,13 @@ FROM debian:buster
 
 RUN apt-get update -y > /dev/null;\
     apt-get upgrade -y > /dev/null;\
-    apt-get install -y mariadb-server > /dev/null;\
-    apt-get install -y mariadb-client > /dev/null;
+    apt-get install -y mariadb-server \
+	procps \
+	mariadb-client > /dev/null;\
+    chmod 777 /var/lib/mysql;
 
 RUN mkdir -p /var/run/mysqld/
-run mkdir -p /run/mysqld/ && chown -R mysql:root /run/mysqld
+RUN mkdir -p /run/mysqld/ && chown -R mysql:root /run/mysqld
 
 COPY entrypoint.sh /
 

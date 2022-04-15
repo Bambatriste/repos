@@ -11,7 +11,7 @@ services:
       - .env
     volumes:
       - /home/aedouard/data/database:/var/lib/mysql
-    restart: always
+    #restart: always
   wordpress:
     build: ./requierements/wordpress
     ports:

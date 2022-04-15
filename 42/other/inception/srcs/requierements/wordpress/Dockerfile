@@ -1,7 +1,7 @@
 FROM debian:buster
 
-RUN apt-get update -y;\
-    apt-get install -y vim php-fpm mariadb-client php-mysql curl;
+RUN apt-get update -y > /dev/null;\
+    apt-get install -y vim php-fpm mariadb-client php-mysql curl > /dev/null;
 
 COPY ./www.conf /etc/php/7.3/fpm/pool.d/
 
