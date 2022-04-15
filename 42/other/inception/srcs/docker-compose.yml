@@ -6,7 +6,7 @@ services:
       - "3306:3306"
     container_name: db_inception
     networks:
-      - back-end
+      - internal
     env_file:
       - .env
     volumes:
@@ -18,8 +18,7 @@ services:
       - "9000:9000"
     container_name: wordpress_inception
     networks:
-      - front-end
-      - back-end
+      - internal
     depends_on:
       - mariadb
     env_file:
@@ -33,12 +32,12 @@ services:
     ports:
       - "443:443"
     networks:
-      - front-end
+      - internal
     depends_on:
       - wordpress
     volumes:
       - /home/aedouard/data/wordpress:/var/www/html
     restart: always
 networks:
-  front-end:
-  back-end:
+  internal:
+    driver : brige
