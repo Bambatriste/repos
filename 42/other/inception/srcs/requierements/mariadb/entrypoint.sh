@@ -1,4 +1,9 @@
-mysql_install_db;
+
+if ! cat /var/lib/mysql/.mariadb_installed 2 > dev/null; then
+  mysql_install_db;
+  touch /var/lib/mysql/.mariadb_installed;
+fi
+
 mysqld_safe&
 
 until mysqladmin ping;
@@ -9,27 +14,16 @@ done
 
 cd /root/
 
-export SQL_ROOT_USER=aedouard;
-export SQL_ROOT_PWD=nelito444^^;
-export SQL_BASIC_USER=basic_user;
-export SQL_BASIC_PWD=bonjour1234;
-export SQL_DB=wordpress;
+#export SQL_ROOT_USER=aedouard;
+#export SQL_ROOT_PWD=nelito444^^;
+#export SQL_BASIC_USER=basic_user;
+#export SQL_BASIC_PWD=bonjour1234;
+#export SQL_DB=wordpress;
 
-mariadb -e "CREATE USER '$SQL_ROOT_USER'@'%' IDENTIFIED BY '$SQL_ROOT_PWD'"
-mariadb -e "GRANT ALL PRIVILEGES ON * . * TO '$SQL_ROOT_USER'@'%'"
-mariadb -e "FLUSH PRIVILEGES"
-mariadb -e "CREATE DATABASE IF NOT EXISTS $SQL_DB"
+if ! cat /var/lib/mysql/.mariadb_configured 2 > dev/null;then
+  mariadb -u root < /tmp/sql_config.sql;
+  touch /var/lib/mysql/.mariadb_configured;
+fi
 
-## CREE UN USER PAS ADMIN */
-
-mariadb -e "CREATE USER '$SQL_BASIC_USER'@'mariadb'"
-mariadb -e "GRANT ALL PRIVILEGES ON $SQL_DB . * TO '$SQL_BASIC_USER'@'mariadb'"
-mariadb -e "FLUSH PRIVILEGES"
-
-## SUPPRIME LA CO ROOT
-mariadb -e "DELETE FROM mysql.user WHERE user=''"
-mariadb -e "DELETE FROM mysql.user WHERE user='root'"
-mariadb -e "FLUSH PRIVILEGES"
-
-mysalqdmin shutdown;
+mysqladmin shutdown;
 mysqld_safe;
