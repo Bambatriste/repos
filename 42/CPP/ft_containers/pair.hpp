@@ -28,15 +28,15 @@ namespace ft
 			return *this;
 		};
 
-		bool operator==( const std::pair<T1,T2>& lhs, const std::pair<T1,T2>& rhs )
+		bool operator==( const pair<T1,T2>& lhs, const pair<T1,T2>& rhs )
 		{
 			return(lhs.first == rhs.first && lhs.second == rhs.second);
 		};
-		bool operator!=( const std::pair<T1,T2>& lhs, const std::pair<T1,T2>& rhs )
+		bool operator!=( const pair<T1,T2>& lhs, const pair<T1,T2>& rhs )
 		{
 			return (!(lhs == rhs));
 		};
-		bool operator<( const std::pair<T1,T2>& lhs, const std::pair<T1,T2>& rhs )
+		bool operator<( const pair<T1,T2>& lhs, const pair<T1,T2>& rhs )
 		{
 			if (lhs.first < rhs.first)
 				return true;
@@ -48,23 +48,30 @@ namespace ft
 				else
 					return false;
 		};
-		bool operator<=( const std::pair<T1,T2>& lhs, const std::pair<T1,T2>& rhs )
+		bool operator<=( const pair<T1,T2>& lhs, const pair<T1,T2>& rhs )
 		{
 			return (!(rhs < lhs );
 		};
-		bool operator>( const std::pair<T1,T2>& lhs, const std::pair<T1,T2>& rhs )
+		bool operator>( const pair<T1,T2>& lhs, const pair<T1,T2>& rhs )
 		{
 			return (rhs < lhs);
 		};
-		bool operator>=( const std::pair<T1,T2>& lhs, const std::pair<T1,T2>& rhs )
+		bool operator>=( const pair<T1,T2>& lhs, const pair<T1,T2>& rhs )
 		{
 			return (!(lhs < rhs));
 		};
 	};
+
+	template< class T1, class T2 >
+	pair<T1,T2> make_pair( T1 t, T2 u )
+	{
+		return (pair<T1, T2>(t, u));
+	};
 	
 }
 
-//std::ostream &operator<<(std::ostream &o, ft::pair const &instance);
+
+
 
 
 #endif /* ************************************************************* PAIR_HPP */
