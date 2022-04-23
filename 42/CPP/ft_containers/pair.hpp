@@ -15,11 +15,10 @@ namespace ft
 		T1 first;
 		T2 second;
 
-
-		pair(): first(), second();
-		pair( const T1 &x, const T2 &y ):first(x), second(y);
+		pair():first(first_type()), second(second_type()){};
+		pair( const T1 &x, const T2 &y ):first(x), second(y){};
 		template< class U1, class U2 >
-		pair( const pair<U1, U2>& p ):first(p.first), second(p.second);
+		pair( const pair<U1, U2>& p ):first(p.first), second(p.second){};
 	
 		pair& operator=( const pair& other )
 		{
@@ -28,35 +27,34 @@ namespace ft
 			return *this;
 		};
 
-		bool operator==( const pair<T1,T2>& lhs, const pair<T1,T2>& rhs )
+		friend bool operator==( const pair<T1,T2>& lhs, const pair<T1,T2>& rhs )
 		{
 			return(lhs.first == rhs.first && lhs.second == rhs.second);
 		};
-		bool operator!=( const pair<T1,T2>& lhs, const pair<T1,T2>& rhs )
+		friend bool operator!=( const pair<T1,T2>& lhs, const pair<T1,T2>& rhs )
 		{
 			return (!(lhs == rhs));
 		};
-		bool operator<( const pair<T1,T2>& lhs, const pair<T1,T2>& rhs )
+		friend bool operator<( const pair<T1,T2>& lhs, const pair<T1,T2>& rhs )
 		{
 			if (lhs.first < rhs.first)
 				return true;
-			else if lhs.first > rhs.first
+			else if (lhs.first > rhs.first)
 				return false;
+			else if (lhs.second < rhs.second)
+				return true;
 			else
-				if (lhs.second < rhs.second)
-					return true;
-				else
-					return false;
+				return false;
 		};
-		bool operator<=( const pair<T1,T2>& lhs, const pair<T1,T2>& rhs )
+		friend bool operator<=( const pair<T1,T2>& lhs, const pair<T1,T2>& rhs )
 		{
-			return (!(rhs < lhs );
+			return (!(rhs < lhs ));
 		};
-		bool operator>( const pair<T1,T2>& lhs, const pair<T1,T2>& rhs )
+		friend bool operator>( const pair<T1,T2>& lhs, const pair<T1,T2>& rhs )
 		{
 			return (rhs < lhs);
 		};
-		bool operator>=( const pair<T1,T2>& lhs, const pair<T1,T2>& rhs )
+		friend bool operator>=( const pair<T1,T2>& lhs, const pair<T1,T2>& rhs )
 		{
 			return (!(lhs < rhs));
 		};
@@ -67,11 +65,7 @@ namespace ft
 	{
 		return (pair<T1, T2>(t, u));
 	};
-	
 }
-
-
-
 
 
 #endif /* ************************************************************* PAIR_HPP */

@@ -1,6 +1,6 @@
 NAME = containers
 
-SRCS = main.cpp\
+SRCS = m.cpp
 
 CC = c++
 
