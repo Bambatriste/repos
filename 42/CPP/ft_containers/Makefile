@@ -2,7 +2,7 @@ NAME = containers
 
 SRCS = m.cpp
 
-CC = c++
+CC = clang++
 
 OBJS = ${SRCS:.cpp=.o}
 
