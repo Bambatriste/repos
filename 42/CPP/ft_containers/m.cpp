@@ -3,9 +3,14 @@
 #include "enable_if.hpp"
 #include "iterators_traits.hpp"
 #include "reverse_iterator.hpp"
+#include "lexicographical_compare.hpp"
+
+
 #include <utility>
 #include <string>
 #include <iostream>
+
+
 
 int main(int ac, char **av)
 {
@@ -14,95 +19,108 @@ int main(int ac, char **av)
 
 	//default constructor
 
-	std::pair<int, std::string>p1;
-	ft::pair<int , std::string>p2;
+	/*********************************** PAIR TESTS **********************************/
 
-	std::cout << p1.first << std::endl;
-	std::cout << p1.second << std::endl;
+	// std::pair<int, std::string>p1;
+	// ft::pair<int , std::string>p2;
 
-	std::cout << p2.first << std::endl;
-	std::cout << p2.second << std::endl;
+	// std::cout << p1.first << std::endl;
+	// std::cout << p1.second << std::endl;
 
-	// assignation constructor
+	// std::cout << p2.first << std::endl;
+	// std::cout << p2.second << std::endl;
 
-	std::pair <int , std::string>p3(42,"abc");
+	// // assignation constructor
 
-	std::cout << p3.first << std::endl;
-	std::cout << p3.second << std::endl;
+	// std::pair <int , std::string>p3(42,"abc");
 
-	ft::pair <int, std::string>p4(42, "abc");
+	// std::cout << p3.first << std::endl;
+	// std::cout << p3.second << std::endl;
 
-	std::cout << p4.first << std::endl;
-	std::cout << p4.second << std::endl;
+	// ft::pair <int, std::string>p4(42, "abc");
 
-	// copy constructor
+	// std::cout << p4.first << std::endl;
+	// std::cout << p4.second << std::endl;
 
-	std::pair <int , std::string>p6(p3);
+	// // copy constructor
 
-	std::cout << p6.first << std::endl;
-	std::cout << p6.second << std::endl;
+	// std::pair <int , std::string>p6(p3);
 
-	ft::pair <int , std::string>p7(p4);
+	// std::cout << p6.first << std::endl;
+	// std::cout << p6.second << std::endl;
 
-	std::cout << p7.first << std::endl;
-	std::cout << p7.second << std::endl;
+	// ft::pair <int , std::string>p7(p4);
 
-	// operator=
+	// std::cout << p7.first << std::endl;
+	// std::cout << p7.second << std::endl;
 
-	p6=p1;
+	// // operator=
 
-	std::cout << p6.first << std::endl;
-	std::cout << p6.second << std::endl;
+	// p6=p1;
 
-	p7 = p2;
+	// std::cout << p6.first << std::endl;
+	// std::cout << p6.second << std::endl;
 
-	std::cout << p7.first << std::endl;
-	std::cout << p7.second << std::endl;
+	// p7 = p2;
 
-	//comparison operators :
+	// std::cout << p7.first << std::endl;
+	// std::cout << p7.second << std::endl;
 
-	// ==
+	// //comparison operators :
 
-	std::cout << (p2 ==p7) << std::endl;
-	//p7.first = 2;
-	//p7.second = 33;
-	std::cout << (p2 ==p7) << std::endl;
+	// // ==
 
-	// !=
+	// std::cout << (p2 ==p7) << std::endl;
+	// //p7.first = 2;
+	// //p7.second = 33;
+	// std::cout << (p2 ==p7) << std::endl;
 
-	std::cout << (p2 !=p7) << std::endl;
-	//p7.first = 2;
-	//p7.second = 33;
-	std::cout << (p2 !=p7) << std::endl;
+	// // !=
 
-
-
-	p2.first = 0;
-	p7.first = 0;
-	p2.second = "abc";
-	p7.second = "abc";
-
-	std::cout << "== :" << (p2 == p7) << std::endl;
-	std::cout << "!= :" << (p2 != p7) << std::endl;
-	std::cout << "< :" << (p2 <p7) << std::endl;
-	std::cout << "<= :" << (p2 <=p7) << std::endl;
-	std::cout << "> :" << (p2 >p7) << std::endl;
-	std::cout << ">= :" << (p2 >=p7) << std::endl;
+	// std::cout << (p2 !=p7) << std::endl;
+	// //p7.first = 2;
+	// //p7.second = 33;
+	// std::cout << (p2 !=p7) << std::endl;
 
 
-	std::pair<int, int> p9 = std::make_pair(12,13);
 
-	std::cout << p9.first << std::endl;
-	std::cout << p9.second << std::endl;
+	// p2.first = 0;
+	// p7.first = 0;
+	// p2.second = "abc";
+	// p7.second = "abc";
+
+	// std::cout << "== :" << (p2 == p7) << std::endl;
+	// std::cout << "!= :" << (p2 != p7) << std::endl;
+	// std::cout << "< :" << (p2 <p7) << std::endl;
+	// std::cout << "<= :" << (p2 <=p7) << std::endl;
+	// std::cout << "> :" << (p2 >p7) << std::endl;
+	// std::cout << ">= :" << (p2 >=p7) << std::endl;
 
 
-	ft::pair<int, int> p10 = ft::make_pair(12,13);
+	// std::pair<int, int> p9 = std::make_pair(12,13);
 
-	std::cout << p10.first << std::endl;
-	std::cout << p10.second << std::endl;
+	// std::cout << p9.first << std::endl;
+	// std::cout << p9.second << std::endl;
 
 
-	
+	// ft::pair<int, int> p10 = ft::make_pair(12,13);
+
+	// std::cout << p10.first << std::endl;
+	// std::cout << p10.second << std::endl;
+
+
+	/*********************************** IS INTEGRAL TESTS **********************************/
+
+	std::cout << std::boolalpha;
+ 	std::cout << "char: " << ft::is_integral<char>::value << std::endl;
+	std::cout << "int: " << ft::is_integral<int>::value << std::endl;
+	std::cout << "float: " << ft::is_integral<float>::value << std::endl;
+	std::cout << "long int: " << ft::is_integral<long int>::value << std::endl;
+
+	/*********************************** ENABLE_IF TESTS **********************************/
+
+
+
 
 
 
