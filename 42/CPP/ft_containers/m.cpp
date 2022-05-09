@@ -4,11 +4,13 @@
 #include "iterators_traits.hpp"
 #include "reverse_iterator.hpp"
 #include "lexicographical_compare.hpp"
+#include "vector.hpp"
 
 
 #include <utility>
 #include <string>
 #include <iostream>
+#include <vector>
 
 
 
@@ -118,6 +120,19 @@ int main(int ac, char **av)
 	std::cout << "long int: " << ft::is_integral<long int>::value << std::endl;
 
 	/*********************************** ENABLE_IF TESTS **********************************/
+	
+
+	/*********************************** VECTOR TESTS *************************************/
+
+	const std::allocator<int> allocator_int;
+
+	std::vector<int> std_default_int_construct;
+	ft::vector<int> ft_default_int_construct;
+
+	std::vector<int> std_alloc1(allocator_int);
+	ft::vector<int> ft_alloc1(allocator_int);
+
+
 
 
 
