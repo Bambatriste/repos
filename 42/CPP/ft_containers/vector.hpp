@@ -31,7 +31,7 @@ namespace ft
 		Allocator	_allocator;
 		pointer		_start;
 		pointer		_end;
-
+		pointer		_capacity;
 
 		public :
 
@@ -40,31 +40,76 @@ namespace ft
 		:
 		_allocator(),
 		_start(_allocator.allocate(0)),
-		_end(_start)
-		//_end_capacity(_end)
+		_end(_start),
+		_capacity(_end)
 		{}
 		explicit vector( const Allocator& alloc )
 		:
 		_allocator(alloc),
 		_start(_allocator.allocate(0)),
-		_end(_start)
+		_end(_start),
+		_capacity(_end)
 		{}
-		explicit vector( size_type count, const T& value = T(), const Allocator& alloc = Allocator())
-		:
-		_allocator(alloc)
-		{
-			for (size_type i = 0, i < count, i++;)
-			{
+		// explicit vector( size_type count, const T& value = T(), const Allocator& alloc = Allocator())
+		// :
+		// _allocator(alloc)
+		// {
 
+		// }
+
+		//functions
+
+
+		/* capacity functions*/
+
+		size_type size() const
+		{
+			return (_end - _start);
+		}
+		size_type max_size() const
+		{
+			return (_allocator.max_size());
+		}
+		size_type capacity() const
+		{
+			return (_capacity);
+		}
+
+		void reserve( size_type new_cap )
+		{
+			if (new_cap >= max_size())
+				throw std::length_error("vector::reserve");
+			if (new_cap > capacity())
+			{
+				pointer new_start;
+				size_type old_size = size();
+
+				new_start = _allocator.allocate(new_cap);
+				for (int i =0; i++; i < size())
+				{
+					_allocator.construct(new_start + i, _start[i]);
+					_allocator.destroy(_start + i));
+				}
+				_allocator.deallocate(_start, capacity());
+				_start = new_start;
+				_end = _start + old_size;
+				_capacity = new_cap;
 			}
 		}
 
-		//functions
-		void assign( size_type count, const T& value )
+		//modifiers
+
+		// iterator insert( iterator pos, const T& value )
+		// {
+
+		// }
+
+		void push_back( const T& value )
 		{
 
 		}
 
+		void pop_back();
 
 	};
 
