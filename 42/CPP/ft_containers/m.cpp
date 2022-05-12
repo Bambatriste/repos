@@ -13,6 +13,16 @@
 #include <vector>
 
 
+template<class T>
+void display_vector(ft::vector<T> vector)
+{
+	std::cout << std::endl;
+	std::cout << "vector display" << std::endl;
+	for (unsigned int i = 0; i < vector.size(); i++)
+	{std::cout << vector[i] << std::endl;}
+}
+
+
 
 int main(int ac, char **av)
 {
@@ -124,6 +134,7 @@ int main(int ac, char **av)
 
 	/*********************************** VECTOR TESTS *************************************/
 
+
 	const std::allocator<int> allocator_int;
 
 	std::vector<int> std_default_int_construct;
@@ -131,6 +142,34 @@ int main(int ac, char **av)
 
 	std::vector<int> std_alloc1(allocator_int);
 	ft::vector<int> ft_alloc1(allocator_int);
+
+	ft_alloc1.push_back(100);
+	std::cout << ft_alloc1.back();
+	ft_alloc1.push_back(42);
+	std::cout << ft_alloc1.back();
+	ft_alloc1.pop_back();
+	std::cout << ft_alloc1.back();
+	std::cout << ft_alloc1.size();
+	std::cout << ft_alloc1.capacity();
+	display_vector(ft_alloc1);
+	ft_alloc1.reserve(99);
+	display_vector(ft_alloc1);
+	// std::cout << ft_alloc1.size();
+	// std::cout << ft_alloc1.capacity();
+	ft_alloc1.push_back(43);
+	ft_alloc1.push_back(44);
+	ft_alloc1.push_back(45);
+	ft_alloc1.push_back(46);
+	ft_alloc1.push_back(47);
+	ft_alloc1.push_back(48);
+	display_vector(ft_alloc1);
+	int pouet = 36;
+	ft_alloc1.insert(ft_alloc1.begin(), pouet);
+	display_vector(ft_alloc1);
+
+
+
+
 
 
 

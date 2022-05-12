@@ -31,7 +31,7 @@ namespace ft
 		Allocator	_allocator;
 		pointer		_start;
 		pointer		_end;
-		pointer		_capacity;
+		size_t		_capacity;
 
 		public :
 
@@ -41,14 +41,14 @@ namespace ft
 		_allocator(),
 		_start(_allocator.allocate(0)),
 		_end(_start),
-		_capacity(_end)
+		_capacity(0)
 		{}
 		explicit vector( const Allocator& alloc )
 		:
 		_allocator(alloc),
 		_start(_allocator.allocate(0)),
 		_end(_start),
-		_capacity(_end)
+		_capacity(0)
 		{}
 		// explicit vector( size_type count, const T& value = T(), const Allocator& alloc = Allocator())
 		// :
@@ -63,17 +63,16 @@ namespace ft
 		/* capacity functions*/
 
 		size_type size() const
-		{
-			return (_end - _start);
-		}
+		{return (_end - _start);}
+
 		size_type max_size() const
-		{
-			return (_allocator.max_size());
-		}
+		{return (_allocator.max_size());}
+
 		size_type capacity() const
-		{
-			return (_capacity);
-		}
+		{return (_capacity);}
+
+		bool empty() const
+		{return (_start == _end);}
 
 		void reserve( size_type new_cap )
 		{
@@ -85,10 +84,10 @@ namespace ft
 				size_type old_size = size();
 
 				new_start = _allocator.allocate(new_cap);
-				for (int i =0; i++; i < size())
+				for (size_type i =0; i < size(); i++)
 				{
 					_allocator.construct(new_start + i, _start[i]);
-					_allocator.destroy(_start + i));
+					_allocator.destroy(_start + i);
 				}
 				_allocator.deallocate(_start, capacity());
 				_start = new_start;
@@ -97,21 +96,135 @@ namespace ft
 			}
 		}
 
-		//modifiers
 
-		// iterator insert( iterator pos, const T& value )
-		// {
-
-		// }
+		/* MODIFIERS */
 
 		void push_back( const T& value )
 		{
-
+			T vcpy = value; // just in case reserve destroys it
+			if ( size() + 1 > capacity())
+			{
+				if (size() == 0)
+					reserve(1);
+				else
+					reserve(2 * capacity());
+			}
+			_allocator.construct(_end, vcpy);
+			_end++;
 		}
 
-		void pop_back();
+		void pop_back()
+		{
+			_allocator.destroy(_end - 1);
+			_end--;
+		}
 
+		void clear()
+		{
+			for (size_type i; i < size(); i++)
+			{
+				_allocator.destroy(_start + i);
+			}
+			_end = _start;
+		}
+
+		iterator insert( iterator pos, const T& value )
+		{
+			if ( size() + 1 > capacity())
+			{
+				if (size() == 0)
+					reserve(1);
+				else
+					reserve(2 * capacity());
+			}
+			if (pos == _end)
+			{
+				_allocator.construct(_end, value);
+				_end++;
+			}
+			else
+			{
+				size_type index = _end - pos;
+				for (iterator it = _start + size() + 1 - 1; it >= _start + index; it--)
+				{
+					*it = *(it - 1);
+					//_allocator.construct(it, it--);
+				}
+				_end++;
+				return (pos);
+				// on doit tout deplacer de 1 offset a droite
+				// l espace est forcement disponible grace a reserve mais end n as pas bouge
+				// end++;
+				// tant que i < end - pos i++; -> 
+				// et inserer la value a pos
+
+			}
+			return (pos);
+		}
+
+		// void insert( iterator pos, size_type count, const T& value );
+
+		// template< class InputIt >
+		// void insert( iterator pos, InputIt first, InputIt last );
+
+		/* ELEMENT ACCES*/
+
+		reference back()
+		{return (*(_end - 1));}
+
+		reference operator[]( size_type pos )
+		{return _start[pos];}
+
+		const_reference operator[]( size_type pos ) const
+		{return _start[pos];}
+
+		reference at( size_type pos )
+		{
+			if (!(pos < size()))
+				throw (std::out_of_range("ft::vector::at"));
+			return _start[pos];
+		}
+		const_reference at( size_type pos ) const
+		{
+			if (!(pos < size()))
+				throw (std::out_of_range("ft::vector::at"));
+			return _start[pos];
+		}
+
+		reference front()
+		{return (_start[0]);}
+		const_reference front() const
+		{return (_start[0]);}
+
+			/* iterators */
+
+		iterator begin()
+		{return _start;}
+
+		const_iterator begin() const
+		{return _start;}
+
+		iterator end()
+		{return _end;}
+
+		const_iterator end() const
+		{return _end;}
+
+		reverse_iterator rbegin()
+		{return reverse_iterator(begin());}
+
+		const_reverse_iterator rbegin() const
+		{return reverse_iterator(begin());}
+
+		reverse_iterator rend()
+		{return reverse_iterator(end());}
+
+		const_reverse_iterator rend() const
+		{return reverse_iterator(end());}
+	
 	};
+
+
 
 
 }
