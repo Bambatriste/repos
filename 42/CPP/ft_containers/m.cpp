@@ -164,7 +164,7 @@ int main(int ac, char **av)
 	ft_alloc1.push_back(48);
 	display_vector(ft_alloc1);
 	int pouet = 36;
-	ft_alloc1.insert(ft_alloc1.begin(), pouet);
+	ft_alloc1.insert(ft_alloc1.begin(), pouet); //segv if begin is out of range
 	display_vector(ft_alloc1);
 
 

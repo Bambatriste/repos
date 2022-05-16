@@ -130,6 +130,7 @@ namespace ft
 
 		iterator insert( iterator pos, const T& value )
 		{
+			size_t newsize = size() + 1;
 			if ( size() + 1 > capacity())
 			{
 				if (size() == 0)
@@ -144,23 +145,24 @@ namespace ft
 			}
 			else
 			{
-				size_type index = _end - pos;
-				for (iterator it = _start + size() + 1 - 1; it >= _start + index; it--)
+				size_type offset = _end - pos;
+				std::cout << "offset :" << offset << std::endl;
+				std::cout << "newsize :" << newsize << std::endl;
+
+				while (offset)
 				{
-					*it = *(it - 1);
-					//_allocator.construct(it, it--);
+					_allocator.construct(_start + newsize, *(_start + newsize -1));
+					newsize--;
+					offset--;
 				}
 				_end++;
+				*pos = value;
 				return (pos);
-				// on doit tout deplacer de 1 offset a droite
-				// l espace est forcement disponible grace a reserve mais end n as pas bouge
-				// end++;
-				// tant que i < end - pos i++; -> 
-				// et inserer la value a pos
-
 			}
 			return (pos);
 		}
+
+
 
 		// void insert( iterator pos, size_type count, const T& value );
 
