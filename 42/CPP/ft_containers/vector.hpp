@@ -148,8 +148,8 @@ namespace ft
 				size_type offset = _end - pos;
 				while (offset)
 				{
-					_allocator.construct(_start + newsize, *(_start + newsize - 1));
 					newsize--;
+					_allocator.construct(_start + newsize, *(_start + newsize - 1));
 					offset--;
 				}
 				_end++;

@@ -158,9 +158,9 @@ int main(int ac, char **av)
 	std::cout << vector2.back();
 	std::cout << vector2.size();
 	std::cout << vector2.capacity();
-	display_vector(vector2);
+	//display_vector(vector2);
 	vector2.reserve(99);
-	display_vector(vector2);
+	//display_vector(vector2);
 	// std::cout << vector2.size();
 	// std::cout << vector2.capacity();
 	vector2.push_back(43);
@@ -169,13 +169,11 @@ int main(int ac, char **av)
 	vector2.push_back(46);
 	vector2.push_back(47);
 	vector2.push_back(48);
-	display_vector(vector2);
+	//display_vector(vector2);
 	int pouet = 36;
-	vector2.insert(vector2.begin(), pouet); //segv if begin is out of range
+	vector2.insert(vector2.begin() + 2, pouet); //segv if begin is out of range
 
 	display_vector(vector2);
-
-
 
 
 }
