@@ -2,19 +2,19 @@ NAME = containers
 
 SRCS = m.cpp
 
-CC = clang++
+CPPC = clang++
 
 OBJS = ${SRCS:.cpp=.o}
 
-CFLAGS = -Wall -Wextra -Werror -std=c++98
+CPPFLAGS = -Wall -Wextra -Werror -std=c++98
 
 all : $(NAME)
 
 .cpp.o :
-		${CC} ${CFLAGS} -c $< -o ${<:.cpp=.o} 
+		${CPPC} ${CPPFLAGS} -c $< -o ${<:.cpp=.o} 
 
 $(NAME): ${OBJS}
-		${CC} -o ${NAME} ${OBJS}
+		${CPPC} -o ${NAME} ${OBJS}
 clean :
 		rm -rf ${OBJS}
 

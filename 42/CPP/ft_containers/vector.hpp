@@ -131,7 +131,7 @@ namespace ft
 		iterator insert( iterator pos, const T& value )
 		{
 			size_t newsize = size() + 1;
-			if ( size() + 1 > capacity())
+			if (newsize > capacity())
 			{
 				if (size() == 0)
 					reserve(1);
@@ -146,23 +146,17 @@ namespace ft
 			else
 			{
 				size_type offset = _end - pos;
-				std::cout << "offset :" << offset << std::endl;
-				std::cout << "newsize :" << newsize << std::endl;
-
 				while (offset)
 				{
-					_allocator.construct(_start + newsize, *(_start + newsize -1));
+					_allocator.construct(_start + newsize, *(_start + newsize - 1));
 					newsize--;
 					offset--;
 				}
 				_end++;
 				*pos = value;
-				return (pos);
 			}
 			return (pos);
 		}
-
-
 
 		// void insert( iterator pos, size_type count, const T& value );
 
