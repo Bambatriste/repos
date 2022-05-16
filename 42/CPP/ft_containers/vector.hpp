@@ -158,7 +158,30 @@ namespace ft
 			return (pos);
 		}
 
-		// void insert( iterator pos, size_type count, const T& value );
+		void insert( iterator pos, size_type count, const T& value )
+		{
+			size_t newsize = size() + count;
+			if (newsize > capacity())
+			{
+				if (size() == 0)
+					reserve(1); // reserve might not be enough
+				else
+					reserve(2 * capacity());
+			}
+			size_type offset = _end - pos + count;
+			while(offset)
+			{
+				newsize--;
+				_allocator.construct(_start + newsize, *(_start + newsize - count));
+				offset--;
+			}
+			while (count)
+			{
+				(*pos + count) = value;
+				count--;
+			}
+			_end += count;
+		}
 
 		// template< class InputIt >
 		// void insert( iterator pos, InputIt first, InputIt last );
