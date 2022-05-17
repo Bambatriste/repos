@@ -161,30 +161,66 @@ namespace ft
 		void insert( iterator pos, size_type count, const T& value )
 		{
 			size_t newsize = size() + count;
+			size_t oldsize = size();
 			if (newsize > capacity())
 			{
 				if (size() == 0)
-					reserve(1); // reserve might not be enough
+					reserve(count);
 				else
+				while (newsize > capacity())
 					reserve(2 * capacity());
 			}
-			size_type offset = _end - pos + count;
-			while(offset)
+			while (_start + newsize >= pos + count)
 			{
+				if (newsize > oldsize)
+					_allocator.construct(_start + newsize, *(_start + oldsize));
+				else
+					*(_start + newsize) = *(_start +oldsize);
+				oldsize--;
 				newsize--;
-				_allocator.construct(_start + newsize, *(_start + newsize - count));
-				offset--;
 			}
-			while (count)
+			while (_start + newsize >= pos)
 			{
-				(*pos + count) = value;
-				count--;
+				*(_start + newsize) = value;
+				newsize--;
 			}
 			_end += count;
 		}
 
-		// template< class InputIt >
-		// void insert( iterator pos, InputIt first, InputIt last );
+		template< class InputIt >
+		void insert( iterator pos,typename std::enable_if<!std::is_integral<InputIt>::value, InputIt>::type first, InputIt last )
+		{
+			size_t count = last - first;
+			size_t oldsize = size();
+			size_t newsize = oldsize + count;
+			if (newsize >= capacity())
+			{
+				if (size() == 0)
+					reserve(count);
+				else
+				while (newsize > capacity())
+					reserve(2 * capacity());
+			}
+			while (_start + newsize >= pos + count)
+			{
+
+				//std::cout << "elems to move right :" << *(_start +oldsize) << std::endl;
+				if (newsize > oldsize)
+					_allocator.construct(_start + newsize, *(_start + oldsize));
+				else
+					*(_start + newsize) = *(_start +oldsize);
+				oldsize--;
+				newsize--;
+			}
+			while (_start + newsize >= pos)
+			{
+				//std::cout << "elems to copy :" << *(last) << std::endl;
+				_allocator.construct(_start + newsize, *(last - 1));
+				last--;
+				newsize--;
+			}
+			_end += count;
+		}
 
 		/* ELEMENT ACCES*/
 

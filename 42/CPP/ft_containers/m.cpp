@@ -4,7 +4,7 @@
  #include <vector>
  #include <map>
  #include <stack>
- //#include <type_traits>
+ #include <type_traits>
  namespace ft = std;
 #else
  #include "vector.hpp"
@@ -173,7 +173,11 @@ int main(int ac, char **av)
 	int pouet = 36;
 	vector2.insert(vector2.begin() + 2, pouet); //segv if begin is out of range
 
+	vector2.insert(vector2.begin(), 5, 77);
+	vector1.push_back(1);
+	vector1.push_back(2);
+	vector1.push_back(3);
+	vector1.push_back(4);
+	// vector2.insert(vector2.begin(), vector1.begin(), vector1.begin() + 4);
 	display_vector(vector2);
-
-
 }
