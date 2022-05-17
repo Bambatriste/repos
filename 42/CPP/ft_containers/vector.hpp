@@ -155,45 +155,15 @@ namespace ft
 				--current;
 				--previous;
 			}
-			*pos = value;
-			//_allocator.construct(pos, value);
+			_allocator.construct(pos, value);
 			_end++;
 			return (pos);
 		}
 
-		// iterator	insert(iterator position, const value_type& val)
-		// {
-		// 	if (position == this->end()) { this->push_back(val); return (this->end()); }
-		// 	else
-		// 	{
-		// 		difference_type n_move = this->end() - position;
-		// 		size_t newsize = size() + 1;
-		// 		if (newsize > capacity())
-		// 		{
-		// 		if (size() == 0)
-		// 			reserve(1);
-		// 		else
-		// 			reserve(2 * capacity());
-		// 	}
-		// 		pointer previous = &_start[(_end - begin())- 1];
-		// 		pointer end = previous + 1;
-		// 		for (difference_type i = 0; i < n_move; ++i)
-		// 		{
-		// 			_allocator.construct(end, *previous);
-		// 			_allocator.destroy(previous);
-		// 			--end;
-		// 			--previous;
-		// 		}
-		// 		_allocator.construct(end, val);
-		// 		++_end;
-		// 		return iterator(end);
-		// 	}
-		// }
-
 		void insert( iterator pos, size_type count, const T& value )
 		{
 			size_t newsize = size() + count;
-			size_t oldsize = size();
+			difference_type n_moves = _end - pos;
 			if (newsize > capacity())
 			{
 				if (size() == 0)
@@ -204,19 +174,19 @@ namespace ft
 					reserve(2 * capacity());
 				}
 			}
-			while (_start + newsize >= pos + count)
+			pointer previous = &_start[_end - begin() - 1];
+			pointer current = previous + count;
+			for (difference_type i = 0; i < n_moves; i++)
 			{
-				if (newsize > oldsize)
-					_allocator.construct(_start + newsize, *(_start + oldsize));
-				else
-					*(_start + newsize) = *(_start +oldsize);
-				oldsize--;
-				newsize--;
+				_allocator.construct(current, *previous);
+				_allocator.destroy(previous);
+				--current;
+				--previous;
 			}
-			while (_start + newsize >= pos)
+			for (size_type i = 0; i < count; i++)
 			{
-				*(_start + newsize) = value;
-				newsize--;
+				_allocator.construct(pos, value);
+				pos++;
 			}
 			_end += count;
 		}
@@ -237,7 +207,6 @@ namespace ft
 			}
 			while (_start + newsize >= pos + count)
 			{
-
 				//std::cout << "elems to move right :" << *(_start +oldsize) << std::endl;
 				if (newsize > oldsize)
 					_allocator.construct(_start + newsize, *(_start + oldsize));

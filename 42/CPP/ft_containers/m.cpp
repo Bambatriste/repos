@@ -192,7 +192,7 @@ int main(int ac, char **av)
 	vector1.push_back(2);
 	vector1.push_back(3);
 	vector1.push_back(4);
-	vector2.insert(vector2.begin(), vector1.begin(), vector1.begin() + 4);
+	//vector2.insert(vector2.begin(), vector1.begin(), vector1.begin() + 4);
 	display_vector(vector2);
 
 	Observable c1;
