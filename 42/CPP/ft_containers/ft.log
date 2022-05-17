@@ -4,14 +4,14 @@ float: false
 long int: true
 1004210012
 vector display
-77
-77
-77
-77
-77
 100
 43
 36
+77
+77
+77
+77
+77
 44
 45
 46
@@ -19,6 +19,12 @@ vector display
 48
 Instance of Observable created.
 Instance of Observable created.
+Instance of Observable destroyed.
+Instance of Observable destroyed.
+Instance of Observable destroyed.
+Instance of Observable destroyed.
+Instance of Observable destroyed.
+Instance of Observable destroyed.
 Instance of Observable destroyed.
 Instance of Observable destroyed.
 Instance of Observable destroyed.

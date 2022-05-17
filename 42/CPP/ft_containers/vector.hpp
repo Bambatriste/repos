@@ -35,6 +35,21 @@ namespace ft
 		pointer		_end;
 		size_t		_capacity;
 
+		void	reallocate(size_t size_add)
+		{
+			size_t newsize = size() + size_add;
+			if (newsize > capacity())
+			{
+				if (size() == 0)
+					reserve(newsize);
+				else
+				{
+					while (newsize > capacity())
+					reserve(2 * capacity());
+				}
+			}
+		}
+
 		public :
 
 		//constructeurs
@@ -136,15 +151,8 @@ namespace ft
 				push_back(value);
 				return (_end - 1);
 			}
-			size_t newsize = size() + 1;
 			difference_type n_move = _end - pos;
-			if (newsize > capacity())
-			{
-				if (size() == 0)
-					reserve(1);
-				else
-					reserve(2 * capacity());
-			}
+			reallocate(1);
 			pointer previous = &_start[_end - begin() - 1];
 			pointer current = previous + 1;
 			for (difference_type i = 0; i < n_move; i++)
@@ -161,20 +169,12 @@ namespace ft
 
 		void insert( iterator pos, size_type count, const T& value )
 		{
-			size_t newsize = size() + count;
 			difference_type n_moves = _end - pos;
-			if (newsize > capacity())
-			{
-				if (size() == 0)
-					reserve(count);
-				else
-				{
-					while (newsize > capacity())
-					reserve(2 * capacity());
-				}
-			}
+			//std::cout << "n moves : " << n_moves << std::endl;
+			reallocate(count);
 			pointer previous = &_start[_end - begin() - 1];
 			pointer current = previous + count;
+			// decalage des anciens elements
 			for (difference_type i = 0; i < n_moves; i++)
 			{
 				_allocator.construct(current, *previous);
@@ -182,47 +182,52 @@ namespace ft
 				--current;
 				--previous;
 			}
+			//construction des nouveaux
+			++previous;
+			for (size_type i = 0; i < count; ++i, ++previous)
+				_allocator.construct(previous, value);
 			for (size_type i = 0; i < count; i++)
 			{
-				_allocator.construct(pos, value);
-				pos++;
+				_allocator.construct(current, value);
+				current--;
 			}
 			_end += count;
 		}
 
-		template< class InputIt >
-		void insert( iterator pos,typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type first, InputIt last )
-		{
-			size_t count = last - first;
-			size_t oldsize = size();
-			size_t newsize = oldsize + count;
-			if (newsize >= capacity())
-			{
-				if (size() == 0)
-					reserve(count);
-				else
-				while (newsize > capacity())
-					reserve(2 * capacity());
-			}
-			while (_start + newsize >= pos + count)
-			{
-				//std::cout << "elems to move right :" << *(_start +oldsize) << std::endl;
-				if (newsize > oldsize)
-					_allocator.construct(_start + newsize, *(_start + oldsize));
-				else
-					*(_start + newsize) = *(_start +oldsize);
-				oldsize--;
-				newsize--;
-			}
-			while (_start + newsize >= pos)
-			{
-				//std::cout << "elems to copy :" << *(last) << std::endl;
-				_allocator.construct(_start + newsize, *(last - 1));
-				last--;
-				newsize--;
-			}
-			_end += count;
-		}
+
+		// template< class InputIt >
+		// void insert( iterator pos,typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type first, InputIt last )
+		// {
+		// 	size_t count = last - first;
+		// 	size_t oldsize = size();
+		// 	size_t newsize = oldsize + count;
+		// 	if (newsize >= capacity())
+		// 	{
+		// 		if (size() == 0)
+		// 			reserve(count);
+		// 		else
+		// 		while (newsize > capacity())
+		// 			reserve(2 * capacity());
+		// 	}
+		// 	while (_start + newsize >= pos + count)
+		// 	{
+		// 		//std::cout << "elems to move right :" << *(_start +oldsize) << std::endl;
+		// 		if (newsize > oldsize)
+		// 			_allocator.construct(_start + newsize, *(_start + oldsize));
+		// 		else
+		// 			*(_start + newsize) = *(_start +oldsize);
+		// 		oldsize--;
+		// 		newsize--;
+		// 	}
+		// 	while (_start + newsize >= pos)
+		// 	{
+		// 		//std::cout << "elems to copy :" << *(last) << std::endl;
+		// 		_allocator.construct(_start + newsize, *(last - 1));
+		// 		last--;
+		// 		newsize--;
+		// 	}
+		// 	_end += count;
+		// }
 
 		/* ELEMENT ACCES*/
 
