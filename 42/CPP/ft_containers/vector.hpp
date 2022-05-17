@@ -3,6 +3,8 @@
 
 # include <memory>
 # include "reverse_iterator.hpp"
+# include "enable_if.hpp"
+# include "is_integral.hpp"
 
 namespace ft 
 {
@@ -130,7 +132,13 @@ namespace ft
 
 		iterator insert( iterator pos, const T& value )
 		{
+			if (pos == _end)
+			{
+				push_back(value);
+				return (pos);
+			}
 			size_t newsize = size() + 1;
+			difference_type n_move = _end - pos;
 			if (newsize > capacity())
 			{
 				if (size() == 0)
@@ -138,25 +146,49 @@ namespace ft
 				else
 					reserve(2 * capacity());
 			}
-			if (pos == _end)
+			pointer previous = &_start[_end - begin() - 1];
+			pointer current = previous + 1;
+			for (difference_type i = 0; i < n_move; i++)
 			{
-				_allocator.construct(_end, value);
-				_end++;
+				_allocator.construct(current, *previous);
+				_allocator.destroy(previous);
+				--current;
+				--previous;
 			}
-			else
-			{
-				size_type offset = _end - pos;
-				while (offset)
-				{
-					newsize--;
-					_allocator.construct(_start + newsize, *(_start + newsize - 1));
-					offset--;
-				}
-				_end++;
-				*pos = value;
-			}
+			*pos = value;
+			//_allocator.construct(pos, value);
+			_end++;
 			return (pos);
 		}
+
+		// iterator	insert(iterator position, const value_type& val)
+		// {
+		// 	if (position == this->end()) { this->push_back(val); return (this->end()); }
+		// 	else
+		// 	{
+		// 		difference_type n_move = this->end() - position;
+		// 		size_t newsize = size() + 1;
+		// 		if (newsize > capacity())
+		// 		{
+		// 		if (size() == 0)
+		// 			reserve(1);
+		// 		else
+		// 			reserve(2 * capacity());
+		// 	}
+		// 		pointer previous = &_start[(_end - begin())- 1];
+		// 		pointer end = previous + 1;
+		// 		for (difference_type i = 0; i < n_move; ++i)
+		// 		{
+		// 			_allocator.construct(end, *previous);
+		// 			_allocator.destroy(previous);
+		// 			--end;
+		// 			--previous;
+		// 		}
+		// 		_allocator.construct(end, val);
+		// 		++_end;
+		// 		return iterator(end);
+		// 	}
+		// }
 
 		void insert( iterator pos, size_type count, const T& value )
 		{
@@ -167,8 +199,10 @@ namespace ft
 				if (size() == 0)
 					reserve(count);
 				else
-				while (newsize > capacity())
+				{
+					while (newsize > capacity())
 					reserve(2 * capacity());
+				}
 			}
 			while (_start + newsize >= pos + count)
 			{
@@ -188,7 +222,7 @@ namespace ft
 		}
 
 		template< class InputIt >
-		void insert( iterator pos,typename std::enable_if<!std::is_integral<InputIt>::value, InputIt>::type first, InputIt last )
+		void insert( iterator pos,typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type first, InputIt last )
 		{
 			size_t count = last - first;
 			size_t oldsize = size();

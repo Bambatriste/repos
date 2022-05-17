@@ -1,10 +1,9 @@
-//define STD
+//#define STD
 
 #ifdef STD
  #include <vector>
  #include <map>
  #include <stack>
- #include <type_traits>
  namespace ft = std;
 #else
  #include "vector.hpp"
@@ -23,6 +22,21 @@
 #include <utility>
 #include <string>
 #include <iostream>
+
+
+class Observable {
+	public:
+		int _data;
+		Observable() { _data = 0; std::cout << "Instance of Observable created." << std::endl; }
+		Observable(int data): _data(data) { std::cout << "Instance of Observable created." << std::endl; }
+		Observable(Observable const & src) { *this = src; }
+		~Observable() { std::cout << "Instance of Observable destroyed." << std::endl; }
+		Observable &operator=(Observable const &rhs) { _data = rhs._data; return *this; }
+};
+std::ostream &operator<<(std::ostream & os, const Observable &obs) {
+	os << obs._data;
+	return os;
+}
 
 template<class T>
 void display_vector(ft::vector<T> vector)
@@ -133,11 +147,11 @@ int main(int ac, char **av)
 
 	/*********************************** IS INTEGRAL TESTS **********************************/
 
-	// std::cout << std::boolalpha;
- 	//std::cout << "char: " << ft::is_integral<char>::value << std::endl;
-	// std::cout << "int: " << ft::is_integral<int>::value << std::endl;
-	// std::cout << "float: " << ft::is_integral<float>::value << std::endl;
-	// std::cout << "long int: " << ft::is_integral<long int>::value << std::endl;
+	std::cout << std::boolalpha;
+ 	std::cout << "char: " << ft::is_integral<char>::value << std::endl;
+	std::cout << "int: " << ft::is_integral<int>::value << std::endl;
+	std::cout << "float: " << ft::is_integral<float>::value << std::endl;
+	std::cout << "long int: " << ft::is_integral<long int>::value << std::endl;
 
 	/*********************************** ENABLE_IF TESTS **********************************/
 	
@@ -178,6 +192,22 @@ int main(int ac, char **av)
 	vector1.push_back(2);
 	vector1.push_back(3);
 	vector1.push_back(4);
-	// vector2.insert(vector2.begin(), vector1.begin(), vector1.begin() + 4);
+	vector2.insert(vector2.begin(), vector1.begin(), vector1.begin() + 4);
 	display_vector(vector2);
+
+	Observable c1;
+	Observable c2;
+
+	ft::vector<Observable> vector3;
+
+	//const std::allocator<Observable> obs;
+	//ft::vector<Observable> vector4(obs);
+
+	vector3.push_back(c1);
+	//vector3.push_back(c2);
+	vector3.insert(vector3.end(), c2);
+	//vector3.insert(vector3.begin(), vector4.begin(), vector4.end());
+
+	//std::cout << vector4[0]<< std::endl;
+	//std::cout << vector3[0]<< std::endl;
 }
