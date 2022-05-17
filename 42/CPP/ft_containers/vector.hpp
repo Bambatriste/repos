@@ -98,7 +98,6 @@ namespace ft
 			}
 		}
 
-
 		/* MODIFIERS */
 
 		void push_back( const T& value )
@@ -135,7 +134,7 @@ namespace ft
 			if (pos == _end)
 			{
 				push_back(value);
-				return (pos);
+				return (_end - 1);
 			}
 			size_t newsize = size() + 1;
 			difference_type n_move = _end - pos;
@@ -155,9 +154,9 @@ namespace ft
 				--current;
 				--previous;
 			}
-			_allocator.construct(pos, value);
+			_allocator.construct(current, value);
 			_end++;
-			return (pos);
+			return (current);
 		}
 
 		void insert( iterator pos, size_type count, const T& value )
