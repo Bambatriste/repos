@@ -74,6 +74,12 @@ namespace ft
 
 		// }
 
+		~vector()
+		{
+			for (long i = 0; i < _end - begin();++i) { _allocator.destroy(&_start[i]); }
+			_allocator.deallocate(_start, _capacity);
+		}
+
 		//functions
 
 
@@ -117,15 +123,9 @@ namespace ft
 
 		void push_back( const T& value )
 		{
-			T vcpy = value; // just in case reserve destroys it
-			if ( size() + 1 > capacity())
-			{
-				if (size() == 0)
-					reserve(1);
-				else
-					reserve(2 * capacity());
-			}
-			_allocator.construct(_end, vcpy);
+			//T vcpy = value; // just in case reserve destroys it
+			reallocate(1);
+			_allocator.construct(_end, value);
 			_end++;
 		}
 
@@ -157,8 +157,7 @@ namespace ft
 			pointer current = previous + 1;
 			for (difference_type i = 0; i < n_move; i++)
 			{
-				_allocator.construct(current, *previous);
-				_allocator.destroy(previous);
+				*current = *previous;
 				--current;
 				--previous;
 			}
@@ -169,30 +168,58 @@ namespace ft
 
 		void insert( iterator pos, size_type count, const T& value )
 		{
-			difference_type n_moves = _end - pos;
-			//std::cout << "n moves : " << n_moves << std::endl;
+			if (count == 0)
+				return ;
+			difference_type n_moves = _end - pos + 1;
 			reallocate(count);
-			pointer previous = &_start[_end - begin() - 1];
+			pointer previous = _end;
 			pointer current = previous + count;
 			// decalage des anciens elements
 			for (difference_type i = 0; i < n_moves; i++)
 			{
-				_allocator.construct(current, *previous);
-				_allocator.destroy(previous);
+				*current = *previous;
 				--current;
 				--previous;
 			}
 			//construction des nouveaux
-			++previous;
-			for (size_type i = 0; i < count; ++i, ++previous)
-				_allocator.construct(previous, value);
-			for (size_type i = 0; i < count; i++)
+			for (size_type i = 0; i < count; ++i)
 			{
-				_allocator.construct(current, value);
+				*current = value;
 				current--;
 			}
 			_end += count;
 		}
+
+		// void	insert(iterator position, size_type n, const value_type& val)
+		// {
+		// 	if (n == 0)
+		// 		return ;
+		// 	if (position == this->end())
+		// 	{
+		// 		if (size() + n > _capacity)
+		// 			reallocate(n);
+		// 		for (size_type i = 0; i < n; ++i) { this->push_back(val); }
+		// 	}
+		// 	else
+		// 	{
+		// 		difference_type n_move = this->end() - position;
+		// 		if (_end - begin() + n > _capacity)
+		// 			reallocate(n);
+		// 		pointer previous = &_start[_end - begin() - 1];
+		// 		pointer end = previous + n;
+		// 		for (difference_type i = 0; i < n_move; ++i)
+		// 		{
+		// 			_allocator.construct(end, *previous);
+		// 			_allocator.destroy(previous);
+		// 			--end;
+		// 			--previous;
+		// 		}
+		// 		++previous;
+		// 		for (size_type i = 0; i < n; ++i, ++previous)
+		// 			_allocator.construct(previous, val);
+		// 		_end += n;
+		// 	}
+		// }
 
 
 		// template< class InputIt >

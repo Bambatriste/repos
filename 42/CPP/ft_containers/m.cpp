@@ -39,7 +39,7 @@ std::ostream &operator<<(std::ostream & os, const Observable &obs) {
 }
 
 template<class T>
-void display_vector(ft::vector<T> vector)
+void display_vector(ft::vector<T> &vector)
 {
 	std::cout << std::endl;
 	std::cout << "vector display" << std::endl;
@@ -183,11 +183,11 @@ int main(int ac, char **av)
 	vector2.push_back(46);
 	vector2.push_back(47);
 	vector2.push_back(48);
-	//display_vector(vector2);
+	display_vector(vector2);
 	int pouet = 36;
 	vector2.insert(vector2.begin() + 2, pouet); //segv if begin is out of range
 
-	vector2.insert(vector2.begin()+ 3, 5, 77);
+	vector2.insert(vector2.end(), 5, 77);
 	vector1.push_back(1);
 	vector1.push_back(2);
 	vector1.push_back(3);
@@ -204,7 +204,7 @@ int main(int ac, char **av)
 	ft::vector<Observable> vector4(obs);
 
 	vector3.push_back(c1);
-	//vector3.push_back(c2);
+	vector3.push_back(c2);
 	vector3.insert(vector3.end(), c2);
 	vector3.insert(vector3.begin(), 5, c2);
 

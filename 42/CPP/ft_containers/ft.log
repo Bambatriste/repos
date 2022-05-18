@@ -6,19 +6,33 @@ long int: true
 vector display
 100
 43
-36
-77
-77
-77
-77
-77
 44
 45
 46
 47
 48
+
+vector display
+100
+43
+36
+44
+45
+46
+47
+48
+77
+77
+77
+77
+77
 Instance of Observable created.
 Instance of Observable created.
+Instance of Observable destroyed.
+Instance of Observable destroyed.
+Instance of Observable destroyed.
+Instance of Observable destroyed.
+Instance of Observable destroyed.
 Instance of Observable destroyed.
 Instance of Observable destroyed.
 Instance of Observable destroyed.
