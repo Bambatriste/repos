@@ -173,7 +173,7 @@ int main(int ac, char **av)
 	std::cout << vector2.size();
 	std::cout << vector2.capacity();
 	//display_vector(vector2);
-	vector2.reserve(99);
+	//vector2.reserve(99);
 	//display_vector(vector2);
 	// std::cout << vector2.size();
 	// std::cout << vector2.capacity();
@@ -184,10 +184,10 @@ int main(int ac, char **av)
 	vector2.push_back(47);
 	vector2.push_back(48);
 	display_vector(vector2);
-	int pouet = 36;
-	vector2.insert(vector2.begin() + 2, pouet); //segv if begin is out of range
 
-	vector2.insert(vector2.end(), 5, 77);
+	//vector2.insert(vector2.begin() + 2, 36); //segv if begin is out of range
+
+	vector2.insert(vector2.begin(), 5, 77);
 	vector1.push_back(1);
 	vector1.push_back(2);
 	vector1.push_back(3);
@@ -206,7 +206,10 @@ int main(int ac, char **av)
 	vector3.push_back(c1);
 	vector3.push_back(c2);
 	vector3.insert(vector3.end(), c2);
-	vector3.insert(vector3.begin(), 5, c2);
+	vector3.insert(vector3.end(), 5, c2);
+
+	display_vector(vector3);
+	//vector3.reserve(200);
 
 	//std::cout << vector4[0]<< std::endl;
 	//std::cout << vector3[0]<< std::endl;

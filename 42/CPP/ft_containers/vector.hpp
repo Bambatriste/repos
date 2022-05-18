@@ -30,10 +30,10 @@ namespace ft
 
 
 		private:
-		Allocator	_allocator;
-		pointer		_start;
-		pointer		_end;
-		size_t		_capacity;
+		Allocator		_allocator;
+		pointer			_start;
+		pointer			_end;
+		size_type		_capacity;
 
 		void	reallocate(size_t size_add)
 		{
@@ -76,7 +76,7 @@ namespace ft
 
 		~vector()
 		{
-			for (long i = 0; i < _end - begin();++i) { _allocator.destroy(&_start[i]); }
+			for (size_type i = 0; i < size() ; i++) { _allocator.destroy(&_start[i]); }
 			_allocator.deallocate(_start, _capacity);
 		}
 
@@ -170,58 +170,44 @@ namespace ft
 		{
 			if (count == 0)
 				return ;
-			difference_type n_moves = _end - pos + 1;
+			difference_type n_moves = _end - pos;
 			reallocate(count);
-			pointer previous = _end;
+			difference_type capacity_diff = capacity() - size();
+			//std::cout << std::endl;
+			//std::cout << capacity() << std::endl;
+			//std::cout << size() << std::endl;
+			//std::cout << "capacity diff :" << capacity_diff << std::endl;
+			//std::cout << "n moves:" << n_moves << std::endl;
+			pointer previous = _end - 1;
 			pointer current = previous + count;
 			// decalage des anciens elements
 			for (difference_type i = 0; i < n_moves; i++)
 			{
-				*current = *previous;
+				if (capacity_diff)
+				{
+					_allocator.construct(current, *previous);
+					capacity_diff--;
+				}
+				else
+					*current = *previous;
 				--current;
 				--previous;
 			}
 			//construction des nouveaux
 			for (size_type i = 0; i < count; ++i)
 			{
-				*current = value;
+				if (capacity_diff)
+				{
+					_allocator.construct(current, value);
+					capacity_diff--;
+				}
+				else
+					*current = value;
 				current--;
 			}
 			_end += count;
 		}
-
-		// void	insert(iterator position, size_type n, const value_type& val)
-		// {
-		// 	if (n == 0)
-		// 		return ;
-		// 	if (position == this->end())
-		// 	{
-		// 		if (size() + n > _capacity)
-		// 			reallocate(n);
-		// 		for (size_type i = 0; i < n; ++i) { this->push_back(val); }
-		// 	}
-		// 	else
-		// 	{
-		// 		difference_type n_move = this->end() - position;
-		// 		if (_end - begin() + n > _capacity)
-		// 			reallocate(n);
-		// 		pointer previous = &_start[_end - begin() - 1];
-		// 		pointer end = previous + n;
-		// 		for (difference_type i = 0; i < n_move; ++i)
-		// 		{
-		// 			_allocator.construct(end, *previous);
-		// 			_allocator.destroy(previous);
-		// 			--end;
-		// 			--previous;
-		// 		}
-		// 		++previous;
-		// 		for (size_type i = 0; i < n; ++i, ++previous)
-		// 			_allocator.construct(previous, val);
-		// 		_end += n;
-		// 	}
-		// }
-
-
+		
 		// template< class InputIt >
 		// void insert( iterator pos,typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type first, InputIt last )
 		// {
