@@ -13,6 +13,10 @@ vector display
 48
 
 vector display
+1
+2
+3
+4
 77
 77
 77
@@ -20,6 +24,7 @@ vector display
 77
 100
 43
+36
 44
 45
 46
@@ -27,6 +32,17 @@ vector display
 48
 Instance of Observable created.
 Instance of Observable created.
+Instance of Observable destroyed.
+Instance of Observable destroyed.
+Instance of Observable destroyed.
+Instance of Observable destroyed.
+Instance of Observable destroyed.
+Instance of Observable destroyed.
+Instance of Observable destroyed.
+Instance of Observable destroyed.
+Instance of Observable destroyed.
+Instance of Observable destroyed.
+Instance of Observable destroyed.
 Instance of Observable destroyed.
 Instance of Observable destroyed.
 Instance of Observable destroyed.
@@ -43,6 +59,15 @@ vector display
 0
 0
 0
+0
+0
+0
+Instance of Observable destroyed.
+Instance of Observable destroyed.
+Instance of Observable destroyed.
+Instance of Observable destroyed.
+Instance of Observable destroyed.
+Instance of Observable destroyed.
 Instance of Observable destroyed.
 Instance of Observable destroyed.
 Instance of Observable destroyed.

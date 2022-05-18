@@ -185,28 +185,35 @@ int main(int ac, char **av)
 	vector2.push_back(48);
 	display_vector(vector2);
 
-	//vector2.insert(vector2.begin() + 2, 36); //segv if begin is out of range
+	vector2.insert(vector2.begin() + 2, 36); //segv if begin is out of range
+
 
 	vector2.insert(vector2.begin(), 5, 77);
 	vector1.push_back(1);
 	vector1.push_back(2);
 	vector1.push_back(3);
 	vector1.push_back(4);
-	//vector2.insert(vector2.begin(), vector1.begin(), vector1.begin() + 4);
+	vector2.insert(vector2.begin(), vector1.begin(), vector1.begin() + 4);
 	display_vector(vector2);
 
 	Observable c1;
 	Observable c2;
 
 	ft::vector<Observable> vector3;
-
 	const std::allocator<Observable> obs;
 	ft::vector<Observable> vector4(obs);
+
+	vector4.push_back(c1);
+	vector4.push_back(c2);
+	vector4.push_back(c1);
+
 
 	vector3.push_back(c1);
 	vector3.push_back(c2);
 	vector3.insert(vector3.end(), c2);
 	vector3.insert(vector3.end(), 5, c2);
+
+	vector3.insert(vector3.begin() +1, vector4.begin(), vector4.end());
 
 	display_vector(vector3);
 	//vector3.reserve(200);
