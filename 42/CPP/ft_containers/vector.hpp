@@ -220,6 +220,8 @@ namespace ft
 		template< class InputIt >
 		void insert( iterator pos,typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type first, InputIt last )
 		{
+			if (first == last)
+				return ;
 			size_t count = last - first;
 			difference_type n_moves = _end - pos;
 			
@@ -252,6 +254,16 @@ namespace ft
 				last--;
 			}
 			_end += count;
+		}
+
+		iterator erase( iterator pos )
+		{
+			
+		}
+
+		iterator erase( iterator first, iterator last )
+		{
+
 		}
 
 		/* ELEMENT ACCES*/
