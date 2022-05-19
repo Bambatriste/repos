@@ -169,13 +169,9 @@ namespace ft
 				--previous;
 			}
 			if (capacity_diff)
-			{
-				_allocator.construct(current, *previous);
-				capacity_diff--;
-			}
+				_allocator.construct(current, value);
 			else
 				*current = value;
-			_allocator.construct(current, value);
 			_end++;
 			return (current);
 		}
@@ -284,23 +280,6 @@ namespace ft
 			}
 			return (first);
 		}
-
-		// 	for (difference_type i = 0; i < n_moves; i++)
-		// 	{
-		// 		if (erase_count)
-		// 		{
-		// 			_allocator.destroy(curr);
-		// 			_allocator.construct(curr, *next);
-		// 			erase_count--;
-		// 		}
-		// 		else if (next != _end)
-		// 			*curr = *next;
-		// 		next++;
-		// 		curr++;
-		// 	}
-		// 	_end -= last - first;
-		// 	return (curr);
-		// }
 
 		void resize( size_type count, T value = T() )
 		{

@@ -11,6 +11,7 @@ vector display
 46
 47
 48
+insert return value : 36
 return value for erase : 6
 
 vector display
@@ -94,11 +95,10 @@ Instance of Observable destroyed.
 Instance of Observable destroyed.
 Instance of Observable destroyed.
 Instance of Observable destroyed.
+
+vector display
+0
 Instance of Observable destroyed.
-
-vector display
-
-vector display
 Instance of Observable destroyed.
 Instance of Observable destroyed.
 Instance of Observable destroyed.

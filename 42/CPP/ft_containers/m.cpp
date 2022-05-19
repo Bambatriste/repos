@@ -185,10 +185,11 @@ int main(int ac, char **av)
 	vector2.push_back(48);
 	display_vector(vector2);
 
-	vector2.insert(vector2.begin() + 2, 36); //segv if begin is out of range , but std too
-
+	ft::vector<int>::iterator insert_test = vector2.insert(vector2.begin() + 2, 36); //segv if begin is out of range , but std too
+	std::cout << "insert return value : " << *insert_test << std::endl; 
 
 	vector2.insert(vector2.begin(), 5, 77);
+	
 	vector1.push_back(1);
 	vector1.push_back(2);
 	vector1.push_back(3);
@@ -229,13 +230,11 @@ int main(int ac, char **av)
 	display_vector(vector3);
 
 	vector3.erase(vector3.begin());
-	
-	vector3.erase(vector3.begin(), vector3.end());
+	vector3.erase(vector3.begin(), vector3.end() - 1);
 	
 	//std::cout << ptr << std::endl;
 	display_vector(vector3);
-	//vector3.erase(vector3.begin(), vector3.end());
-	display_vector(vector3);
+
 	//vector3.reserve(200);
 
 	//std::cout << vector4[0]<< std::endl;
