@@ -193,8 +193,15 @@ int main(int ac, char **av)
 	vector1.push_back(2);
 	vector1.push_back(3);
 	vector1.push_back(4);
-	vector2.insert(vector2.begin(), vector1.begin(), vector1.begin() + 4);
-	display_vector(vector2);
+	vector1.push_back(5);
+	vector1.push_back(6);
+	vector1.push_back(7);
+	vector1.push_back(8);
+	vector1.erase(vector1.begin());
+
+	vector1.erase(vector1.begin() +2, vector1.begin() + 4);
+	vector2.insert(vector2.begin(), vector1.begin(), vector1.end()); // problem for erase and insert if vector1.begin() + 4 probably just undefined behavior
+	display_vector(vector1);
 
 	Observable c1;
 	Observable c2;
@@ -216,6 +223,8 @@ int main(int ac, char **av)
 	vector3.insert(vector3.begin() +1, vector4.begin(), vector4.end());
 
 	display_vector(vector3);
+
+	vector3.erase(vector3.begin());
 	//vector3.reserve(200);
 
 	//std::cout << vector4[0]<< std::endl;

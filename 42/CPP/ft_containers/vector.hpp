@@ -258,12 +258,50 @@ namespace ft
 
 		iterator erase( iterator pos )
 		{
-			
+			difference_type n_moves = _end - pos;
+			pointer curr = pos;
+			pointer next = pos + 1;
+			size_t erase_count = 1;
+
+			for (difference_type i = 0; i < n_moves; i++)
+			{
+				if (erase_count)
+				{
+					_allocator.destroy(curr);
+					_allocator.construct(curr, *next);
+					erase_count--;
+				}
+				else
+					*curr = *next;
+				next++;
+				curr++;
+			}
+			_end -= 1;
+			return (pos); // wrong : to change
 		}
 
 		iterator erase( iterator first, iterator last )
 		{
+			difference_type n_moves = _end - first;
+			size_type erase_count = last - first;
+			pointer curr = first;
+			pointer next = first + erase_count;
 
+			for (difference_type i = 0; i < n_moves; i++)
+			{
+				if (erase_count)
+				{
+					_allocator.destroy(curr);
+					_allocator.construct(curr, *next);
+					erase_count--;
+				}
+				else
+					*curr = *next;
+				next++;
+				curr++;
+			}
+			_end -= last - first;
+			return (last); //wrong : to change
 		}
 
 		/* ELEMENT ACCES*/
