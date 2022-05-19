@@ -164,11 +164,13 @@ int main(int ac, char **av)
 	ft::vector<int> vector1;
 	ft::vector<int> vector2(allocator_int);
 
+
 	vector2.push_back(100);
 	std::cout << vector2.back();
 	vector2.push_back(42);
 	std::cout << vector2.back();
 	vector2.pop_back();
+	
 	std::cout << vector2.back();
 	std::cout << vector2.size();
 	std::cout << vector2.capacity();
@@ -184,6 +186,7 @@ int main(int ac, char **av)
 	vector2.push_back(47);
 	vector2.push_back(48);
 	display_vector(vector2);
+	
 
 	ft::vector<int>::iterator insert_test = vector2.insert(vector2.begin() + 2, 36); //segv if begin is out of range , but std too
 	std::cout << "insert return value : " << *insert_test << std::endl; 
@@ -202,11 +205,16 @@ int main(int ac, char **av)
 
 	ft::vector<int>::iterator test = vector1.erase(vector1.begin() +2, vector1.begin() + 4);
 	std::cout << "return value for erase : " << *test << std::endl;
+	
+	//vector2.resize(36, 0); // problem due to insert when resizing to bigger (invalid write : 1)
+	std::cout << "size before insert : " << vector2.size() << std::endl;
 	vector2.insert(vector2.begin(), vector1.begin(), vector1.end()); // problem for erase and insert if vector1.end() + 1 probably just undefined behavior
+	std::cout << "size after insert : " << vector2.size() << std::endl;
+	vector2.resize(36, 0);
+	
 	display_vector(vector2);
 
-	//vector2.resize(36, 0);
-	display_vector(vector2);
+	//display_vector(vector2);
 
 	Observable c1;
 	Observable c2;
@@ -234,6 +242,10 @@ int main(int ac, char **av)
 	
 	//std::cout << ptr << std::endl;
 	display_vector(vector3);
+
+	
+
+	//vector2.resize(36, 0);
 
 	//vector3.reserve(200);
 

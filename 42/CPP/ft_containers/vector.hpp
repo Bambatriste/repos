@@ -283,11 +283,8 @@ namespace ft
 
 		void resize( size_type count, T value = T() )
 		{
-			//std::cout << "count :" << count << std::endl;
-			//std::cout << "cap: " << capacity() << std::endl;
-			//std::cout << "size :" << size() << std::endl; 
-			if (count > capacity())
-				reallocate(count - capacity());
+			if (count > size())
+				reallocate(count - size());
 			if (count < size())
 			{
 				while (count < size())
@@ -301,8 +298,8 @@ namespace ft
 				size_type size_diff = count - size();
 				while (size_diff > 0)
 				{
+					_allocator.construct(_end, value);
 					_end++;
-					_allocator.construct(_end , value);
 					size_diff--;
 				}
 			}
