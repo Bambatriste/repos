@@ -11,6 +11,7 @@ vector display
 46
 47
 48
+return value for erase : 6
 
 vector display
 2
@@ -18,6 +19,39 @@ vector display
 6
 7
 8
+77
+77
+77
+77
+77
+100
+43
+36
+44
+45
+46
+47
+48
+
+vector display
+2
+3
+6
+7
+8
+77
+77
+77
+77
+77
+100
+43
+36
+44
+45
+46
+47
+48
 Instance of Observable created.
 Instance of Observable created.
 Instance of Observable destroyed.
@@ -61,6 +95,10 @@ Instance of Observable destroyed.
 Instance of Observable destroyed.
 Instance of Observable destroyed.
 Instance of Observable destroyed.
+
+vector display
+
+vector display
 Instance of Observable destroyed.
 Instance of Observable destroyed.
 Instance of Observable destroyed.

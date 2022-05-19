@@ -258,50 +258,75 @@ namespace ft
 
 		iterator erase( iterator pos )
 		{
-			difference_type n_moves = _end - pos;
-			pointer curr = pos;
-			pointer next = pos + 1;
-			size_t erase_count = 1;
-
-			for (difference_type i = 0; i < n_moves; i++)
-			{
-				if (erase_count)
-				{
-					_allocator.destroy(curr);
-					_allocator.construct(curr, *next);
-					erase_count--;
-				}
-				else
-					*curr = *next;
-				next++;
-				curr++;
-			}
-			_end -= 1;
-			return (pos); // wrong : to change
+			return(erase(pos, pos + 1));
 		}
 
 		iterator erase( iterator first, iterator last )
 		{
-			difference_type n_moves = _end - first;
-			size_type erase_count = last - first;
 			pointer curr = first;
-			pointer next = first + erase_count;
-
-			for (difference_type i = 0; i < n_moves; i++)
+			pointer next = last;
+			size_t erase_count = last - first;
+			while (erase_count)
 			{
-				if (erase_count)
-				{
-					_allocator.destroy(curr);
+				_allocator.destroy(curr);
+				if (next < _end)
 					_allocator.construct(curr, *next);
-					erase_count--;
-				}
-				else
-					*curr = *next;
+				erase_count--;
 				next++;
 				curr++;
 			}
 			_end -= last - first;
-			return (last); //wrong : to change
+			while (curr < _end)
+			{
+				*curr = *next;
+				next++;
+				curr++;
+			}
+			return (first);
+		}
+
+		// 	for (difference_type i = 0; i < n_moves; i++)
+		// 	{
+		// 		if (erase_count)
+		// 		{
+		// 			_allocator.destroy(curr);
+		// 			_allocator.construct(curr, *next);
+		// 			erase_count--;
+		// 		}
+		// 		else if (next != _end)
+		// 			*curr = *next;
+		// 		next++;
+		// 		curr++;
+		// 	}
+		// 	_end -= last - first;
+		// 	return (curr);
+		// }
+
+		void resize( size_type count, T value = T() )
+		{
+			//std::cout << "count :" << count << std::endl;
+			//std::cout << "cap: " << capacity() << std::endl;
+			//std::cout << "size :" << size() << std::endl; 
+			if (count > capacity())
+				reallocate(count - capacity());
+			if (count < size())
+			{
+				while (count < size())
+				{
+					_allocator.destroy(_end -1);
+					_end--;
+				}
+			}
+			else
+			{
+				size_type size_diff = count - size();
+				while (size_diff > 0)
+				{
+					_end++;
+					_allocator.construct(_end , value);
+					size_diff--;
+				}
+			}
 		}
 
 		/* ELEMENT ACCES*/
