@@ -13,8 +13,8 @@ vector display
 48
 insert return value : 36
 return value for erase : 6
-size before insert : 13
-size after insert : 18
+size before insert : 18
+size after insert : 23
 
 vector display
 2
@@ -24,6 +24,11 @@ vector display
 8
 77
 77
+33
+33
+33
+33
+33
 77
 77
 77
@@ -48,11 +53,12 @@ vector display
 0
 0
 0
-0
-0
-0
-0
-0
+
+vector display
+99
+99
+99
+99
 Instance of Observable created.
 Instance of Observable created.
 Instance of Observable destroyed.
@@ -98,6 +104,10 @@ Instance of Observable destroyed.
 
 vector display
 0
+vector3 capacity :16
+vector3 size :1
+Instance of Observable destroyed.
+Instance of Observable destroyed.
 Instance of Observable destroyed.
 Instance of Observable destroyed.
 Instance of Observable destroyed.

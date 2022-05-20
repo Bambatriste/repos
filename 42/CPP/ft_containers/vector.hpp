@@ -67,12 +67,34 @@ namespace ft
 		_end(_start),
 		_capacity(0)
 		{}
-		// explicit vector( size_type count, const T& value = T(), const Allocator& alloc = Allocator())
-		// :
-		// _allocator(alloc)
+		explicit vector( size_type count, const T& value = T(), const Allocator& alloc = Allocator())
+		:
+		_allocator(alloc),
+		_start(_allocator.allocate(0)),
+		_end(_start),
+		_capacity(0)
+		{
+			assign(count, value);
+		}
+
+		void assign( size_type count, const T& value )
+		{
+			clear();
+			insert(_start, count, value);
+		}
+
+
+		// template< class InputIt >
+		// void assign( InputIt first, InputIt last )
 		// {
 
 		// }
+
+
+		//allocator_type get_allocator() const;
+
+
+		//vector& operator=( const vector& other );
 
 		~vector()
 		{
@@ -137,10 +159,8 @@ namespace ft
 
 		void clear()
 		{
-			for (size_type i; i < size(); i++)
-			{
+			for (size_type i = 0; i < size(); i++)
 				_allocator.destroy(_start + i);
-			}
 			_end = _start;
 		}
 
@@ -152,23 +172,19 @@ namespace ft
 				return (_end - 1);
 			}
 			difference_type n_move = _end - pos;
-			difference_type capacity_diff = capacity() - size();
 			reallocate(1);
 			pointer previous = _end - 1;
 			pointer current = previous + 1;
 			for (difference_type i = 0; i < n_move; i++)
 			{
-				if (capacity_diff)
-				{
+				if (_start + i > _start + size())
 					_allocator.construct(current, *previous);
-					capacity_diff--;
-				}
 				else
 					*current = *previous;
 				--current;
 				--previous;
 			}
-			if (capacity_diff)
+			if (current > _start + size())
 				_allocator.construct(current, value);
 			else
 				*current = value;
@@ -182,30 +198,23 @@ namespace ft
 				return ;
 			difference_type n_moves = _end - pos;
 			reallocate(count);
-			difference_type capacity_diff = capacity() - size();
 			pointer previous = _end - 1;
 			pointer current = previous + count;
 			// decalage des anciens elements
 			for (difference_type i = 0; i < n_moves; i++)
 			{
-				if (capacity_diff)
-				{
+				if (_start + i > _start + size())
 					_allocator.construct(current, *previous);
-					capacity_diff--;
-				}
 				else
 					*current = *previous;
 				--current;
 				--previous;
 			}
 			//construction des nouveaux
-			for (size_type i = 0; i < count; ++i)
+			for (size_type i = 0; i < count; i++)
 			{
-				if (capacity_diff)
-				{
+				if (_start + i > _start + size())
 					_allocator.construct(current, value);
-					capacity_diff--;
-				}
 				else
 					*current = value;
 				current--;
@@ -222,16 +231,12 @@ namespace ft
 			difference_type n_moves = _end - pos;
 			
 			reallocate(count);
-			difference_type capacity_diff = capacity() - size();
 			pointer previous = _end - 1;
 			pointer current = previous + count;
 			for (difference_type i = 0; i < n_moves; i++)
 			{
-				if (capacity_diff)
-				{
+				if (_start + i > _start + size())
 					_allocator.construct(current, *previous);
-					capacity_diff--;
-				}
 				else
 					*current = *previous;
 				current--;
@@ -239,11 +244,8 @@ namespace ft
 			}
 			for (size_type i = 0; i < count; i++)
 			{
-				if (capacity_diff)
-				{
+				if (_start + i > _start + size())
 					_allocator.construct(current, *(last - 1));
-					capacity_diff--;
-				}
 				else
 					*current = *(last -1);
 				current--;

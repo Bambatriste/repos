@@ -192,6 +192,8 @@ int main(int ac, char **av)
 	std::cout << "insert return value : " << *insert_test << std::endl; 
 
 	vector2.insert(vector2.begin(), 5, 77);
+
+	vector2.insert(vector2.begin() + 2, 5, 33);
 	
 	vector1.push_back(1);
 	vector1.push_back(2);
@@ -213,6 +215,10 @@ int main(int ac, char **av)
 	vector2.resize(36, 0);
 	
 	display_vector(vector2);
+
+	vector2.assign(4, 99);
+	display_vector(vector2);
+
 
 	//display_vector(vector2);
 
@@ -242,8 +248,13 @@ int main(int ac, char **av)
 	
 	//std::cout << ptr << std::endl;
 	display_vector(vector3);
+	std::cout << "vector3 capacity :" << vector3.capacity() << std::endl;
+	std::cout << "vector3 size :" << vector3.size() << std::endl;
 
-	
+	vector3.insert(vector3.begin(), 1, c1);
+
+	//display_vector(vector3);
+
 
 	//vector2.resize(36, 0);
 
