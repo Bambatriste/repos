@@ -2,9 +2,9 @@
 
 
 make fclean
-make CPPFLAGS='-Wall -Wextra -Werror -std=c++11 -D STD' NAME='std.out';
+make CPPFLAGS='-Wall -Wextra -Werror -std=c++98 -D STD' NAME='std.out';
 make fclean;
-make CPPFLAGS='-Wall -Wextra -Werror -std=c++11' NAME='ft.out';
+make CPPFLAGS='-Wall -Wextra -Werror -std=c++98' NAME='ft.out';
 
 rm std.log ft.log diff.log;
 

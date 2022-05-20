@@ -35,17 +35,23 @@ namespace ft
 		pointer			_end;
 		size_type		_capacity;
 
-		void	reallocate(size_t size_add)
+		void	_reallocate(size_t size_add)
 		{
 			size_t newsize = size() + size_add;
+			int n = 0;
+			int newalloc = 1;
 			if (newsize > capacity())
 			{
 				if (size() == 0)
 					reserve(newsize);
-				else
+				while (newsize > capacity())
 				{
-					while (newsize > capacity())
-					reserve(2 * capacity());
+					if (n == 0)
+						newalloc = size() * 2;
+					else
+						newalloc *=2;
+					n++;
+					reserve(newalloc);
 				}
 			}
 		}
@@ -100,6 +106,7 @@ namespace ft
 		{
 			for (size_type i = 0; i < size() ; i++) { _allocator.destroy(&_start[i]); }
 			_allocator.deallocate(_start, _capacity);
+			_start = 0;
 		}
 
 		//functions
@@ -146,7 +153,7 @@ namespace ft
 		void push_back( const T& value )
 		{
 			//T vcpy = value; // just in case reserve destroys it
-			reallocate(1);
+			_reallocate(1);
 			_allocator.construct(_end, value);
 			_end++;
 		}
@@ -172,19 +179,19 @@ namespace ft
 				return (_end - 1);
 			}
 			difference_type n_move = _end - pos;
-			reallocate(1);
+			_reallocate(1);
 			pointer previous = _end - 1;
 			pointer current = previous + 1;
 			for (difference_type i = 0; i < n_move; i++)
 			{
-				if (_start + i > _start + size())
+				if (current >= _start + size())
 					_allocator.construct(current, *previous);
 				else
 					*current = *previous;
 				--current;
 				--previous;
 			}
-			if (current > _start + size())
+			if (current >= _start + size())
 				_allocator.construct(current, value);
 			else
 				*current = value;
@@ -192,35 +199,36 @@ namespace ft
 			return (current);
 		}
 
-		void insert( iterator pos, size_type count, const T& value )
-		{
-			if (count == 0)
-				return ;
-			difference_type n_moves = _end - pos;
-			reallocate(count);
-			pointer previous = _end - 1;
-			pointer current = previous + count;
-			// decalage des anciens elements
-			for (difference_type i = 0; i < n_moves; i++)
-			{
-				if (_start + i > _start + size())
-					_allocator.construct(current, *previous);
-				else
-					*current = *previous;
-				--current;
-				--previous;
-			}
-			//construction des nouveaux
-			for (size_type i = 0; i < count; i++)
-			{
-				if (_start + i > _start + size())
-					_allocator.construct(current, value);
-				else
-					*current = value;
-				current--;
-			}
-			_end += count;
-		}
+        void insert( iterator pos, size_type count, const T& value )
+        {
+            if (count == 0)
+                return ;
+            difference_type n_moves = _end - pos;
+            _reallocate(count);
+            pointer previous = _end - 1;
+            pointer current = previous + count;
+
+            // decalage des anciens elements
+            for (difference_type i = 0; i < n_moves; i++)
+            {
+                if (current >= _start + size())
+                    _allocator.construct(current, *previous);
+                else
+                    *current = *previous;
+                --current;
+                --previous;
+            }
+            //construction des nouveaux
+            for (size_type i = 0; i < count; i++)
+            {
+                if (current >= _start + size())
+                    _allocator.construct(current, value);
+                else
+                    *current = value;
+                current--;
+            }
+            _end += count;
+        }
 		
 		template< class InputIt >
 		void insert( iterator pos,typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type first, InputIt last )
@@ -230,12 +238,12 @@ namespace ft
 			size_t count = last - first;
 			difference_type n_moves = _end - pos;
 			
-			reallocate(count);
+			_reallocate(count);
 			pointer previous = _end - 1;
 			pointer current = previous + count;
 			for (difference_type i = 0; i < n_moves; i++)
 			{
-				if (_start + i > _start + size())
+				if (current >= _start + size())
 					_allocator.construct(current, *previous);
 				else
 					*current = *previous;
@@ -244,7 +252,7 @@ namespace ft
 			}
 			for (size_type i = 0; i < count; i++)
 			{
-				if (_start + i > _start + size())
+				if (current >= _start + size())
 					_allocator.construct(current, *(last - 1));
 				else
 					*current = *(last -1);
@@ -286,12 +294,12 @@ namespace ft
 		void resize( size_type count, T value = T() )
 		{
 			if (count > size())
-				reallocate(count - size());
+				reserve(count);
 			if (count < size())
 			{
 				while (count < size())
 				{
-					_allocator.destroy(_end -1);
+					_allocator.destroy(_end - 1);
 					_end--;
 				}
 			}
