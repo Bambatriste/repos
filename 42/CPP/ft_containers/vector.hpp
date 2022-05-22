@@ -120,7 +120,7 @@ namespace ft
 			if (this != &other)
 			{
 				resize(other.size());
-				for (size_t i = 0; i < size(); i++)
+				for (size_type i = 0; i < size(); i++)
 				{
 					_start[i] = other._start[i];
 				}
@@ -346,7 +346,6 @@ namespace ft
 			pointer tmp_end = _end;
 			size_type tmp_capacity = _capacity;
 
-			(void)other;
 			tmp_start = this->_start;
 			tmp_end = this->_end;
 			tmp_capacity = this->_capacity;
@@ -404,16 +403,16 @@ namespace ft
 		{return _end;}
 
 		reverse_iterator rbegin()
-		{return reverse_iterator(begin());}
+		{return reverse_iterator(end());}
 
 		const_reverse_iterator rbegin() const
-		{return reverse_iterator(begin());}
+		{return reverse_iterator(end());}
 
 		reverse_iterator rend()
-		{return reverse_iterator(end());}
+		{return reverse_iterator(begin());}
 
 		const_reverse_iterator rend() const
-		{return reverse_iterator(end());}
+		{return reverse_iterator(begin());}
 	};
 
 	template< class T, class Alloc >
@@ -422,7 +421,7 @@ namespace ft
 		if (lhs.size() != rhs.size())
 			return (false);
 		else
-			for (int i = 0; i < lhs.size(); i++)
+			for (size_t i = 0; i < lhs.size(); i++)
 			{
 				if (lhs[i] != rhs[i])
 					return (false);

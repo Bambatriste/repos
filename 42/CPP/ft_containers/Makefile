@@ -6,7 +6,7 @@ CPPC = clang++
 
 OBJS = ${SRCS:.cpp=.o}
 
-CPPFLAGS = -Wall -Wextra -Werror -std=c++11 -g3
+CPPFLAGS = -Wall -Wextra -Werror -std=c++98 -g3
 
 all : $(NAME)
 

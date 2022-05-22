@@ -310,6 +310,9 @@ int main(int ac, char **av)
 	vector1.swap(vector2);
 	display_vector(vector1);
 	display_vector(vector2);
+
+	std::cout << *vector1.rbegin() << std::endl;
+	std::cout << *vector1.rend() << std::endl;
 	//vector3.push_back(c1);
 	//std::cout << "vector3 capacity :" << vector3.capacity() << std::endl;
 	//std::cout << "vector3 size :" << vector3.size() << std::endl;
