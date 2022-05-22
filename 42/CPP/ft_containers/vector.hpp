@@ -40,9 +40,6 @@ namespace ft
 			size_t newsize = size() + size_add;
 			size_t buffer_realloc = 2 * (size());
 
-
-			//std::cout << "size inside : " << size() << std::endl;
-			//std::cout << "capacity inside :" << capacity() << std::endl;
 			if (newsize < capacity())
 				return;
 			else if (newsize > buffer_realloc)
@@ -86,8 +83,10 @@ namespace ft
 
 
 
-		//allocator_type get_allocator() const;
-
+		allocator_type get_allocator() const
+		{
+			return _allocator;
+		}
 
 		vector& operator=( const vector& other )
 		{
@@ -293,7 +292,6 @@ namespace ft
 
 		void resize( size_type count, T value = T() )
 		{
-			_reallocate(count);
 			if (count < size())
 			{
 				while (count < size())
@@ -304,6 +302,7 @@ namespace ft
 			}
 			else
 			{
+				_reallocate(count - size());
 				size_type size_diff = count - size();
 				while (size_diff > 0)
 				{

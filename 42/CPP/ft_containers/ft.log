@@ -89,6 +89,8 @@ vector display
 Instance of Observable created.
 Instance of Observable destroyed.0
 Instance of Observable destroyed.1
+vector 3 size before resize :18
+vector 3 capacity before resize :18
 Instance of Observable created.
 Instance of Observable destroyed.1
 Instance of Observable destroyed.1
@@ -109,7 +111,8 @@ Instance of Observable destroyed.1
 Instance of Observable destroyed.1
 Instance of Observable destroyed.0
 Instance of Observable destroyed.0
-Instance of Observable destroyed.0
+vector 3 size after resize :33
+vector 3 capacity after resize :36
 
 vector display
 1
@@ -129,6 +132,22 @@ vector display
 1
 1
 1
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
 Instance of Observable destroyed.0
 Instance of Observable destroyed.0
 Instance of Observable destroyed.0
@@ -149,5 +168,21 @@ Instance of Observable destroyed.1
 Instance of Observable destroyed.1
 Instance of Observable destroyed.1
 Instance of Observable destroyed.1
+Instance of Observable destroyed.0
+Instance of Observable destroyed.0
+Instance of Observable destroyed.0
+Instance of Observable destroyed.0
+Instance of Observable destroyed.0
+Instance of Observable destroyed.0
+Instance of Observable destroyed.0
+Instance of Observable destroyed.0
+Instance of Observable destroyed.0
+Instance of Observable destroyed.0
+Instance of Observable destroyed.0
+Instance of Observable destroyed.0
+Instance of Observable destroyed.0
+Instance of Observable destroyed.0
+Instance of Observable destroyed.0
+Instance of Observable destroyed.0
 Instance of Observable destroyed.0
 Instance of Observable destroyed.0

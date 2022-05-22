@@ -294,7 +294,11 @@ int main(int ac, char **av)
 	//while (i < 15)
 	//{
 	vector3.insert(vector3.begin(), 17, Observable(1));
-	vector3.resize(17, Observable());
+	// std::cout << "vector 3 size before resize :" << vector3.size() <<  std::endl;
+	// std::cout << "vector 3 capacity before resize :" << vector3.capacity() <<  std::endl;
+	vector3.resize(33, Observable());
+	// std::cout << "vector 3 size after resize :" << vector3.size() <<  std::endl;
+	// std::cout << "vector 3 capacity after resize :" << vector3.capacity() <<  std::endl;
 
 	
 	
