@@ -47,7 +47,7 @@ std::ostream &operator<<(std::ostream & os, const Observable &obs) {
 }
 
 template<class T>
-void display_vector(ft::vector<T> &vector)
+void display_vector(ft::vector<T> vector)
 {
 	std::cout << std::endl;
 	std::cout << "vector display" << std::endl;
@@ -303,6 +303,13 @@ int main(int ac, char **av)
 	
 	
 	display_vector(vector3);
+
+
+	display_vector(vector1);
+	display_vector(vector2);
+	vector1.swap(vector2);
+	display_vector(vector1);
+	display_vector(vector2);
 	//vector3.push_back(c1);
 	//std::cout << "vector3 capacity :" << vector3.capacity() << std::endl;
 	//std::cout << "vector3 size :" << vector3.size() << std::endl;

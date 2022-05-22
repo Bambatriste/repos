@@ -340,25 +340,25 @@ namespace ft
 			}
 		}
 
-		void swap( vector& other )
-		{
-			pointer tmp_start = _start;
-			pointer tmp_end = _end;
-			size_type tmp_capacity = _capacity;
+		// void swap( vector& other )
+		// {
+		// 	vector tmp;
+		// 	tmp._start = this->_start;
+		// 	tmp._end = this->_end;
+		// 	tmp._capacity = this->_capacity;
+		// 	tmp._allocator = this->_allocator;
 
-			(void)other;
-			tmp_start = this->_start;
-			tmp_end = this->_end;
-			tmp_capacity = this->_capacity;
+		// 	this->_start = other._start;
+		// 	this->_end = other._end;
+		// 	this->_capacity = other._capacity;
+		// 	this->_allocator = other._allocator;
 
-			this->_start = other._start;
-			this->_end = other._end;
-			this->_capacity = other._capacity;
+		// 	other._start = tmp._start;
+		// 	other._end = tmp._end;
+		// 	other._capacity = tmp._capacity;
+		// 	other._allocator = tmp._allocator;
 
-			other._start = tmp_start;
-			other._end = tmp_end;
-			other._capacity = tmp_capacity;
-		}
+		// }
 
 		/* ELEMENT ACCES*/
 
