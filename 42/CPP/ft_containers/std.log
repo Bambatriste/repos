@@ -7,22 +7,13 @@ vector display
 46
 47
 48
- test capacity before insert 1: 8
-insert return value : 36
- test capacity before insert 2: 8
- test capacity before insert 3: 16
- test size before insert 3: 13
- test capacity after insert 3: 26
- test capacity before erase: 26
-return value for erase : 6
-size before insert : 18
- test capacity before insert: 26
-size after insert : 23
- test capacity resize : 26
+return value for insert test : 36
 
 vector display
 2
 3
+4
+5
 6
 7
 8
@@ -44,25 +35,6 @@ vector display
 46
 47
 48
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-
-vector display
-99
-99
-99
-99
 
 vector display
 99
@@ -75,16 +47,11 @@ Instance of Observable destroyed.0
 Instance of Observable destroyed.0
 Instance of Observable destroyed.0
 Instance of Observable destroyed.0
-before el insertado :2
-Instance of Observable destroyed.0
-Instance of Observable destroyed.0
-before el insertinho :4
-before el insertinho size :3
 Instance of Observable destroyed.0
 Instance of Observable destroyed.0
 Instance of Observable destroyed.0
-before el inserto capacity :8
-before el inserto  size :8
+Instance of Observable destroyed.0
+Instance of Observable destroyed.0
 Instance of Observable destroyed.0
 Instance of Observable destroyed.0
 Instance of Observable destroyed.0
@@ -116,12 +83,9 @@ Instance of Observable destroyed.0
 Instance of Observable destroyed.0
 Instance of Observable destroyed.0
 Instance of Observable destroyed.0
-last vector 3 display
 
 vector display
 0
-vector3 capacity :16
-vector3 size :1
 Instance of Observable created.
 Instance of Observable destroyed.0
 Instance of Observable destroyed.1
@@ -147,8 +111,6 @@ vector display
 1
 1
 1
-vector3 capacity :18
-vector3 size :17
 Instance of Observable destroyed.0
 Instance of Observable destroyed.0
 Instance of Observable destroyed.0

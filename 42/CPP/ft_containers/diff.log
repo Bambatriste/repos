@@ -1,21 +1,19 @@
-86,92d85
-< before el inserto capacity :8
-< before el inserto  size :8
-< Instance of Observable destroyed.0
-< Instance of Observable destroyed.0
-< Instance of Observable destroyed.0
-< Instance of Observable destroyed.0
-< Instance of Observable destroyed.0
-95a89,90
-> before el inserto capacity :12
-> before el inserto  size :8
-123c118
-< vector3 capacity :16
----
-> vector3 capacity :12
-126a122
+92a93,110
+> Instance of Observable destroyed.1
+> Instance of Observable destroyed.1
+> Instance of Observable destroyed.1
+> Instance of Observable destroyed.1
+> Instance of Observable destroyed.1
+> Instance of Observable destroyed.1
+> Instance of Observable destroyed.1
+> Instance of Observable destroyed.1
+> Instance of Observable destroyed.1
+> Instance of Observable destroyed.1
+> Instance of Observable destroyed.1
+> Instance of Observable destroyed.1
+> Instance of Observable destroyed.1
+> Instance of Observable destroyed.1
+> Instance of Observable destroyed.1
+> Instance of Observable destroyed.1
+> Instance of Observable destroyed.1
 > Instance of Observable destroyed.0
-150c146
-< vector3 capacity :18
----
-> vector3 capacity :32

@@ -23,6 +23,14 @@
 #include <string>
 #include <iostream>
 
+// template<class T>
+// void wrapper_insert(ft::vector<T>& vect, size_t count, T& value) {
+// 	std::cout << "capacity before insert: " << vec.capacity();
+// 	std::cout << "size before insert: " << vect.size();
+// 	v.insert(count, value);
+// 	std::cout << "capacity before insert: " << vec.capacity();
+// 	std::cout << "size before insert: " << vect.size();
+// }
 
 class Observable {
 	public:
@@ -187,24 +195,25 @@ int main(int ac, char **av)
 	vector2.push_back(48);
 	display_vector(vector2);
 
-	std::cout << " test capacity before insert 1: " << vector2.capacity() << std::endl;
 	
 
 	ft::vector<int>::iterator insert_test = vector2.insert(vector2.begin() + 2, 36); //segv if begin is out of range , but std too
-	std::cout << "insert return value : " << *insert_test << std::endl; 
+	std::cout << "return value for insert test : " << *insert_test << std::endl;
 
-
-	std::cout << " test capacity before insert 2: " << vector2.capacity() << std::endl;
 
 
 	vector2.insert(vector2.begin(), 5, 77);
 
-	std::cout << " test capacity before insert 3: " << vector2.capacity() << std::endl;
-	std::cout << " test size before insert 3: " << vector2.size() << std::endl;
+
+
+	//  std::cout <<  "before insert capacity :" << vector2.capacity() << std::endl;
+	// std::cout <<  "before insert size :" << vector2.size() << std::endl;
 
 	vector2.insert(vector2.begin() + 2, 5, 33);
 
-	std::cout << " test capacity after insert 3: " << vector2.capacity() << std::endl;
+	// std::cout <<  "after insert capacity :" << vector2.capacity() << std::endl;
+	// std::cout <<  "after insert size :" << vector2.size() << std::endl;
+
 	
 	vector1.push_back(1);
 	vector1.push_back(2);
@@ -216,34 +225,36 @@ int main(int ac, char **av)
 	vector1.push_back(8);
 	vector1.erase(vector1.begin());
 
-	std::cout << " test capacity before erase: " << vector2.capacity() << std::endl;
+
+	//ft::vector<int>::iterator test = vector1.erase(vector1.begin() +2, vector1.begin() + 4);
 
 	
-
-	ft::vector<int>::iterator test = vector1.erase(vector1.begin() +2, vector1.begin() + 4);
-
-	
-	std::cout << "return value for erase : " << *test << std::endl;
-	
+	//std::cout << "return value for erase : " << *test << std::endl;
 	//vector2.resize(36, 0); // problem due to insert when resizing to bigger (invalid write : 1)
-	std::cout << "size before insert : " << vector2.size() << std::endl;
-	std::cout << " test capacity before insert: " << vector2.capacity() << std::endl;
+	//std::cout <<  "before insert capacity : :" << vector2.capacity() << std::endl;
+	//std::cout <<  "before insert size :" << vector2.size() << std::endl;
+
+
+	// std::cout <<  "before insert size : :" << vector2.size() << std::endl;
+	// std::cout <<  "before insert capacity : :" << vector2.capacity() << std::endl;
+	// std::cout << "number of elements to add : " << vector1.end() - vector1.begin() << std :: endl;
+	// display_vector(vector2);
 	vector2.insert(vector2.begin(), vector1.begin(), vector1.end()); // problem for erase and insert if vector1.end() + 1 probably just undefined behavior
-	std::cout << "size after insert : " << vector2.size() << std::endl;
-	std::cout << " test capacity resize : " << vector2.capacity() << std::endl;
-	vector2.resize(36, 0);
+	// std::cout <<  "after insert capacity : :" << vector2.capacity() << std::endl;
+	// std::cout <<  "after insert size : :" << vector2.size() << std::endl;
+
+
+	//std::cout <<  "before resize size :" << vector2.size() << std::endl;
+	//vector2.resize(36, 0);
+	//std::cout <<  "after resize capacity : :" << vector2.capacity() << std::endl;
+	//std::cout <<  "after resize size :" << vector2.size() << std::endl;
 	
 	display_vector(vector2);
-
 	vector2.assign(4, 99);
-	display_vector(vector2);
-
-
 	display_vector(vector2);
 
 	Observable c1;
 	Observable c2;
-
 
 	ft::vector<Observable> vector3;
 	const std::allocator<Observable> obs;
@@ -253,20 +264,17 @@ int main(int ac, char **av)
 	vector4.push_back(c2);
 	vector4.push_back(c1);
 
-
 	vector3.push_back(c1);
 	vector3.push_back(c2);
 
-	std::cout <<  "before el insertado :" << vector3.capacity() << std::endl;
-
 	vector3.insert(vector3.end(), c2);
 
-	std::cout <<  "before el insertinho :" << vector3.capacity() << std::endl;
-	std::cout <<  "before el insertinho size :" << vector3.size() << std::endl;
+	//std::cout <<  "before insert :" << vector3.capacity() << std::endl;
+	//std::cout <<  "before insert size :" << vector3.size() << std::endl;
 	vector3.insert(vector3.end(), 5, c2);
 
-	std::cout <<  "before el inserto capacity :" << vector3.capacity() << std::endl;
-	std::cout <<  "before el inserto  size :" << vector3.size() << std::endl;
+	//std::cout <<  "after insert capacity :" << vector3.capacity() << std::endl;
+	//std::cout <<  "after insert  size :" << vector3.size() << std::endl;
 
 	vector3.insert(vector3.begin() +1, vector4.begin(), vector4.end());
 
@@ -277,10 +285,10 @@ int main(int ac, char **av)
 	
 	//std::cout << ptr << std::endl;
 
-	std::cout << "last vector 3 display" << std::endl;
+//std::cout << "last vector 3 display" << std::endl;
 	display_vector(vector3);
-	std::cout << "vector3 capacity :" << vector3.capacity() << std::endl;
-	std::cout << "vector3 size :" << vector3.size() << std::endl;
+	//std::cout << "vector3 capacity :" << vector3.capacity() << std::endl;
+	//std::cout << "vector3 size :" << vector3.size() << std::endl;
 
 	//int i = 0;
 	//while (i < 15)
@@ -292,8 +300,8 @@ int main(int ac, char **av)
 	
 	display_vector(vector3);
 	//vector3.push_back(c1);
-	std::cout << "vector3 capacity :" << vector3.capacity() << std::endl;
-	std::cout << "vector3 size :" << vector3.size() << std::endl;
+	//std::cout << "vector3 capacity :" << vector3.capacity() << std::endl;
+	//std::cout << "vector3 size :" << vector3.size() << std::endl;
 
 
 

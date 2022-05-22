@@ -38,22 +38,17 @@ namespace ft
 		void	_reallocate(size_t size_add)
 		{
 			size_t newsize = size() + size_add;
-			int n = 0;
-			int newalloc = 1;
-			if (newsize > capacity())
-			{
-				if (size() == 0)
-					reserve(newsize);
-				while (newsize > capacity())
-				{
-					if (n == 0)
-						newalloc = size() * 2;
-					else
-						newalloc *=2;
-					n++;
-					reserve(newalloc);
-				}
-			}
+			size_t buffer_realloc = 2 * (size());
+
+
+			//std::cout << "size inside : " << size() << std::endl;
+			//std::cout << "capacity inside :" << capacity() << std::endl;
+			if (newsize < capacity())
+				return;
+			else if (newsize > buffer_realloc)
+				reserve (newsize);
+			else
+				reserve (buffer_realloc);
 		}
 
 		public :
@@ -90,17 +85,22 @@ namespace ft
 		}
 
 
-		// template< class InputIt >
-		// void assign( InputIt first, InputIt last )
-		// {
-
-		// }
-
 
 		//allocator_type get_allocator() const;
 
 
-		//vector& operator=( const vector& other );
+		vector& operator=( const vector& other )
+		{
+			if (this != &other)
+			{
+				resize(other.size());
+				for (size_t i = 0; i < size(); i++)
+				{
+					_start[i] = other._start[i];
+				}
+				return *this;
+			}
+		}
 
 		~vector()
 		{
@@ -293,8 +293,7 @@ namespace ft
 
 		void resize( size_type count, T value = T() )
 		{
-			if (count > size())
-				reserve(count);
+			_reallocate(count);
 			if (count < size())
 			{
 				while (count < size())
