@@ -1,8 +1,8 @@
 #!/bin/bash
 
-g++ mazoise_main.cpp && ./a.out > ft_mazoise.log
+g++ mazoise_main.cpp -std=c++98 && ./a.out > ft_mazoise.log
 rm a.out
-g++ -D=STD mazoise_main.cpp && ./a.out > std_mazoise.log
+g++ -D=STD mazoise_main.cpp -std=c++98 && ./a.out > std_mazoise.log
 
 rm diff_mazoise.log
 

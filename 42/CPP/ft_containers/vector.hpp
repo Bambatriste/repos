@@ -40,11 +40,15 @@ namespace ft
 		void	_reallocate(size_t size_add)
 		{
 			size_t newsize = size() + size_add;
-			size_t buffer_realloc = 2 * (capacity());
+			size_t buffer_realloc;
 
 			if (newsize <= capacity())
 				return;
-			else if (newsize > buffer_realloc)
+			if (size_add == 1)
+				buffer_realloc = 2 * (capacity());
+			else
+				buffer_realloc = 2 * size();
+			if (newsize > buffer_realloc)
 				reserve (newsize);
 			else
 				reserve (buffer_realloc);
@@ -118,14 +122,8 @@ namespace ft
 
 		vector& operator=( const vector& other )
 		{
-			if (this != &other)
-			{
-				resize(other.size());
-				for (size_type i = 0; i < size(); i++)
-				{
-					_start[i] = other._start[i];
-				}
-			}
+			if (this == &other) { return *this; }
+			this->assign(other.begin(), other.end());
 			return *this;
 		}
 
@@ -294,40 +292,10 @@ namespace ft
 			return(erase(pos, pos + 1));
 		}
 
-		// iterator erase( iterator first, iterator last )
-		// {
-		// 	pointer curr = first;
-		// 	pointer next = last;
-		// 	size_t erase_count = last - first;
-		// 	while (erase_count)
-		// 	{
-		// 		_allocator.destroy(curr);
-		// 		if (next < _end)
-		// 		{
-		// 			_allocator.construct(curr, *next);
-		// 		}
-		// 		erase_count--;
-		// 		next++;
-		// 		curr++;
-		// 	}
-		// 	_end -= last - first;
-		// 	while (curr != _end)
-		// 	{
-		// 		*curr = *next;
-		// 		next++;
-		// 		curr++;
-		// 	}
-		// 	while (curr != end + erase_count)
-		// 	{
-		// 		_allocator.destroy(curr);
-		// 	}
-		// 	return (first);
-		// }
-
 		iterator erase( iterator first, iterator last )
 		{
 			size_t erase_count = last - first;
-			iterator ret = first;
+			pointer ret = first;
 
 			while (last != _end)
 			{
@@ -335,7 +303,6 @@ namespace ft
 				first++;
 				last++;
 			}
-			ret = first;
 			while (first != _end)
 			{
 				_allocator.destroy(first);
@@ -357,8 +324,9 @@ namespace ft
 			}
 			else
 			{
-				_reallocate(count - size());
 				size_type size_diff = count - size();
+
+				_reallocate(count - size());
 				while (size_diff > 0)
 				{
 					_allocator.construct(_end, value);

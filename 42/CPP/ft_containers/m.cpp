@@ -226,22 +226,22 @@ int main(int ac, char **av)
 	vector1.erase(vector1.begin());
 
 
-	//ft::vector<int>::iterator test = vector1.erase(vector1.begin() +2, vector1.begin() + 4);
+	ft::vector<int>::iterator test = vector1.erase(vector1.begin() +2, vector1.begin() + 4);
 
 	
-	//std::cout << "return value for erase : " << *test << std::endl;
-	//vector2.resize(36, 0); // problem due to insert when resizing to bigger (invalid write : 1)
-	//std::cout <<  "before insert capacity : :" << vector2.capacity() << std::endl;
-	//std::cout <<  "before insert size :" << vector2.size() << std::endl;
+	std::cout << "return value for erase : " << *test << std::endl;
+	vector2.resize(36, 0); // problem due to insert when resizing to bigger (invalid write : 1)
+	std::cout <<  "before insert capacity : :" << vector2.capacity() << std::endl;
+	std::cout <<  "before insert size :" << vector2.size() << std::endl;
 
 
-	// std::cout <<  "before insert size : :" << vector2.size() << std::endl;
-	// std::cout <<  "before insert capacity : :" << vector2.capacity() << std::endl;
+	std::cout <<  "before insert size : :" << vector2.size() << std::endl;
+	std::cout <<  "before insert capacity : :" << vector2.capacity() << std::endl;
 	// std::cout << "number of elements to add : " << vector1.end() - vector1.begin() << std :: endl;
 	// display_vector(vector2);
 	vector2.insert(vector2.begin(), vector1.begin(), vector1.end()); // problem for erase and insert if vector1.end() + 1 probably just undefined behavior
-	// std::cout <<  "after insert capacity : :" << vector2.capacity() << std::endl;
-	// std::cout <<  "after insert size : :" << vector2.size() << std::endl;
+	std::cout <<  "after insert capacity : :" << vector2.capacity() << std::endl;
+	std::cout <<  "after insert size : :" << vector2.size() << std::endl;
 
 
 	//std::cout <<  "before resize size :" << vector2.size() << std::endl;
@@ -269,12 +269,12 @@ int main(int ac, char **av)
 
 	vector3.insert(vector3.end(), c2);
 
-	//std::cout <<  "before insert :" << vector3.capacity() << std::endl;
-	//std::cout <<  "before insert size :" << vector3.size() << std::endl;
+	std::cout <<  "before insert :" << vector3.capacity() << std::endl;
+	std::cout <<  "before insert size :" << vector3.size() << std::endl;
 	vector3.insert(vector3.end(), 5, c2);
 
-	//std::cout <<  "after insert capacity :" << vector3.capacity() << std::endl;
-	//std::cout <<  "after insert  size :" << vector3.size() << std::endl;
+	std::cout <<  "after insert capacity :" << vector3.capacity() << std::endl;
+	std::cout <<  "after insert  size :" << vector3.size() << std::endl;
 
 	vector3.insert(vector3.begin() +1, vector4.begin(), vector4.end());
 
