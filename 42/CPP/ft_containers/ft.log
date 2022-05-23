@@ -221,6 +221,82 @@ vector display
 8
 99
 0
+foo contains: 200 200 200 200 200
+bar contains: 100 100 100
+tmp before swap :100
+tmp2 before swap : 11
+tmp after swap :100
+tmp2 after swap : 11
+foo contains:
+11
+22
+33
+bar contains:
+100
+200
+iter through bar contains :
+100
+200
+tmp2 : 11
+11
+22
+33
+
+vector display
+11
+22
+33
+
+vector display
+73
+173
+763
+73854
+74683
+753
+
+vector display
+100
+200
+200
+100
+33
+22
+11
+73
+173
+763
+73854
+74683
+753
+
+vector display
+11
+22
+33
+
+vector display
+100
+200
+
+vector display
+73
+173
+763
+73854
+74683
+753
+100
+200
+11
+22
+33
+753
+74683
+73854
+763
+173
+73
 Instance of Observable destroyed.0
 Instance of Observable destroyed.0
 Instance of Observable destroyed.0

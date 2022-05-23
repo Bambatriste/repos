@@ -6,29 +6,30 @@
 # include "enable_if.hpp"
 # include "is_integral.hpp"
 # include "lexicographical_compare.hpp"
+# include "iterators_traits.hpp"
+# include "algorithms.hpp"
+
+
 
 namespace ft 
 {
 	template <class T, class Allocator = std::allocator<T> >
 	class vector 
 	{
-
-
 		public:
 		// types:
 		typedef typename Allocator::reference					reference;
 		typedef typename Allocator::const_reference 			const_reference;
-		typedef T* 												iterator;
-		typedef const T* 										const_iterator;
 		typedef std::size_t 									size_type; 
 		typedef std::ptrdiff_t									difference_type;
 		typedef T												value_type;
 		typedef Allocator										allocator_type;
-		typedef typename										Allocator::pointer pointer;
-		typedef typename										Allocator::const_pointer const_pointer;
+		typedef typename Allocator::pointer						pointer;
+		typedef typename Allocator::const_pointer				const_pointer;
+		typedef pointer											iterator;
+		typedef const_pointer									const_iterator;
 		typedef ft::reverse_iterator<iterator>					reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator>			const_reverse_iterator;
-
 
 		private:
 		Allocator		_allocator;
@@ -293,28 +294,55 @@ namespace ft
 			return(erase(pos, pos + 1));
 		}
 
+		// iterator erase( iterator first, iterator last )
+		// {
+		// 	pointer curr = first;
+		// 	pointer next = last;
+		// 	size_t erase_count = last - first;
+		// 	while (erase_count)
+		// 	{
+		// 		_allocator.destroy(curr);
+		// 		if (next < _end)
+		// 		{
+		// 			_allocator.construct(curr, *next);
+		// 		}
+		// 		erase_count--;
+		// 		next++;
+		// 		curr++;
+		// 	}
+		// 	_end -= last - first;
+		// 	while (curr != _end)
+		// 	{
+		// 		*curr = *next;
+		// 		next++;
+		// 		curr++;
+		// 	}
+		// 	while (curr != end + erase_count)
+		// 	{
+		// 		_allocator.destroy(curr);
+		// 	}
+		// 	return (first);
+		// }
+
 		iterator erase( iterator first, iterator last )
 		{
-			pointer curr = first;
-			pointer next = last;
 			size_t erase_count = last - first;
-			while (erase_count)
+			iterator ret = first;
+
+			while (last != _end)
 			{
-				_allocator.destroy(curr);
-				if (next < _end)
-					_allocator.construct(curr, *next);
-				erase_count--;
-				next++;
-				curr++;
+				*first = *last;
+				first++;
+				last++;
 			}
-			_end -= last - first;
-			while (curr < _end)
+			ret = first;
+			while (first != _end)
 			{
-				*curr = *next;
-				next++;
-				curr++;
+				_allocator.destroy(first);
+				first++;
 			}
-			return (first);
+			_end -= erase_count;
+			return (ret);
 		}
 
 		void resize( size_type count, T value = T() )
@@ -342,21 +370,9 @@ namespace ft
 
 		void swap( vector& other )
 		{
-			pointer tmp_start = _start;
-			pointer tmp_end = _end;
-			size_type tmp_capacity = _capacity;
-
-			tmp_start = this->_start;
-			tmp_end = this->_end;
-			tmp_capacity = this->_capacity;
-
-			this->_start = other._start;
-			this->_end = other._end;
-			this->_capacity = other._capacity;
-
-			other._start = tmp_start;
-			other._end = tmp_end;
-			other._capacity = tmp_capacity;
+			ft::swap(_start, other._start);
+			ft::swap(_end, other._end);
+			ft::swap(_capacity, other._capacity);
 		}
 
 		/* ELEMENT ACCES*/
@@ -456,6 +472,11 @@ namespace ft
 		return !(lhs < rhs);
 	}
 
+	template< class T, class Alloc >
+	void swap( ft::vector<T,Alloc>& lhs, ft::vector<T,Alloc>& rhs )
+	{
+		lhs.swap(rhs);
+	}
 }
 
 #endif /* ************************************************************* VECTOR_HPP */
