@@ -74,14 +74,14 @@ namespace ft
 			reverse_iterator operator++( int )
 			{
 				reverse_iterator tmp = *this;
-				--(*this);
+				++(*this);
 				return (tmp);
 			}
 			// it--
 			reverse_iterator operator--( int )
 			{
 				reverse_iterator tmp = *this;
-				++(*this);
+				--(*this);
 				return (tmp);
 			}
 			reverse_iterator operator+( difference_type n ) const

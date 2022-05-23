@@ -40,9 +40,9 @@ namespace ft
 		void	_reallocate(size_t size_add)
 		{
 			size_t newsize = size() + size_add;
-			size_t buffer_realloc = 2 * (size());
+			size_t buffer_realloc = 2 * (capacity());
 
-			if (newsize < capacity())
+			if (newsize <= capacity())
 				return;
 			else if (newsize > buffer_realloc)
 				reserve (newsize);
@@ -163,7 +163,7 @@ namespace ft
 				size_type old_size = size();
 
 				new_start = _allocator.allocate(new_cap);
-				for (size_type i =0; i < size(); i++)
+				for (size_type i = 0; i < old_size; i++)
 				{
 					_allocator.construct(new_start + i, _start[i]);
 					_allocator.destroy(_start + i);

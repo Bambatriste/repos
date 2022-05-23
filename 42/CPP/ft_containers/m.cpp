@@ -206,13 +206,13 @@ int main(int ac, char **av)
 
 
 
-	//  std::cout <<  "before insert capacity :" << vector2.capacity() << std::endl;
-	// std::cout <<  "before insert size :" << vector2.size() << std::endl;
+	//std::cout <<  "before insert capacity :" << vector2.capacity() << std::endl;
+	//std::cout <<  "before insert size :" << vector2.size() << std::endl;
 
 	vector2.insert(vector2.begin() + 2, 5, 33);
 
-	// std::cout <<  "after insert capacity :" << vector2.capacity() << std::endl;
-	// std::cout <<  "after insert size :" << vector2.size() << std::endl;
+	//std::cout <<  "after insert capacity :" << vector2.capacity() << std::endl;
+	//std::cout <<  "after insert size :" << vector2.size() << std::endl;
 
 	
 	vector1.push_back(1);
