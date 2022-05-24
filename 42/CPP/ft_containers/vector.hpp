@@ -260,7 +260,7 @@ namespace ft
 		{
 			if (first == last)
 				return ;
-			size_t count = last - first;
+			size_type  count = ft::distance( first, last);
 			difference_type n_moves = _end - pos;
 			
 			_reallocate(count);
@@ -275,12 +275,13 @@ namespace ft
 				current--;
 				previous--;
 			}
+			last--;
 			for (size_type i = 0; i < count; i++)
 			{
 				if (current >= _start + size())
-					_allocator.construct(current, *(last - 1));
+					_allocator.construct(current, *(last));
 				else
-					*current = *(last -1);
+					*current = *(last);
 				current--;
 				last--;
 			}
@@ -346,6 +347,9 @@ namespace ft
 		/* ELEMENT ACCES*/
 
 		reference back()
+		{return (*(_end - 1));}
+
+		const_reference back() const
 		{return (*(_end - 1));}
 
 		reference operator[]( size_type pos )
