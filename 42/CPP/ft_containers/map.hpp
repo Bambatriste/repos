@@ -33,6 +33,15 @@ namespace ft
 		//typedef       CONST LEGACY BIDIR ITER TO VALUETYPE	const_iterator;
 		//typedef ft::reverse_iterator<iterator>					reverse_iterator;
 		//typedef ft::reverse_iterator<const_iterator>			const_reverse_iterator;
+
+
+        //todo :
+
+
+        // node for binary tree
+        // binary tree constructor
+        // binary tree iterator
+        // add red black rules
         
     };
 }
