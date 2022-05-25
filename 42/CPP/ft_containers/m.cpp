@@ -7,7 +7,7 @@
  namespace ft = std;
 #else
  #include "vector.hpp"
-//#include "map.hpp"
+ #include "map.hpp"
 //#include "stack.hpp"
  #include "pair.hpp"
  #include "is_integral.hpp"

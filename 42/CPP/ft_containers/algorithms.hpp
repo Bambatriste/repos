@@ -17,9 +17,9 @@ namespace ft
 	}
 
 	template<class InputIt>
-	typename ft::iterator_traits<InputIt>::difference_type distance(InputIt first, InputIt last)
+	typename iterator_traits<InputIt>::difference_type distance(InputIt first, InputIt last)
 	{
-		typename ft::iterator_traits<InputIt>::difference_type n = 0;
+		typename iterator_traits<InputIt>::difference_type n = 0;
 		while (first != last)
 		{
 			++first;

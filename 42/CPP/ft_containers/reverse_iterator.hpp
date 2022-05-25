@@ -158,12 +158,20 @@ namespace ft
 		return reverse_iterator<Iter>(it + n);
 	}
 
+	template< class Iterator>
+	typename reverse_iterator<Iterator>::difference_type operator-
+	( const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs )
+	{
+		return (rhs.base() - lhs.base());
+	}
+
 	template< class Iterator, class Iterator2>
 	typename reverse_iterator<Iterator>::difference_type operator-
 	( const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator2>& rhs )
 	{
 		return (rhs.base() - lhs.base());
 	}
+
 }
 
 #endif /* ************************************************************* REVERSE_ITERATOR_HPP */
