@@ -45,7 +45,7 @@ namespace ft
         _size(0),
         _node_allocator_(_node_allocator_),
         _allocator_(_allocator_),
-        _root(0),
+        _root(0)
         {
             create_end_node();
         }
@@ -110,7 +110,7 @@ namespace ft
             node_pointer tmp = _root;
             while (tmp)
             {
-                if (value < tmp)
+                if (_comp(content.first, tmp->content.first))
                 {
                     if (!tmp->left)
                     {
