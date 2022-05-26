@@ -4,17 +4,20 @@
 # include <iostream>
 # include <string>
 
-class bidirit
+namespace ft
 {
-	public:
-		bidirit();
-		bidirit(bidirit const &src);
-		~bidirit();
-		bidirit &operator=(bidirit const &rhs);
-	private:
-};
+	class bidirit
+	{
+		public:
+			bidirit();
+			bidirit(bidirit const &src);
+			~bidirit();
+			bidirit &operator=(bidirit const &rhs);
+		private:
+	};
+}
 
-std::ostream &operator<<(std::ostream &o, bidirit const &instance);
+//std::ostream &operator<<(std::ostream &o, bidirit const &instance);
 
 
 #endif /* ************************************************************* BIDIRIT_HPP */

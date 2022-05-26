@@ -38,6 +38,22 @@ namespace ft
         typedef node*                                                       node_pointer;
         typedef typename    allocator_type::template rebind<node>::other	alnode;
 
+        class value_compare
+        {
+            friend class map;
+            protected:
+                Compare comp;
+                value_compare(Compare c):comp(c){}
+            public:
+                typedef bool                                                result_type;
+                typedef value_type                                          first_argument_type;
+                typedef value_type                                          second_argument_type;
+                bool operator()(const first_argument_type& lhs, const second_argument_type &rhs)
+                {
+                    return comp(lhs.first, rhs.first);
+                }
+        };
+
         //constructeurs :
 
         map()
@@ -45,7 +61,8 @@ namespace ft
         _size(0),
         _node_allocator_(_node_allocator_),
         _allocator_(_allocator_),
-        _root(0)
+        _root(0),
+        _comp(Compare())
         {
             create_end_node();
         }
@@ -156,7 +173,7 @@ namespace ft
 
     //todo :
 
-    //insert function
+    //iterators
     //accessor to display this beauty
     // binary tree iterator
     // add red black rules
