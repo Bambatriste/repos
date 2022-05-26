@@ -4,7 +4,13 @@
 
 # include "pair.hpp"
 
-//node contains : bool (red/black); T value; node * leftchild; node *rightchild;
+enum Node_color { BLACK, RED };
+
+# define LEFT 0
+# define RIGHT 1
+# define left  child[LEFT]
+# define right child[RIGHT]
+# define is_sentinel(node_pointer) (node_pointer->content == 0 ? true : false)
 
 namespace ft {
 
@@ -17,7 +23,7 @@ namespace ft {
 
 		pointer content;
 		node_pointer parent;
-		bool color;
+		Node_color color;
 		node_pointer child[2];
 	};
 }
