@@ -10,6 +10,8 @@
 # include "iterators_traits.hpp"
 # include "algorithms.hpp"
 # include "Node.hpp"
+#include <vector>
+#include <math.h>
 
 namespace ft 
 {
@@ -99,10 +101,6 @@ namespace ft
             new_node->parent = parent;
             new_node->color = BLACK;
             ++_size;
-            std::cout << "root node :" << std::endl;
-            std::cout << new_node->content->second << std::endl;
-            std::cout << new_node->right << std::endl;
-            std::cout << new_node->left << std::endl;
             return new_node;
         }
 
@@ -134,24 +132,15 @@ namespace ft
                 _root = create_node(content, 0);
                 _root->color = BLACK;
                 update_end_node();
-                std::cout << "root node after :" << std::endl;
-                std::cout << _root->content->second << std::endl;
-                std::cout << _root->right << std::endl;
-                std::cout << _root->left << std::endl;
-                std::cout << "test1" << std::endl;
                 return ;
-                
             }
             node_pointer tmp = _root;
             while (tmp)
             {
-                std::cout << "test2" << std::endl;
                 if (_comp(content.first, tmp->content->first))
                 {
                     if (!tmp->left)
                     {
-                        std::cout << tmp->content << std::endl;
-                        std::cout << "no tmp left" << std::endl;
                         tmp->left = create_node(content, tmp);
                         update_end_node();
                         return;
@@ -162,9 +151,6 @@ namespace ft
                 {
                     if (!tmp->right || is_sentinel(tmp->right))
                     {
-                        std::cout << tmp->content << std::endl;
-                        std::cout << tmp->right << std::endl;
-                        std::cout << "no tmp right" << std::endl;
                         tmp->right = create_node(content, tmp);
                         update_end_node();
                         return;
@@ -194,6 +180,98 @@ namespace ft
                 tmp = tmp->left;
             return tmp;
         }
+
+        void    display_self(node_pointer node = 0)
+        {
+            if (!node)
+            {
+                node = _root;
+                if (!node)
+                    return;
+            }
+            if (node->left && !is_sentinel(node->left))
+            {
+                display_self(node->left);
+            }
+            std::cout << node->content->first << " ";
+            if (node->right && !is_sentinel(node->right))
+            {
+                display_self(node->right);
+            }
+        }
+
+        int get_max_depth(node_pointer root)
+		{
+			if (!root || is_sentinel(root))
+				return 0;
+			int depth1 = get_max_depth(root->left);
+			int depth2 = get_max_depth(root->right);
+			return depth1 > depth2 ? depth1 + 1 : depth2 + 1;
+		}
+
+        void get_nodes_by_depth(std::vector<std::vector<node_pointer> > & nodes, node_pointer node = 0, int depth = 0)
+		{
+			if (!node && depth == 0)
+			{
+				node = _root;
+				if (!node)
+					return ; //empty
+			}
+			if (node && node->left && !is_sentinel(node->left))
+				get_nodes_by_depth(nodes, node->left, depth + 1);
+			else if ((size_t)(depth + 1) < nodes.size())
+				get_nodes_by_depth(nodes, 0, depth + 1);
+			nodes[depth].push_back(node);
+			if (node && node->right && !is_sentinel(node->right))
+				get_nodes_by_depth(nodes, node->right, depth + 1);
+			else if ((size_t)(depth + 1) < nodes.size())
+				get_nodes_by_depth(nodes, 0, depth + 1);
+		}
+
+		size_t sp2(int x) //sum of power of 2
+		{
+			if (x == 0) return 0;
+			size_t r = 1;
+			while (--x > 0)
+				r += pow(2, x);
+			return r;
+		}
+
+		void print_tree_ascii()
+		{
+			int elem_size = 1;
+			int depth = get_max_depth(_root);
+			std::vector<std::vector<node_pointer> > v;
+			for (int i = 0; i < depth; ++i)
+				v.push_back(std::vector<node_pointer>()); //filing v with depth
+			get_nodes_by_depth(v);
+			int i = depth - 1;
+			std::string padding;
+			for (typename std::vector<std::vector<node_pointer> >::iterator i1 = v.begin(); i1 != v.end(); ++i1)
+			{
+				padding.append(sp2(i) * elem_size, ' ');
+				std::cout << padding;
+				padding.clear();
+				padding.append(sp2(i + 1) * elem_size, ' ');
+				for (typename std::vector<node_pointer>::iterator i2 = (*i1).begin(); i2 != (*i1).end(); ++i2)
+				{
+					if (*i2)
+					{
+						if ((*i2)->color == RED)
+							std::cout << "\033[31m";
+						else
+							std::cout << "\033[37m";
+						std::cout << (*i2)->content->first << padding;
+					}
+					else
+						std::cout << "\033[37m " << padding;
+				}
+				std::cout << std::endl;
+				--i;
+				padding.clear();
+			}
+			std::cout << "\033[0m" << std::endl; //back to normal
+		}
     };
 }
 

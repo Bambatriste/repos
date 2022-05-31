@@ -456,11 +456,35 @@ int main(int ac, char **av)
 
 	ft::pair<int, std::string> pair_test(1, "bonjour");
 	ft::pair<int, std::string> pair_test2(2, "xonjour");
+	ft::pair<int, std::string> pair_test3(0, "abcd");
 
 	ft::map<int, std::string> map_test;
 
 	map_test.insert_node(pair_test);
 	map_test.insert_node(pair_test2);
+	map_test.insert_node(pair_test2);
+	map_test.insert_node(pair_test2);
+	map_test.insert_node(pair_test);
+	map_test.insert_node(pair_test3);
+	//map_test.display_self();
+
+
+	ft::pair <int , int> arraypair[10];
+	ft::map<int, int > int_map;
+	int values[10] = {9, 5 , 6 , 10 , 3 , 1 , 2 , 7 , 8, 4};
+	for (int i = 0; i < 10; i++)
+	{
+		arraypair[i] = ft::pair<int, int>(values[i], i);
+	}
+	for (int i = 0; i < 10; i++)
+	{
+		int_map.insert_node(arraypair[i]);
+	}
+	//int_map.display_self();
+	int_map.print_tree_ascii();
+
+
+
 
 
 
