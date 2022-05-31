@@ -13,10 +13,13 @@
 
 namespace ft 
 {
-    template<class Key, class T, class Compare = std::less<Key>, class Allocator = std::allocator<ft::pair<const Key, T> > >
+    template<class Key,
+             class T,
+            class Compare = std::less<Key>,
+            class Allocator = std::allocator<ft::pair<const Key, T> > 
+            >
     class map
     {
-
         public:
 		// types:
         typedef Key                                                         key_type;
@@ -54,18 +57,29 @@ namespace ft
                 }
         };
 
+        private:
+
+        allocator_type  _allocator;
+        alnode          _node_allocator;
+        node_pointer    _root;
+        node_pointer    _end;
+        size_type       _size;
+        key_compare     _comp;
+
+        public:
+
         //constructeurs :
 
-        map()
-        :
-        _size(0),
-        _node_allocator_(_node_allocator_),
-        _allocator_(_allocator_),
+        explicit map (const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type())
+		: 
+        _allocator(alloc),
+        _node_allocator(alloc),
         _root(0),
-        _comp(Compare())
-        {
-            create_end_node();
-        }
+        _end(0),
+        _comp(comp)
+		{
+			create_end_node();
+		}
 
         // capacity
 
@@ -73,31 +87,28 @@ namespace ft
 
         //explicit map( const Compare& comp, const Allocator& alloc = Allocator() );
 
-        private:
+        //private:
 
-        alnode          _node_allocator_;
-        allocator_type  _allocator_;
-        node_pointer    _root;
-        node_pointer    _end;
-        size_type       _size;
-        key_compare     _comp;
-
-        node_pointer create_node( value_type &content,node_pointer parent)
+        node_pointer create_node(const value_type &content, node_pointer parent)
         {
-            node_pointer new_node = _node_allocator_.allocate(1);
-            new_node->content = _allocator_.allocate(1);
-            _allocator_.construct(new_node->content, content);
+            node_pointer new_node = _node_allocator.allocate(1);
+            new_node->content = _allocator.allocate(1);
+            _allocator.construct(new_node->content, content);
             new_node->left = 0;
             new_node->right = 0;
             new_node->parent = parent;
             new_node->color = BLACK;
             ++_size;
+            std::cout << "root node :" << std::endl;
+            std::cout << new_node->content->second << std::endl;
+            std::cout << new_node->right << std::endl;
+            std::cout << new_node->left << std::endl;
             return new_node;
         }
 
         void create_end_node()
         {
-            _end = _node_allocator_.allocate(1);
+            _end = _node_allocator.allocate(1);
             _end->content = 0;
             _end->left = 0;
             _end->right = 0;
@@ -120,27 +131,43 @@ namespace ft
         {
             if (!_root)
             {
-                _root = create_node();
+                _root = create_node(content, 0);
                 _root->color = BLACK;
                 update_end_node();
+                std::cout << "root node after :" << std::endl;
+                std::cout << _root->content->second << std::endl;
+                std::cout << _root->right << std::endl;
+                std::cout << _root->left << std::endl;
+                std::cout << "test1" << std::endl;
+                return ;
+                
             }
             node_pointer tmp = _root;
             while (tmp)
             {
-                if (_comp(content.first, tmp->content.first))
+                std::cout << "test2" << std::endl;
+                if (_comp(content.first, tmp->content->first))
                 {
                     if (!tmp->left)
                     {
+                        std::cout << tmp->content << std::endl;
+                        std::cout << "no tmp left" << std::endl;
                         tmp->left = create_node(content, tmp);
+                        update_end_node();
+                        return;
                     }
                     tmp = tmp->left;
                 }
                 else
                 {
-                    if (!tmp->right)
+                    if (!tmp->right || is_sentinel(tmp->right))
                     {
+                        std::cout << tmp->content << std::endl;
+                        std::cout << tmp->right << std::endl;
+                        std::cout << "no tmp right" << std::endl;
                         tmp->right = create_node(content, tmp);
                         update_end_node();
+                        return;
                     }
                     tmp = tmp->right;
                 }

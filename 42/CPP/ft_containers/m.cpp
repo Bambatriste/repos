@@ -38,7 +38,7 @@ class Observable {
 		Observable() { _data = 0; std::cout << "Instance of Observable created." << std::endl; }
 		Observable(int data): _data(data) { std::cout << "Instance of Observable created." << std::endl; }
 		Observable(Observable const & src) { *this = src; }
-		~Observable() { std::cout << "Instance of Observable destroyed." << this->_data << std::endl; }
+		//~Observable() { std::cout << "Instance of Observable destroyed." << this->_data << std::endl; }
 		Observable &operator=(Observable const &rhs) { _data = rhs._data; return *this; }
 };
 std::ostream &operator<<(std::ostream & os, const Observable &obs) {
@@ -451,7 +451,16 @@ int main(int ac, char **av)
 		tmp3--;
 	}
 		std::cout << *tmp3 << '\n';
+
 }
+
+	ft::pair<int, std::string> pair_test(1, "bonjour");
+	ft::pair<int, std::string> pair_test2(2, "xonjour");
+
+	ft::map<int, std::string> map_test;
+
+	map_test.insert_node(pair_test);
+	map_test.insert_node(pair_test2);
 
 
 
