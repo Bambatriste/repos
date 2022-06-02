@@ -171,6 +171,7 @@ int main(int ac, char **av)
 
 	ft::vector<int> vector1;
 	ft::vector<int> vector2(allocator_int);
+	//ft::vector<float>vector3;
 
 
 	vector2.push_back(100);
@@ -460,28 +461,46 @@ int main(int ac, char **av)
 
 	ft::map<int, std::string> map_test;
 
-	map_test.insert_node(pair_test);
-	map_test.insert_node(pair_test2);
-	map_test.insert_node(pair_test2);
-	map_test.insert_node(pair_test2);
-	map_test.insert_node(pair_test);
-	map_test.insert_node(pair_test3);
+	// map_test.insert_node(pair_test);
+	// map_test.insert_node(pair_test2);
+	// map_test.insert_node(pair_test2);
+	// map_test.insert_node(pair_test2);
+	// map_test.insert_node(pair_test);
+	// map_test.insert_node(pair_test3);
 	//map_test.display_self();
 
 
-	ft::pair <int , int> arraypair[10];
-	ft::map<int, int > int_map;
-	int values[10] = {9, 5 , 6 , 10 , 3 , 1 , 2 , 7 , 8, 4};
-	for (int i = 0; i < 10; i++)
-	{
-		arraypair[i] = ft::pair<int, int>(values[i], i);
-	}
-	for (int i = 0; i < 10; i++)
-	{
-		int_map.insert_node(arraypair[i]);
-	}
-	//int_map.display_self();
-	int_map.print_tree_ascii();
+	// ft::pair <int , int> arraypair[10];
+	// ft::map<int, int > int_map;
+	// int values[10] = {9, 5 , 6 , 10 , 3 , 1 , 2 , 7 , 8, 4};
+	// for (int i = 0; i < 10; i++)
+	// {
+	// 	arraypair[i] = ft::pair<int, int>(values[i], i);
+	// }
+	// for (int i = 0; i < 10; i++)
+	// {
+	// 	int_map.insert_node(arraypair[i]);
+	// }
+	// //int_map.display_self();
+	// int_map.print_tree_ascii();
+
+	ft::map<int , std::string> pouet;
+	ft::map<int , std::string>::iterator j;
+	//ft::map<int , std::string>::iterator k;
+	j = pouet.insert(pair_test).first;
+	//std::cout << j->second;
+
+	// pouet.insert(pair_test2);
+	
+	// //vector<int>::iterator i;
+	// std::map<int , std::string>::iterator i;
+
+	// for (i = pouet.begin(); i != pouet.end(); ++i)
+    // {
+    //    std::cout << i->second << " ";
+    // }
+
+
 
 
 

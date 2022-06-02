@@ -10,6 +10,7 @@
 # include "iterators_traits.hpp"
 # include "algorithms.hpp"
 # include "Node.hpp"
+# include "map_iterator.hpp"
 #include <vector>
 #include <math.h>
 
@@ -35,7 +36,7 @@ namespace ft
         typedef const value_type&                                           const_reference;
         typedef typename Allocator::pointer						            pointer;
         typedef typename Allocator::const_pointer				            const_pointer;
-        //typedef 		LEGACY BIDIR ITER TO VALUETYPE			            iterator;
+        typedef ft::map_iterator<value_type>                                iterator;
         //typedef       CONST LEGACY BIDIR ITER TO VALUETYPE	            const_iterator;
         //typedef ft::reverse_iterator<iterator>					        reverse_iterator;
         //typedef ft::reverse_iterator<const_iterator>	                    const_reverse_iterator;
@@ -83,13 +84,57 @@ namespace ft
 			create_end_node();
 		}
 
-        // capacity
+        // CAPACITY
 
         bool empty() const { return _size == 0; }
 
         //explicit map( const Compare& comp, const Allocator& alloc = Allocator() );
 
-        //private:
+
+        //MODIFIERS
+
+        // ft::pair<iterator, bool> insert( const value_type& value )
+        // {
+        //     insert_node(value);
+        // }
+
+        pair<iterator, bool> insert(const value_type& content)
+        {
+            if (!_root)
+            {
+                _root = create_node(content, 0);
+                _root->color = BLACK;
+                update_end_node();
+                return make_pair(iterator(_root), true);
+            }
+            node_pointer tmp = _root;
+            while (tmp)
+            {
+                if (_comp(content.first, tmp->content->first))
+                {
+                    if (!tmp->left)
+                    {
+                        tmp->left = create_node(content, tmp);
+                        update_end_node();
+                        return make_pair(iterator(tmp->left), true);
+                    }
+                    tmp = tmp->left;
+                }
+                else
+                {
+                    if (!tmp->right || is_sentinel(tmp->right))
+                    {
+                        tmp->right = create_node(content, tmp);
+                        update_end_node();
+                        return make_pair(iterator(tmp->right), true);
+                    }
+                    tmp = tmp->right;
+                }
+            }
+            return make_pair(iterator(tmp), false);
+        }
+
+        private:
 
         node_pointer create_node(const value_type &content, node_pointer parent)
         {
@@ -99,7 +144,7 @@ namespace ft
             new_node->left = 0;
             new_node->right = 0;
             new_node->parent = parent;
-            new_node->color = BLACK;
+            new_node->color = RED;
             ++_size;
             return new_node;
         }
@@ -125,41 +170,6 @@ namespace ft
             }
         }
 
-        void    insert_node(const value_type& content)
-        {
-            if (!_root)
-            {
-                _root = create_node(content, 0);
-                _root->color = BLACK;
-                update_end_node();
-                return ;
-            }
-            node_pointer tmp = _root;
-            while (tmp)
-            {
-                if (_comp(content.first, tmp->content->first))
-                {
-                    if (!tmp->left)
-                    {
-                        tmp->left = create_node(content, tmp);
-                        update_end_node();
-                        return;
-                    }
-                    tmp = tmp->left;
-                }
-                else
-                {
-                    if (!tmp->right || is_sentinel(tmp->right))
-                    {
-                        tmp->right = create_node(content, tmp);
-                        update_end_node();
-                        return;
-                    }
-                    tmp = tmp->right;
-                }
-            }
-        }
-
         node_pointer get_rightmost_node()
         {
             if (this->empty())
@@ -180,6 +190,29 @@ namespace ft
                 tmp = tmp->left;
             return tmp;
         }
+
+
+
+        //todo :
+
+        // iterators
+        // accessor
+        // add red black rules
+
+
+        /***********************************************DISPLAY FUNCTIONS ***************************************************/
+        /********************************************************************************************************************/
+        /********************************************************************************************************************/
+        /********************************************************************************************************************/
+        /********************************************************************************************************************/
+        /********************************************************************************************************************/
+        /********************************************************************************************************************/
+        /********************************************************************************************************************/
+        /********************************************************************************************************************/
+        /********************************************************************************************************************/
+        /********************************************************************************************************************/
+        /********************************************************************************************************************/
+
 
         void    display_self(node_pointer node = 0)
         {
@@ -274,14 +307,5 @@ namespace ft
 		}
     };
 }
-
-
-    //todo :
-
-    //iterators
-    //accessor to display this beauty
-    // binary tree iterator
-    // add red black rules
-
 
 #endif /* ************************************************************* MAP_HPP */
