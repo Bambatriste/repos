@@ -3,6 +3,8 @@
 
 # include "Node.hpp"
 # include "iterators_traits.hpp"
+#include "map.hpp"
+#include "pair.hpp"
 
 namespace ft
 
@@ -23,31 +25,36 @@ namespace ft
 
 	};
 
-
-
 	template < class T>
-	class map_iterator : public ft::iterator<std::bidirectional_iterator_tag, T> 
+	class map_iterator
 	{
 		public:
 
-		typedef iterator<std::bidirectional_iterator_tag , T> iterator;
-		typedef	std::bidirectional_iterator_tag			iterator_category;
-		typedef	std::ptrdiff_t							difference_type;
-		typedef T										value_type;
-		typedef T*										pointer;
-		typedef T&										reference;
-		typedef typename value_type::first_type			key_type;
-		typedef typename value_type::second_type		mapped_type;
-		typedef iterator_traits<map_iterator>			iterator_traits;
-		typedef Node<key_type, mapped_type>				node;
-		typedef node*									node_pointer;
+		typedef iterator<std::bidirectional_iterator_tag , T> 				iterator;
+		typedef	ft::iterator_traits<iterator>								iterator_traits;
+		typedef	typename 	iterator_traits::difference_type				difference_type;
+		typedef typename 	iterator_traits::value_type						value_type;
+		typedef typename	iterator_traits::pointer						pointer;
+		typedef typename	iterator_traits::reference						reference;
+		typedef typename	iterator_traits::iterator_category				iterator_category;
+		typedef typename	value_type::first_type							key_type;
+		typedef typename	value_type::second_type							mapped_type;
+		typedef				Node<key_type, mapped_type>						node;
+		typedef				node*											node_pointer;
+		//typedef Node<K, V>*						node_pointer;
 
 		node_pointer _p;
 
-		map_iterator(node_pointer p = 0)
+		map_iterator()
+		{
+
+		}
+
+		map_iterator(node_pointer p)
 		:
 		_p(p)
 		{}
+
 
 		map_iterator(map_iterator const &src)
 		:
@@ -63,7 +70,7 @@ namespace ft
 		~map_iterator()
 		{}
 
-		operator map_iterator<const value_type> () const { return _p; }
+		//operator map_iterator<const value_type> () const { return _p; }
 
 		map_iterator& operator++()
 		{

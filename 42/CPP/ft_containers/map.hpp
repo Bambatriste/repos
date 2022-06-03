@@ -27,7 +27,7 @@ namespace ft
 		// types:
         typedef Key                                                         key_type;
         typedef T                         			                        mapped_type;
-        typedef ft::pair<const Key, T>                                      value_type;                               
+        typedef ft::pair<Key, T>                                      value_type;                               
         typedef std::size_t	        							            size_type; 
         typedef std::ptrdiff_t									            difference_type;
         typedef Compare										                key_compare;
@@ -84,6 +84,22 @@ namespace ft
 			create_end_node();
 		}
 
+        // explicit map (key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type())
+		// : 
+        // _allocator(alloc),
+        // _node_allocator(alloc),
+        // _root(0),
+        // _end(0),
+        // _comp(comp)
+		// {
+		// 	create_end_node();
+		// }
+
+        // template< class InputIt >
+        // map( InputIt first, InputIt last,
+        // const Compare& comp = Compare(),
+        // const Allocator& alloc = Allocator() );
+
         // CAPACITY
 
         bool empty() const { return _size == 0; }
@@ -98,6 +114,13 @@ namespace ft
         //     insert_node(value);
         // }
 
+        //ACCESSORS
+
+        iterator begin()
+        {
+            return (_root);
+        }
+
         pair<iterator, bool> insert(const value_type& content)
         {
             if (!_root)
@@ -105,7 +128,9 @@ namespace ft
                 _root = create_node(content, 0);
                 _root->color = BLACK;
                 update_end_node();
-                return make_pair(iterator(_root), true);
+                //map<key_type, mapped_type>::iterator it;
+                //ft::map<int , std::string>::iterator j;
+                return ft::make_pair(iterator(_root), true);
             }
             node_pointer tmp = _root;
             while (tmp)
@@ -116,7 +141,7 @@ namespace ft
                     {
                         tmp->left = create_node(content, tmp);
                         update_end_node();
-                        return make_pair(iterator(tmp->left), true);
+                        return ft::make_pair(iterator(tmp->left), true);
                     }
                     tmp = tmp->left;
                 }
@@ -126,12 +151,12 @@ namespace ft
                     {
                         tmp->right = create_node(content, tmp);
                         update_end_node();
-                        return make_pair(iterator(tmp->right), true);
+                        return ft::make_pair(iterator(tmp->right), true);
                     }
                     tmp = tmp->right;
                 }
             }
-            return make_pair(iterator(tmp), false);
+            return ft::make_pair(iterator(tmp), false);
         }
 
         private:
