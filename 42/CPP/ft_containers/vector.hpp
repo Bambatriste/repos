@@ -45,7 +45,7 @@ namespace ft
 			if (newsize <= capacity())
 				return;
 			if (size_add == 1)
-				buffer_realloc = 2 * (capacity()); //check for 2* 0
+				buffer_realloc = 2 * (capacity());
 			else
 				buffer_realloc = 2 * size();
 			if (newsize > buffer_realloc)

@@ -19,7 +19,7 @@ namespace ft
     template<class Key,
              class T,
             class Compare = std::less<Key>,
-            class Allocator = std::allocator<ft::pair<const Key, T> > 
+            class Allocator = std::allocator<ft::pair<Key, T> > 
             >
     class map
     {
@@ -121,7 +121,7 @@ namespace ft
             return (_root);
         }
 
-        pair<iterator, bool> insert(const value_type& content)
+        pair<iterator, bool> insert(value_type& content)
         {
             if (!_root)
             {
@@ -161,7 +161,7 @@ namespace ft
 
         private:
 
-        node_pointer create_node(const value_type &content, node_pointer parent)
+        node_pointer create_node(value_type &content, node_pointer parent)
         {
             node_pointer new_node = _node_allocator.allocate(1);
             new_node->content = _allocator.allocate(1);

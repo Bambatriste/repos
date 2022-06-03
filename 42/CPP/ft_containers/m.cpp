@@ -455,7 +455,7 @@ int main(int ac, char **av)
 
 }
 
-	ft::pair<const int, std::string> pair_test(1, "bonjour");
+	ft::pair<int, std::string> pair_test(1, "bonjour");
 	ft::pair<int, std::string> pair_test2(2, "xonjour");
 	ft::pair<int, std::string> pair_test3(0, "abcd");
 
@@ -487,10 +487,10 @@ int main(int ac, char **av)
 	ft::map<int , std::string> pouet;
 	ft::map<int , std::string>::iterator j;
 	//ft::map<int , std::string>::iterator k;
-	pouet.insert(pair_test);
-	j = pouet.begin();
+	j = pouet.insert(pair_test).first;
+	//j = pouet.begin();
 
-	//std::cout << j->second;
+	std::cout << j->second;
 
 	// pouet.insert(pair_test2);
 	

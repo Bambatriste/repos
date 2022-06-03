@@ -41,20 +41,18 @@ namespace ft
 		typedef typename	value_type::second_type							mapped_type;
 		typedef				Node<key_type, mapped_type>						node;
 		typedef				node*											node_pointer;
-		//typedef Node<K, V>*						node_pointer;
 
 		node_pointer _p;
 
 		map_iterator()
 		{
-
+			_p = NULL;
 		}
 
 		map_iterator(node_pointer p)
 		:
 		_p(p)
 		{}
-
 
 		map_iterator(map_iterator const &src)
 		:
@@ -109,6 +107,8 @@ namespace ft
 			++(*this);
 			return ret;
 		}
+
+		pointer operator->() const{ return &(*_p->content); }
 	};
 }
 
