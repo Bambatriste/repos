@@ -17,7 +17,7 @@ namespace ft {
 	template <class T1, class T2>
 	struct Node
 	{
-		typedef typename 	ft::pair<T1,T2>* 		pointer;
+		typedef typename 	ft::pair<const T1,T2>* 		pointer;
 		typedef				Node*						node_pointer;
 		typedef				Node&						node_reference;
 

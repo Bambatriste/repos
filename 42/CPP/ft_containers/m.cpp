@@ -18,7 +18,6 @@
  #include "vector.hpp"
 #endif
 
-
 #include <utility>
 #include <string>
 #include <iostream>
@@ -470,19 +469,19 @@ int main(int ac, char **av)
 	//map_test.display_self();
 
 
-	// ft::pair <int , int> arraypair[10];
-	// ft::map<int, int > int_map;
-	// int values[10] = {9, 5 , 6 , 10 , 3 , 1 , 2 , 7 , 8, 4};
-	// for (int i = 0; i < 10; i++)
-	// {
-	// 	arraypair[i] = ft::pair<int, int>(values[i], i);
-	// }
-	// for (int i = 0; i < 10; i++)
-	// {
-	// 	int_map.insert_node(arraypair[i]);
-	// }
-	// //int_map.display_self();
-	// int_map.print_tree_ascii();
+	ft::pair <int , int> arraypair[10];
+	ft::map<int, int > int_map;
+	int values[10] = {9, 5 , 6 , 10 , 3 , 1 , 2 , 7 , 8, 4};
+	for (int i = 0; i < 10; i++)
+	{
+		arraypair[i] = ft::pair<int, int>(values[i], i);
+	}
+	for (int i = 0; i < 10; i++)
+	{
+		int_map.insert(arraypair[i]);
+	}
+	//int_map.display_self();
+	int_map.print_tree_ascii();
 
 	ft::map<int , std::string> pouet;
 	ft::map<int , std::string>::iterator j;

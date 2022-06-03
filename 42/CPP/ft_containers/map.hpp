@@ -19,15 +19,15 @@ namespace ft
     template<class Key,
              class T,
             class Compare = std::less<Key>,
-            class Allocator = std::allocator<ft::pair<Key, T> > 
+            class Allocator = std::allocator<ft::pair<const Key, T> > 
             >
     class map
     {
         public:
 		// types:
-        typedef Key                                                         key_type;
+        typedef const Key                                                   key_type;
         typedef T                         			                        mapped_type;
-        typedef ft::pair<Key, T>                                      value_type;                               
+        typedef ft::pair<const Key, T>                                      value_type;                               
         typedef std::size_t	        							            size_type; 
         typedef std::ptrdiff_t									            difference_type;
         typedef Compare										                key_compare;
@@ -121,7 +121,7 @@ namespace ft
             return (_root);
         }
 
-        pair<iterator, bool> insert(value_type& content)
+        pair<iterator, bool> insert(const value_type& content)
         {
             if (!_root)
             {
@@ -161,7 +161,7 @@ namespace ft
 
         private:
 
-        node_pointer create_node(value_type &content, node_pointer parent)
+        node_pointer create_node(const value_type &content, node_pointer parent)
         {
             node_pointer new_node = _node_allocator.allocate(1);
             new_node->content = _allocator.allocate(1);
@@ -294,7 +294,7 @@ namespace ft
 				r += pow(2, x);
 			return r;
 		}
-
+        public:
 		void print_tree_ascii()
 		{
 			int elem_size = 1;
