@@ -130,6 +130,16 @@ namespace ft
             return(iterator(_end));
         }
 
+        iterator rbegin()
+        {
+            return reverse_iterator(end());
+        }
+
+        iterator rend()
+        {
+            return reverse_iterator(begin());
+        }
+
         pair<iterator, bool> insert(const value_type& content)
         {
             if (!_root)

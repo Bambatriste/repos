@@ -475,8 +475,8 @@ int main(int ac, char **av)
 
 	ft::pair <int , int> arraypair[10];
 	ft::map<int, int > int_map;
-	ft::map<int , int>::iterator array_iter[10];
 	ft::map<int , int>::iterator int_map_iterator;
+	ft::map<int , int>::reverse_iterator rev_int_map_iterator;
 	int values[10] = {9, 5 , 6 , 10 , 3 , 1 , 2 , 7 , 8, 4};
 	for (int i = 0; i < 10; i++)
 	{
@@ -484,13 +484,23 @@ int main(int ac, char **av)
 	}
 	for (int i = 0; i < 10; i++)
 	{
-		array_iter[i] = int_map.insert(arraypair[i]).first;
+		int_map.insert(arraypair[i]);
 	}
 
 	for (int_map_iterator = int_map.begin() ; int_map_iterator != int_map.end(); int_map_iterator++)
     {
         std::cout << int_map_iterator->first << " ";
     }
+	for (rev_int_map_iterator = int_map.rbegin() ; rev_int_map_iterator != int_map.rend(); ++rev_int_map_iterator)
+    {
+		std::cout << rev_int_map_iterator->first << " ";
+    }
+
+
+	//int_map_iterator--;
+
+	//std::cout << int_map_iterator->first << " ";
+
 	//int_map.display_self();
 	//int_map.print_tree_ascii();
 
