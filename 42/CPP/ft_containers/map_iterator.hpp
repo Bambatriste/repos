@@ -109,8 +109,48 @@ namespace ft
 			return ret;
 		}
 
+		map_iterator& operator--()
+		{
+			if (_p->left)
+			{
+				_p = _p->left;
+				while(_p->right)
+				{
+					_p = _p->right;
+				}
+			}
+			else
+			{
+				if  (!_p->parent)
+				{
+					_p = _p->left;
+					return *this;
+				}
+				else if (_p == _p->parent->right)
+				{
+					_p = _p->parent;
+					return *this;
+				}
+			}
+			return *this;
+		}
+
+		map_iterator operator--(int)
+		{
+			map_iterator ret = *this;
+			--(*this);
+			return ret;
+		}
+
+		reference operator*() const { return *_p->content; }
 		pointer operator->() const{ return &(*_p->content); }
+		template <typename U>
+		bool operator==(const map_iterator<U>& rhs) const { return _p == rhs._p; }
+		template <typename U>
+		bool operator!=(const map_iterator<U>& rhs) const { return _p != rhs._p; }
 	};
+
+
 }
 
 

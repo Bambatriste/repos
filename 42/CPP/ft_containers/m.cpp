@@ -312,7 +312,11 @@ int main(int ac, char **av)
 	display_vector(vector2);
 
 	std::cout << *vector1.rbegin() << std::endl;
-	std::cout << *vector1.rend() << std::endl;
+	std::cout << *vector1.rend() << std::endl; 
+
+	
+
+
 	//vector3.push_back(c1);
 	//std::cout << "vector3 capacity :" << vector3.capacity() << std::endl;
 	//std::cout << "vector3 size :" << vector3.size() << std::endl;
@@ -471,6 +475,8 @@ int main(int ac, char **av)
 
 	ft::pair <int , int> arraypair[10];
 	ft::map<int, int > int_map;
+	ft::map<int , int>::iterator array_iter[10];
+	ft::map<int , int>::iterator int_map_iterator;
 	int values[10] = {9, 5 , 6 , 10 , 3 , 1 , 2 , 7 , 8, 4};
 	for (int i = 0; i < 10; i++)
 	{
@@ -478,18 +484,23 @@ int main(int ac, char **av)
 	}
 	for (int i = 0; i < 10; i++)
 	{
-		int_map.insert(arraypair[i]);
+		array_iter[i] = int_map.insert(arraypair[i]).first;
 	}
-	//int_map.display_self();
-	int_map.print_tree_ascii();
 
-	ft::map<int , std::string> pouet;
-	ft::map<int , std::string>::iterator j;
+	for (int_map_iterator = int_map.begin() ; int_map_iterator != int_map.end(); int_map_iterator++)
+    {
+        std::cout << int_map_iterator->first << " ";
+    }
+	//int_map.display_self();
+	//int_map.print_tree_ascii();
+
+	//ft::map<int , std::string> pouet;
+	//ft::map<int , std::string>::iterator j;
 	//ft::map<int , std::string>::iterator k;
-	j = pouet.insert(pair_test).first;
+	//j = pouet.insert(pair_test).first;
 	//j = pouet.begin();
 
-	std::cout << j->second;
+	//std::cout << j->second;
 
 	// pouet.insert(pair_test2);
 	

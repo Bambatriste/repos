@@ -37,9 +37,9 @@ namespace ft
         typedef typename Allocator::pointer						            pointer;
         typedef typename Allocator::const_pointer				            const_pointer;
         typedef ft::map_iterator<value_type>                                iterator;
-        //typedef       CONST LEGACY BIDIR ITER TO VALUETYPE	            const_iterator;
-        //typedef ft::reverse_iterator<iterator>					        reverse_iterator;
-        //typedef ft::reverse_iterator<const_iterator>	                    const_reverse_iterator;
+        typedef const iterator	                                            const_iterator;
+        typedef ft::reverse_iterator<iterator>					            reverse_iterator;
+        typedef ft::reverse_iterator<const_iterator>	                    const_reverse_iterator;
         typedef Node<key_type, mapped_type>                                 node;
         typedef node*                                                       node_pointer;
         typedef typename    allocator_type::template rebind<node>::other	alnode;
@@ -79,10 +79,14 @@ namespace ft
         _node_allocator(alloc),
         _root(0),
         _end(0),
+        _size(0),
         _comp(comp)
 		{
 			create_end_node();
 		}
+
+        ~map()
+        {}
 
         // explicit map (key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type())
 		// : 
@@ -118,7 +122,12 @@ namespace ft
 
         iterator begin()
         {
-            return (_root);
+            return (iterator(get_leftmost_node()));
+        }
+
+        iterator end()
+        {
+            return(iterator(_end));
         }
 
         pair<iterator, bool> insert(const value_type& content)
@@ -128,8 +137,6 @@ namespace ft
                 _root = create_node(content, 0);
                 _root->color = BLACK;
                 update_end_node();
-                //map<key_type, mapped_type>::iterator it;
-                //ft::map<int , std::string>::iterator j;
                 return ft::make_pair(iterator(_root), true);
             }
             node_pointer tmp = _root;
