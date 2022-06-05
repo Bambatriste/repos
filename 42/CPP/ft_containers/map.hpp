@@ -121,24 +121,28 @@ namespace ft
         //ACCESSORS
 
         iterator begin()
-        {
-            return (iterator(get_leftmost_node()));
-        }
+        {return (iterator(get_leftmost_node()));}
+
+        const_iterator begin() const
+        {return (const_iterator(get_leftmost_node()));}
 
         iterator end()
-        {
-            return(iterator(_end));
-        }
+        {return(iterator(_end));}
 
-        iterator rbegin()
-        {
-            return reverse_iterator(end());
-        }
+        const_iterator end() const
+        {return(const_iterator(_end));}
 
-        iterator rend()
-        {
-            return reverse_iterator(begin());
-        }
+        reverse_iterator rbegin()
+        {return reverse_iterator(end());}
+
+        const_reverse_iterator rbegin() const
+        {return const_reverse_iterator(end());}
+
+        reverse_iterator rend()
+        {return reverse_iterator(begin());}
+
+        const_reverse_iterator rend() const
+        {return const_reverse_iterator(begin());}
 
         pair<iterator, bool> insert(const value_type& content)
         {

@@ -477,6 +477,11 @@ int main(int ac, char **av)
 	ft::map<int, int > int_map;
 	ft::map<int , int>::iterator int_map_iterator;
 	ft::map<int , int>::reverse_iterator rev_int_map_iterator;
+	ft::map<int , int>::reverse_iterator rev_int_map_iterator2;
+
+	rev_int_map_iterator = int_map.rbegin();
+	rev_int_map_iterator2 = int_map.rend();
+
 	int values[10] = {9, 5 , 6 , 10 , 3 , 1 , 2 , 7 , 8, 4};
 	for (int i = 0; i < 10; i++)
 	{

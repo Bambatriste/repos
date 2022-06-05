@@ -2,19 +2,24 @@ NAME = containers
 
 SRCS = m.cpp
 
-CPPC = clang++
+CXX = clang++
 
 OBJS = ${SRCS:.cpp=.o}
 
-CPPFLAGS = -Wall -Wextra -Werror -std=c++98 -g3
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -g3
+
+STDFLAGS = ""
 
 all : $(NAME)
 
+std: ${NAME_STD}
+
 .cpp.o :
-		${CPPC} ${CPPFLAGS} -c $< -o ${<:.cpp=.o} 
+		${CXX} ${STDFLAGS} ${CXXFLAGS} -c $< -o ${<:.cpp=.o}
 
 $(NAME): ${OBJS}
-		${CPPC} -o ${NAME} ${OBJS}
+		${CXX} -o ${NAME} ${OBJS}
+
 clean :
 		rm -rf ${OBJS}
 
@@ -23,4 +28,6 @@ fclean: clean
 
 re:		fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean res
+
+std:
