@@ -107,11 +107,56 @@ namespace ft
         // CAPACITY
 
         bool empty() const { return _size == 0; }
+        size_type size() const { return _size; }
+		size_type max_size() const { return _node_allocator.max_size(); }
 
         //explicit map( const Compare& comp, const Allocator& alloc = Allocator() );
 
 
         //MODIFIERS
+
+        pair<iterator, bool> insert(const value_type& content)
+        {
+            if (!_root)
+            {
+                _root = create_node(content, 0);
+                _root->color = BLACK;
+                update_end_node();
+                return ft::make_pair(iterator(_root), true);
+            }
+            node_pointer tmp = _root;
+            while (tmp)
+            {
+                if (_comp(content.first, tmp->content->first))
+                {
+                    if (!tmp->left)
+                    {
+                        tmp->left = create_node(content, tmp);
+                        update_end_node();
+                        rotate_colorflip(tmp->left);
+                        return ft::make_pair(iterator(tmp->left), true);
+                    }
+                    tmp = tmp->left;
+                }
+                else
+                {
+                    if (!tmp->right || is_sentinel(tmp->right))
+                    {
+                        tmp->right = create_node(content, tmp);
+                        update_end_node();
+                        //rotate_colorflip(tmp->right);
+                        return ft::make_pair(iterator(tmp->right), true);
+                    }
+                    tmp = tmp->right;
+                }
+            }
+            return ft::make_pair(iterator(tmp), false);
+        }
+
+        void erase( iterator pos )
+        {
+            _allocator.destroy(pos);
+        }
 
         // ft::pair<iterator, bool> insert( const value_type& value )
         // {
@@ -143,42 +188,6 @@ namespace ft
 
         const_reverse_iterator rend() const
         {return const_reverse_iterator(begin());}
-
-        pair<iterator, bool> insert(const value_type& content)
-        {
-            if (!_root)
-            {
-                _root = create_node(content, 0);
-                _root->color = BLACK;
-                update_end_node();
-                return ft::make_pair(iterator(_root), true);
-            }
-            node_pointer tmp = _root;
-            while (tmp)
-            {
-                if (_comp(content.first, tmp->content->first))
-                {
-                    if (!tmp->left)
-                    {
-                        tmp->left = create_node(content, tmp);
-                        update_end_node();
-                        return ft::make_pair(iterator(tmp->left), true);
-                    }
-                    tmp = tmp->left;
-                }
-                else
-                {
-                    if (!tmp->right || is_sentinel(tmp->right))
-                    {
-                        tmp->right = create_node(content, tmp);
-                        update_end_node();
-                        return ft::make_pair(iterator(tmp->right), true);
-                    }
-                    tmp = tmp->right;
-                }
-            }
-            return ft::make_pair(iterator(tmp), false);
-        }
 
         private:
 
@@ -237,13 +246,87 @@ namespace ft
             return tmp;
         }
 
+        void parent_rotate(node_pointer grandparent, int side)
+        {
+            //node_pointer root = grand parent;
+            std::cout << "parent rotate" << std::endl;
+            node_pointer parent =  grandparent->child[1 - side];
+            node_pointer child = parent->child[side];
 
+            parent->right = child->left;
+            child->left = parent;
+            grandparent->child[1 - side] = child;
+        }
 
-        //todo :
+        void grand_parent_rotate(node_pointer grandparent, int side)
+        {
+            node_pointer tmp =  grandparent->child[1 - side];
+            node_pointer root =  grandparent->parent;
 
-        // iterators
-        // accessor
-        // add red black rules
+            grandparent->child[1 - side] = tmp->child[side];
+            tmp->child[side] = grandparent;
+            grandparent->parent = tmp;
+            if (!root)
+                _root = tmp;
+            else
+               root = tmp;
+        }
+
+        void rotate(node_pointer child)
+        {
+
+            node_pointer parent = child->parent;
+            node_pointer grandparent = parent->parent;
+            //int grand_parent_side = node_side(grandparent);
+            int parent_side = node_side(parent);
+            int child_side = node_side(child);
+
+            if(parent_side == LEFT && child_side == LEFT)
+            {
+                std::cout << "LEFT for both" << std::endl;
+            }
+            if (parent_side == child_side)
+            {
+                std::cout << "grandpa rotate" << std::endl;
+                grand_parent_rotate(grandparent, (1 - parent_side));
+            }
+            else
+            {
+                //parent_rotate(grandparent, (1 - child_side));
+                //grand_parent_rotate(grandparent, (1 - parent_side));
+            }       
+        }
+
+        void    rotate_colorflip(node_pointer node)
+        {
+            node_pointer parent = node->parent;
+            node_pointer grandparent;
+            node_pointer aunt;
+
+            
+            if (parent->color == BLACK)
+                return;
+            if ((grandparent = parent->parent) == 0)
+            {
+                std::cout << "no grandparent" << std::endl;
+                //std::cout << node->content << std::endl;
+                parent->color = BLACK;
+                return;
+            }
+            aunt = grandparent->child[1 - node_side(parent)];
+            if (!aunt ||  is_sentinel(aunt) || aunt->color == BLACK)
+            {
+                //std::cout << node->content->first << std::endl;
+                rotate(node);
+
+            }
+            else
+            {
+                grandparent->color = RED;
+                parent->color = BLACK;
+                aunt->color = BLACK;
+            }
+        }
 
 
         /***********************************************DISPLAY FUNCTIONS ***************************************************/
@@ -259,7 +342,7 @@ namespace ft
         /********************************************************************************************************************/
         /********************************************************************************************************************/
 
-
+        public:
         void    display_self(node_pointer node = 0)
         {
             if (!node)
@@ -278,6 +361,8 @@ namespace ft
                 display_self(node->right);
             }
         }
+
+        private:
 
         int get_max_depth(node_pointer root)
 		{

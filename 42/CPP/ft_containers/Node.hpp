@@ -11,6 +11,7 @@ enum Node_color { BLACK, RED };
 # define left  child[LEFT]
 # define right child[RIGHT]
 # define is_sentinel(node_pointer) (node_pointer->content == 0 ? true : false)
+# define node_side(node_pointer) (node_pointer == node_pointer->parent->right ? RIGHT : LEFT)
 
 namespace ft {
 

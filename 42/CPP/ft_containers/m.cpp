@@ -482,12 +482,12 @@ int main(int ac, char **av)
 	rev_int_map_iterator = int_map.rbegin();
 	rev_int_map_iterator2 = int_map.rend();
 
-	int values[10] = {9, 5 , 6 , 10 , 3 , 1 , 2 , 7 , 8, 4};
+	int values[10] = {10, 9 , 8 , 10 , 3 , 1 , 2 , 7 , 8, 4};
 	for (int i = 0; i < 10; i++)
 	{
 		arraypair[i] = ft::pair<int, int>(values[i], i);
 	}
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		int_map.insert(arraypair[i]);
 	}
@@ -507,7 +507,14 @@ int main(int ac, char **av)
 	//std::cout << int_map_iterator->first << " ";
 
 	//int_map.display_self();
-	//int_map.print_tree_ascii();
+	//int_map.display_self();
+	//int_map.display_self();
+	std::cout << std::endl;
+	std::cout << std::endl;
+	std::cout << std::endl;
+	std::cout << std::endl;
+	std::cout << std::endl;
+	int_map.print_tree_ascii();
 
 	//ft::map<int , std::string> pouet;
 	//ft::map<int , std::string>::iterator j;
