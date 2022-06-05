@@ -482,7 +482,7 @@ int main(int ac, char **av)
 	rev_int_map_iterator = int_map.rbegin();
 	rev_int_map_iterator2 = int_map.rend();
 
-	int values[10] = {10, 9 , 8 , 10 , 3 , 1 , 2 , 7 , 8, 4};
+	int values[10] = {2, 8 , 6 , 10 , 3 , 1 , 2 , 7 , 8, 4};
 	for (int i = 0; i < 10; i++)
 	{
 		arraypair[i] = ft::pair<int, int>(values[i], i);

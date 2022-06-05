@@ -248,14 +248,16 @@ namespace ft
 
         void parent_rotate(node_pointer grandparent, int side)
         {
-            //node_pointer root = grand parent;
-            std::cout << "parent rotate" << std::endl;
-            node_pointer parent =  grandparent->child[1 - side];
-            node_pointer child = parent->child[side];
+            //node_pointer root = grandparent;
+            node_pointer parent = grandparent->child[RIGHT];
+            node_pointer child = parent->child[LEFT];
+            
+            parent->child[LEFT] = child->child[RIGHT];
+            child->child[RIGHT] = parent;
+            grandparent->child[RIGHT] = child;
 
-            parent->right = child->left;
-            child->left = parent;
-            grandparent->child[1 - side] = child;
+            parent->parent = child;
+            child->parent = grandparent;
         }
 
         void grand_parent_rotate(node_pointer grandparent, int side)
@@ -292,7 +294,7 @@ namespace ft
             }
             else
             {
-                //parent_rotate(grandparent, (1 - child_side));
+                parent_rotate(grandparent, (1 - child_side));
                 //grand_parent_rotate(grandparent, (1 - parent_side));
             }       
         }
