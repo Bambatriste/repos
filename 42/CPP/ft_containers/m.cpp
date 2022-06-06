@@ -477,17 +477,17 @@ int main(int ac, char **av)
 	ft::map<int, int > int_map;
 	ft::map<int , int>::iterator int_map_iterator;
 	ft::map<int , int>::reverse_iterator rev_int_map_iterator;
-	ft::map<int , int>::reverse_iterator rev_int_map_iterator2;
-
 	rev_int_map_iterator = int_map.rbegin();
-	rev_int_map_iterator2 = int_map.rend();
 
-	int values[10] = {2, 8 , 6 , 10 , 3 , 1 , 2 , 7 , 8, 4};
+	//int values[10] = {2, 8 , 6 , 10 , 3 , 1 , 7 , 9, 4, 5};
+	int values[10] = {1, 2 , 3 , 5 , 7 , 8 , 9 , 10, 11, 12};
+
+	//int values[10] = {1, 2 , 3 , 4 , 5 , 6 , 7 , 8, 9, 10};
 	for (int i = 0; i < 10; i++)
 	{
 		arraypair[i] = ft::pair<int, int>(values[i], i);
 	}
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i <10; i++)
 	{
 		int_map.insert(arraypair[i]);
 	}
@@ -496,8 +496,9 @@ int main(int ac, char **av)
     {
         std::cout << int_map_iterator->first << " ";
     }
-	for (rev_int_map_iterator = int_map.rbegin() ; rev_int_map_iterator != int_map.rend(); ++rev_int_map_iterator)
+	for (rev_int_map_iterator = int_map.rbegin() ; rev_int_map_iterator != int_map.rend(); rev_int_map_iterator++)
     {
+		
 		std::cout << rev_int_map_iterator->first << " ";
     }
 

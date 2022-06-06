@@ -111,25 +111,30 @@ namespace ft
 
 		map_iterator& operator--()
 		{
-			if (_p->left)
+			if (is_sentinel(_p))
+				_p = _p->parent;
+			else if (_p->left)
 			{
 				_p = _p->left;
-				while(_p->right)
-				{
+				while (_p->right)
 					_p = _p->right;
-				}
 			}
 			else
 			{
-				if  (!_p->parent)
+				node_pointer tmp = _p;
+				while (tmp)
 				{
-					_p = _p->left;
-					return *this;
-				}
-				else if (_p == _p->parent->right)
-				{
-					_p = _p->parent;
-					return *this;
+					if (!tmp->parent)
+					{
+						_p = _p->left;
+						break ;
+					}
+					else if (node_side(tmp) == RIGHT)
+					{
+						_p = tmp->parent;
+						break ;
+					}
+					tmp = tmp->parent;
 				}
 			}
 			return *this;

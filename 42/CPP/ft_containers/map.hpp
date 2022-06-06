@@ -115,43 +115,7 @@ namespace ft
 
         //MODIFIERS
 
-        pair<iterator, bool> insert(const value_type& content)
-        {
-            if (!_root)
-            {
-                _root = create_node(content, 0);
-                _root->color = BLACK;
-                update_end_node();
-                return ft::make_pair(iterator(_root), true);
-            }
-            node_pointer tmp = _root;
-            while (tmp)
-            {
-                if (_comp(content.first, tmp->content->first))
-                {
-                    if (!tmp->left)
-                    {
-                        tmp->left = create_node(content, tmp);
-                        update_end_node();
-                        rotate_colorflip(tmp->left);
-                        return ft::make_pair(iterator(tmp->left), true);
-                    }
-                    tmp = tmp->left;
-                }
-                else
-                {
-                    if (!tmp->right || is_sentinel(tmp->right))
-                    {
-                        tmp->right = create_node(content, tmp);
-                        update_end_node();
-                        //rotate_colorflip(tmp->right);
-                        return ft::make_pair(iterator(tmp->right), true);
-                    }
-                    tmp = tmp->right;
-                }
-            }
-            return ft::make_pair(iterator(tmp), false);
-        }
+
 
         void erase( iterator pos )
         {
@@ -169,7 +133,10 @@ namespace ft
         {return (iterator(get_leftmost_node()));}
 
         const_iterator begin() const
-        {return (const_iterator(get_leftmost_node()));}
+        {
+            if (this->empty())
+				return this->end();
+            return (const_iterator(get_leftmost_node()));}
 
         iterator end()
         {return(iterator(_end));}
@@ -178,10 +145,17 @@ namespace ft
         {return(const_iterator(_end));}
 
         reverse_iterator rbegin()
-        {return reverse_iterator(end());}
+        {
+            if (this->empty())
+				return this->rend();
+            return reverse_iterator(end());
+        }
 
         const_reverse_iterator rbegin() const
-        {return const_reverse_iterator(end());}
+        {
+            if (this->empty())
+				return this->rend();
+            return const_reverse_iterator(end());}
 
         reverse_iterator rend()
         {return reverse_iterator(begin());}
@@ -245,89 +219,174 @@ namespace ft
                 tmp = tmp->left;
             return tmp;
         }
+    
+        public:
 
-        void parent_rotate(node_pointer grandparent, int side)
+
+
+        pair<iterator, bool> insert(const value_type& content)
         {
-            //node_pointer root = grandparent;
-            node_pointer parent = grandparent->child[RIGHT];
-            node_pointer child = parent->child[LEFT];
-            
-            parent->child[LEFT] = child->child[RIGHT];
-            child->child[RIGHT] = parent;
-            grandparent->child[RIGHT] = child;
-
-            parent->parent = child;
-            child->parent = grandparent;
-        }
-
-        void grand_parent_rotate(node_pointer grandparent, int side)
-        {
-            node_pointer tmp =  grandparent->child[1 - side];
-            node_pointer root =  grandparent->parent;
-
-            grandparent->child[1 - side] = tmp->child[side];
-            tmp->child[side] = grandparent;
-            grandparent->parent = tmp;
-            if (!root)
-                _root = tmp;
-            else
-               root = tmp;
-        }
-
-        void rotate(node_pointer child)
-        {
-
-            node_pointer parent = child->parent;
-            node_pointer grandparent = parent->parent;
-            //int grand_parent_side = node_side(grandparent);
-            int parent_side = node_side(parent);
-            int child_side = node_side(child);
-
-            if(parent_side == LEFT && child_side == LEFT)
+            if (!_root)
             {
-                std::cout << "LEFT for both" << std::endl;
+                _root = create_node(content, 0);
+                _root->color = BLACK;
+                update_end_node();
+                return ft::make_pair(iterator(_root), true);
             }
-            if (parent_side == child_side)
+            node_pointer tmp = _root;
+            while (tmp)
             {
-                std::cout << "grandpa rotate" << std::endl;
-                grand_parent_rotate(grandparent, (1 - parent_side));
+                if (_comp(content.first, tmp->content->first))
+                {
+                    if (!tmp->left)
+                    {
+                        tmp->left = create_node(content, tmp);
+                        //update_end_node();
+                        //rb_insert_fixup(tmp->right);
+                        //rotate_colorflip(tmp->left);
+                        recolor_rotate(tmp->left);
+                        return ft::make_pair(iterator(tmp->left), true);
+                    }
+                    tmp = tmp->left;
+                }
+                else if (_comp(tmp->content->first, content.first))
+                {
+                    if (!tmp->right || is_sentinel(tmp->right))
+                    {
+                        tmp->right = create_node(content, tmp);
+                        //rb_insert_fixup(tmp->right);
+                        //recolor_rotate(tmp->right);
+                        rotate_colorflip(tmp->right);
+                        update_end_node();
+                        
+                        return ft::make_pair(iterator(tmp->right), true);
+                    }
+                    tmp = tmp->right;
+                }
             }
-            else
-            {
-                parent_rotate(grandparent, (1 - child_side));
-                //grand_parent_rotate(grandparent, (1 - parent_side));
-            }       
+            return ft::make_pair(iterator(tmp), false);
         }
 
+        void m_rotate(node_pointer x, int side) //x = parent
+        {
+
+            node_pointer y = x->child[1 - side]; // set y
+            x->child[1 - side] = y->child[side]; // turn y’s left subtree into x’s right subtree
+            if (y->child[side] != 0)
+                y->child[side]->parent = x;
+            y->parent = x->parent;
+            if (x->parent == NULL)
+                _root = y;
+            else if (x == x->parent->child[side])
+                x->parent->child[side] = y;
+            else
+                x->parent->child[1 - side] = y;
+            y->child[side] = x;
+            x->parent = y;
+        }
+        
         void    rotate_colorflip(node_pointer node)
         {
             node_pointer parent = node->parent;
             node_pointer grandparent;
             node_pointer aunt;
-
             
             if (parent->color == BLACK)
                 return;
             if ((grandparent = parent->parent) == 0)
             {
-                std::cout << "no grandparent" << std::endl;
-                //std::cout << node->content << std::endl;
                 parent->color = BLACK;
                 return;
             }
-            aunt = grandparent->child[1 - node_side(parent)];
+            int side = node_side(parent);
+            aunt = grandparent->child[1 - side];
             if (!aunt ||  is_sentinel(aunt) || aunt->color == BLACK)
             {
-                //std::cout << node->content->first << std::endl;
-                rotate(node);
-
+                if (node == parent->child[1 - side])
+                {
+                    m_rotate(parent, side);
+                    node = parent;
+                    parent = grandparent->child[side];
+                }
+                m_rotate(grandparent, 1 - side);
+                parent->color = BLACK;
+                grandparent->color = RED;
+                return;
             }
             else
             {
                 grandparent->color = RED;
                 parent->color = BLACK;
                 aunt->color = BLACK;
+                node = grandparent;
             }
+        }
+
+        void recolor_rotate(node_pointer node)
+		{
+			node_pointer uncle, parent, grandparent;
+
+			parent = node->parent;
+			do
+			{
+				if (parent->color == BLACK)
+					return ;
+				//parent is RED
+				if ((grandparent = parent->parent) == 0)
+				{
+					parent->color = BLACK;
+					return ;
+				}
+				//parent is RED and grandparent exists
+				int side = node_side(parent);
+				uncle = grandparent->child[1 - side];
+				if (!uncle || is_sentinel(uncle) || uncle->color == BLACK)
+				{
+					if (node == parent->child[1 - side])
+					{
+						m_rotate(parent, side);
+						node = parent;
+						parent = grandparent->child[side];
+					}
+					m_rotate(grandparent, 1 - side);
+					parent->color = BLACK;
+					grandparent->color = RED;
+					return ;
+				}
+				//parent and uncle are RED
+				parent->color = BLACK;
+				uncle->color = BLACK;
+				grandparent->color = RED;
+				node = grandparent;
+			} while ((parent = node->parent) != 0);
+		}
+
+        void rb_insert_fixup(node_pointer child)
+        {
+            node_pointer y;
+            while (child->parent->color == RED)
+            {
+                if (child->parent == child->parent->parent->left)
+                {
+                    y = child->parent->parent->right;
+                    if (y->color == RED)
+                    {
+                        child->parent->color = BLACK;
+                        y->color = BLACK;
+                        child->parent->parent->color = RED;
+                        child = child->parent->parent;
+                    }
+                }
+                else if (child == child->parent->right)
+                {
+                    child = child->parent;
+                    m_rotate(child, LEFT);
+                }
+                child->parent->color = BLACK;
+                child->parent->parent->color = RED;
+                m_rotate(child->parent->parent, RIGHT);
+            }
+            _root->color = BLACK;
         }
 
 
