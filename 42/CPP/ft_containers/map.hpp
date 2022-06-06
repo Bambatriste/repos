@@ -243,8 +243,8 @@ namespace ft
                         tmp->left = create_node(content, tmp);
                         //update_end_node();
                         //rb_insert_fixup(tmp->right);
-                        //rotate_colorflip(tmp->left);
-                        recolor_rotate(tmp->left);
+                        rotate_colorflip(tmp->left);
+                        //recolor_rotate(tmp->left);
                         return ft::make_pair(iterator(tmp->left), true);
                     }
                     tmp = tmp->left;
@@ -284,82 +284,85 @@ namespace ft
             y->child[side] = x;
             x->parent = y;
         }
-        
+
         void    rotate_colorflip(node_pointer node)
         {
             node_pointer parent = node->parent;
             node_pointer grandparent;
             node_pointer aunt;
-            
-            if (parent->color == BLACK)
-                return;
-            if ((grandparent = parent->parent) == 0)
+
+            while (parent != 0)
             {
-                parent->color = BLACK;
-                return;
-            }
-            int side = node_side(parent);
-            aunt = grandparent->child[1 - side];
-            if (!aunt ||  is_sentinel(aunt) || aunt->color == BLACK)
-            {
-                if (node == parent->child[1 - side])
+                if (parent->color == BLACK)
+                    return;
+                //parent is black , we end
+                if ((grandparent = parent->parent) == 0)
                 {
-                    m_rotate(parent, side);
-                    node = parent;
-                    parent = grandparent->child[side];
+                    parent->color = BLACK;
+                    return;
                 }
-                m_rotate(grandparent, 1 - side);
-                parent->color = BLACK;
-                grandparent->color = RED;
-                return;
-            }
-            else
-            {
+                // grandparent is root , thus we can just set parent to black and end
+                int side = node_side(parent);
+                aunt = grandparent->child[1 - side];
+                if (!aunt ||  is_sentinel(aunt) || aunt->color == BLACK)
+                {
+                    if (node == parent->child[1 - side]) //node isn t same side as grand parent so we rotate
+                    {
+                        m_rotate(parent, side);
+                        node = parent;
+                        parent = grandparent->child[side]; 
+                    }
+                    m_rotate(grandparent, 1 - side);
+                    parent->color = BLACK;
+                    grandparent->color = RED;
+                    return;
+                }
                 grandparent->color = RED;
                 parent->color = BLACK;
                 aunt->color = BLACK;
                 node = grandparent;
+                parent = parent->parent;
             }
         }
 
-        void recolor_rotate(node_pointer node)
-		{
-			node_pointer uncle, parent, grandparent;
+        // void recolor_rotate(node_pointer node)
+		// {
+		// 	node_pointer uncle, parent, grandparent;
 
-			parent = node->parent;
-			do
-			{
-				if (parent->color == BLACK)
-					return ;
-				//parent is RED
-				if ((grandparent = parent->parent) == 0)
-				{
-					parent->color = BLACK;
-					return ;
-				}
-				//parent is RED and grandparent exists
-				int side = node_side(parent);
-				uncle = grandparent->child[1 - side];
-				if (!uncle || is_sentinel(uncle) || uncle->color == BLACK)
-				{
-					if (node == parent->child[1 - side])
-					{
-						m_rotate(parent, side);
-						node = parent;
-						parent = grandparent->child[side];
-					}
-					m_rotate(grandparent, 1 - side);
-					parent->color = BLACK;
-					grandparent->color = RED;
-					return ;
-				}
-				//parent and uncle are RED
-				parent->color = BLACK;
-				uncle->color = BLACK;
-				grandparent->color = RED;
-				node = grandparent;
-			} while ((parent = node->parent) != 0);
-		}
+		// 	parent = node->parent;
+		// 	do
+		// 	{
+		// 		if (parent->color == BLACK)
+		// 			return ;
+		// 		//parent is RED
+		// 		if ((grandparent = parent->parent) == 0)
+		// 		{
+		// 			parent->color = BLACK;
+		// 			return ;
+		// 		}
+		// 		//parent is RED and grandparent exists
+		// 		int side = node_side(parent);
+		// 		uncle = grandparent->child[1 - side];
+		// 		if (!uncle || is_sentinel(uncle) || uncle->color == BLACK)
+		// 		{
+		// 			if (node == parent->child[1 - side])
+		// 			{
+		// 				m_rotate(parent, side);
+		// 				node = parent;
+		// 				parent = grandparent->child[side];
+		// 			}
+		// 			m_rotate(grandparent, 1 - side);
+		// 			parent->color = BLACK;
+		// 			grandparent->color = RED;
+		// 			return ;
+		// 		}
+		// 		//parent and uncle are RED
+		// 		parent->color = BLACK;
+		// 		uncle->color = BLACK;
+		// 		grandparent->color = RED;
+		// 		node = grandparent;
+		// 	} while ((parent = node->parent) != 0);
+		// }
 
         void rb_insert_fixup(node_pointer child)
         {

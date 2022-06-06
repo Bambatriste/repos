@@ -479,15 +479,15 @@ int main(int ac, char **av)
 	ft::map<int , int>::reverse_iterator rev_int_map_iterator;
 	rev_int_map_iterator = int_map.rbegin();
 
-	//int values[10] = {2, 8 , 6 , 10 , 3 , 1 , 7 , 9, 4, 5};
-	int values[10] = {1, 2 , 3 , 5 , 7 , 8 , 9 , 10, 11, 12};
+	int values[19] = {2, 8 , 6 , 10 , 3 , 1 , 7 , 9, 4, 5, 16 , 33 , 12 ,15 ,14 , 36 ,54 ,22 , 23};
+	//int values[10] = {1, 2 , 3 , 5 , 7 , 8 , 9 , 10, 11, 12};
 
 	//int values[10] = {1, 2 , 3 , 4 , 5 , 6 , 7 , 8, 9, 10};
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 19; i++)
 	{
 		arraypair[i] = ft::pair<int, int>(values[i], i);
 	}
-	for (int i = 0; i <10; i++)
+	for (int i = 0; i <19; i++)
 	{
 		int_map.insert(arraypair[i]);
 	}
