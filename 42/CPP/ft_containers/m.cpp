@@ -22,6 +22,10 @@
 #include <string>
 #include <iostream>
 
+#include <stdio.h>
+#include <stdlib.h>
+#include<time.h>
+
 // template<class T>
 // void wrapper_insert(ft::vector<T>& vect, size_t count, T& value) {
 // 	std::cout << "capacity before insert: " << vec.capacity();
@@ -472,22 +476,36 @@ int main(int ac, char **av)
 	// map_test.insert_node(pair_test3);
 	//map_test.display_self();
 
+	
 
-	ft::pair <int , int> arraypair[10];
+
+	
 	ft::map<int, int > int_map;
 	ft::map<int , int>::iterator int_map_iterator;
 	ft::map<int , int>::reverse_iterator rev_int_map_iterator;
 	rev_int_map_iterator = int_map.rbegin();
 
-	int values[19] = {2, 8 , 6 , 10 , 3 , 1 , 7 , 9, 4, 5, 16 , 33 , 12 ,15 ,14 , 36 ,54 ,22 , 23};
+	int nb_keys = 100;
+	int keys[nb_keys];
+	ft::pair <int , int> arraypair[nb_keys];
+
+	srand(time(0));
+
+	for (int i = 0; i < nb_keys; i++)
+	{
+		keys[i] = ( rand() % 100);
+		std::cout << keys[i] << std::endl;
+	}
+
+	//int values[20] = {2, 2,  8 , 6 , 10 , 3 , 1 , 7 , 9, 4, 5, 16 , 33 , 12 ,15 ,14 , 36 ,54 ,22 , 23};
 	//int values[10] = {1, 2 , 3 , 5 , 7 , 8 , 9 , 10, 11, 12};
 
 	//int values[10] = {1, 2 , 3 , 4 , 5 , 6 , 7 , 8, 9, 10};
-	for (int i = 0; i < 19; i++)
+	for (int i = 0; i < nb_keys; i++)
 	{
-		arraypair[i] = ft::pair<int, int>(values[i], i);
+		arraypair[i] = ft::pair<int, int>(keys[i], i);
 	}
-	for (int i = 0; i <19; i++)
+	for (int i = 0; i < nb_keys; i++)
 	{
 		int_map.insert(arraypair[i]);
 	}

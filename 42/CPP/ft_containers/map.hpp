@@ -263,9 +263,29 @@ namespace ft
                     }
                     tmp = tmp->right;
                 }
+                else
+                    break;
             }
             return ft::make_pair(iterator(tmp), false);
         }
+        void t_rotate(node_pointer node, int rotation_side)
+		{
+			node_pointer parent = node->parent;
+			node_pointer pivot = node->child[1 - rotation_side];
+			node_pointer child;
+
+			child = pivot->child[rotation_side];
+			node->child[1 - rotation_side] = child;
+			if (child != 0)
+				child->parent = node;
+			pivot->child[rotation_side] = node;
+			node->parent = pivot;
+			pivot->parent = parent;
+			if (parent != 0)
+				parent->child[node == parent->right ? RIGHT : LEFT] = pivot;
+			else
+				_root = pivot;
+		}
 
         void m_rotate(node_pointer x, int side) //x = parent
         {
@@ -295,18 +315,18 @@ namespace ft
             {
                 if (parent->color == BLACK)
                     return;
-                //parent is black , we end
+                //if parent is black , we end
                 if ((grandparent = parent->parent) == 0)
                 {
                     parent->color = BLACK;
                     return;
                 }
                 // grandparent is root , thus we can just set parent to black and end
-                int side = node_side(parent);
+                int side = node_side(parent); // parent side
                 aunt = grandparent->child[1 - side];
                 if (!aunt ||  is_sentinel(aunt) || aunt->color == BLACK)
                 {
-                    if (node == parent->child[1 - side]) //node isn t same side as grand parent so we rotate
+                    if (node == parent->child[1 - side]) //node isn t same side as parent so we rotate
                     {
                         m_rotate(parent, side);
                         node = parent;
@@ -321,76 +341,76 @@ namespace ft
                 parent->color = BLACK;
                 aunt->color = BLACK;
                 node = grandparent;
-                parent = parent->parent;
+                parent = node->parent;
             }
         }
 
-        // void recolor_rotate(node_pointer node)
-		// {
-		// 	node_pointer uncle, parent, grandparent;
+        void recolor_rotate(node_pointer node)
+		{
+			node_pointer uncle, parent, grandparent;
 
-		// 	parent = node->parent;
-		// 	do
-		// 	{
-		// 		if (parent->color == BLACK)
-		// 			return ;
-		// 		//parent is RED
-		// 		if ((grandparent = parent->parent) == 0)
-		// 		{
-		// 			parent->color = BLACK;
-		// 			return ;
-		// 		}
-		// 		//parent is RED and grandparent exists
-		// 		int side = node_side(parent);
-		// 		uncle = grandparent->child[1 - side];
-		// 		if (!uncle || is_sentinel(uncle) || uncle->color == BLACK)
-		// 		{
-		// 			if (node == parent->child[1 - side])
-		// 			{
-		// 				m_rotate(parent, side);
-		// 				node = parent;
-		// 				parent = grandparent->child[side];
-		// 			}
-		// 			m_rotate(grandparent, 1 - side);
-		// 			parent->color = BLACK;
-		// 			grandparent->color = RED;
-		// 			return ;
-		// 		}
-		// 		//parent and uncle are RED
-		// 		parent->color = BLACK;
-		// 		uncle->color = BLACK;
-		// 		grandparent->color = RED;
-		// 		node = grandparent;
-		// 	} while ((parent = node->parent) != 0);
-		// }
+			parent = node->parent;
+			do
+			{
+				if (parent->color == BLACK)
+					return ;
+				//parent is RED
+				if ((grandparent = parent->parent) == 0)
+				{
+					parent->color = BLACK;
+					return ;
+				}
+				//parent is RED and grandparent exists
+				int side = node_side(parent);
+				uncle = grandparent->child[1 - side];
+				if (!uncle || is_sentinel(uncle) || uncle->color == BLACK)
+				{
+					if (node == parent->child[1 - side])
+					{
+						m_rotate(parent, side);
+						node = parent;
+						parent = grandparent->child[side];
+					}
+					m_rotate(grandparent, 1 - side);
+					parent->color = BLACK;
+					grandparent->color = RED;
+					return ;
+				}
+				//parent and uncle are RED
+				parent->color = BLACK;
+				uncle->color = BLACK;
+				grandparent->color = RED;
+				node = grandparent;
+			} while ((parent = node->parent) != 0);
+		}
 
-        void rb_insert_fixup(node_pointer child)
-        {
-            node_pointer y;
-            while (child->parent->color == RED)
-            {
-                if (child->parent == child->parent->parent->left)
-                {
-                    y = child->parent->parent->right;
-                    if (y->color == RED)
-                    {
-                        child->parent->color = BLACK;
-                        y->color = BLACK;
-                        child->parent->parent->color = RED;
-                        child = child->parent->parent;
-                    }
-                }
-                else if (child == child->parent->right)
-                {
-                    child = child->parent;
-                    m_rotate(child, LEFT);
-                }
-                child->parent->color = BLACK;
-                child->parent->parent->color = RED;
-                m_rotate(child->parent->parent, RIGHT);
-            }
-            _root->color = BLACK;
-        }
+        // void rb_insert_fixup(node_pointer child)
+        // {
+        //     node_pointer y;
+        //     while (child->parent->color == RED)
+        //     {
+        //         if (child->parent == child->parent->parent->left)
+        //         {
+        //             y = child->parent->parent->right;
+        //             if (y->color == RED)
+        //             {
+        //                 child->parent->color = BLACK;
+        //                 y->color = BLACK;
+        //                 child->parent->parent->color = RED;
+        //                 child = child->parent->parent;
+        //             }
+        //         }
+        //         else if (child == child->parent->right)
+        //         {
+        //             child = child->parent;
+        //             m_rotate(child, LEFT);
+        //         }
+        //         child->parent->color = BLACK;
+        //         child->parent->parent->color = RED;
+        //         m_rotate(child->parent->parent, RIGHT);
+        //     }
+        //     _root->color = BLACK;
+        // }
 
 
         /***********************************************DISPLAY FUNCTIONS ***************************************************/
