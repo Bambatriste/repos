@@ -117,10 +117,6 @@ namespace ft
 
 
 
-        void erase( iterator pos )
-        {
-            _allocator.destroy(pos);
-        }
 
         // ft::pair<iterator, bool> insert( const value_type& value )
         // {
@@ -343,6 +339,55 @@ namespace ft
                 node = grandparent;
                 parent = node->parent;
             }
+            _root->color = BLACK;
+        }
+        public:
+
+        void erase( iterator pos );
+        void erase( iterator first, iterator last );
+        size_type erase( const Key& key )
+        {
+            node_pointer node_test = _root;
+            while (node_test && !is_sentinel(node_test))
+            {
+                if (_comp(key, node_test->content->first))
+					node_test = node_test->left;
+				else if (_comp(node_test->content->first, key))
+					node_test = node_test->right;
+                else
+                {
+                    //_end->parent->right = 0;
+                    std::cout << "node value :" << key << std::endl;
+                    //remove_node(node_test);
+                    return (1);
+                }
+            }
+            return (0);
+        }
+        
+        void    delete_node(node_pointer node)
+        {
+
+            if (node->parent)
+				node->parent->child[node_side(node)] = 0;
+            _allocator.destroy(node->content);
+            _allocator.deallocate(node->content, 1);
+            _node_allocator.destroy(node);
+            _node_allocator.deallocate(node, 1);
+            --_size;
+        }
+
+        void remove_node (node_pointer node)
+        {
+            if (node->color == RED)
+            {
+                delete_node(node);
+            }
+            else if (node->color == BLACK)
+            {
+
+            }
+
         }
 
         void recolor_rotate(node_pointer node)
@@ -509,7 +554,17 @@ namespace ft
 							std::cout << "\033[31m";
 						else
 							std::cout << "\033[37m";
-						std::cout << (*i2)->content->first << padding;
+						std::cout << (*i2)->content->first;
+                        if ((*i2)->parent)
+                        {
+                            std::cout << "("<<(*i2)->parent->content->first << ")";
+                            if (node_side((*i2)) == LEFT)
+                                std::cout << "L";
+                            else
+                                std::cout << "R";
+                        }
+                            
+                        std::cout << padding;
 					}
 					else
 						std::cout << "\033[37m " << padding;
