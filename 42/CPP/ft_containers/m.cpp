@@ -540,7 +540,10 @@ int main(int ac, char **av)
 	std::cout << std::endl;
 	std::cout << std::endl;
 	std::cout << std::endl;
+	int_map.erase(7);
 	//int_map.erase(33);
+	//int_map.erase(22);
+	//int_map.erase(23);
 	int_map.print_tree_ascii();
 
 	std::cout << std::endl;

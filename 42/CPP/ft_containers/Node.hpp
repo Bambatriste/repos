@@ -29,7 +29,7 @@ namespace ft {
 
 		node_pointer in_order_successor()
 		{
-			node_pointer node = node->right;
+			node_pointer node = this->right;
 			while (node->left && !is_sentinel(node->left))
 				node = node->left;
 			return node;

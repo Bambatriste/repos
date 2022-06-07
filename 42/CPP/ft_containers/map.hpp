@@ -358,105 +358,72 @@ namespace ft
                 {
                     //_end->parent->right = 0;
                     std::cout << "node value :" << key << std::endl;
-                    //remove_node(node_test);
+                    simple_delete(node_test);
                     return (1);
                 }
             }
             return (0);
         }
-        
-        void    delete_node(node_pointer node)
+
+        void transplant(node_pointer u, node_pointer v)
         {
 
-            if (node->parent)
-				node->parent->child[node_side(node)] = 0;
-            _allocator.destroy(node->content);
-            _allocator.deallocate(node->content, 1);
+            if (u->parent == NULL)
+                _root = v;
+            else if (node_side(u) == LEFT)
+                u->parent->left = v;
+            else 
+                u->parent->right = v;
+            if (v != NULL)
+                v->parent = u->parent;
+        }
+
+        void rb_transplant(node_pointer u, node_pointer v)
+        {
+
+            if (u->parent == NULL)
+                _root = v;
+            else if (node_side(u) == LEFT)
+                u->parent->left = v;
+            else 
+                u->parent->right = v;
+            if (v != NULL)
+                v->parent = u->parent;
+        }
+
+        void    simple_delete(node_pointer z)
+        {
+            if (z->left == NULL)
+                transplant(z, z->right);
+            else if (z->right == NULL)
+                transplant(z, z->left);
+            else
+            {
+                node_pointer y = z->in_order_successor(); // y never has a left child
+                if (y->parent != z) //case where y is not the right child of z
+                {
+                    transplant(y, y->right);
+                    y->right = z->right;
+                    y->right->parent = y; // r->y->x becomes y->r->x 
+                }
+                transplant(z, y); //delete z and replace it by y
+                y->left = z->left; // transplant z->left into y
+                y->left->parent = y;
+            }
+            delete_node(z);
+        }
+
+        void    delete_node(node_pointer node)
+        {
+            if (node->content)
+            {
+                _allocator.destroy(node->content);
+                _allocator.deallocate(node->content, 1);
+            }
             _node_allocator.destroy(node);
             _node_allocator.deallocate(node, 1);
             --_size;
         }
-
-        void remove_node (node_pointer node)
-        {
-            if (node->color == RED)
-            {
-                delete_node(node);
-            }
-            else if (node->color == BLACK)
-            {
-
-            }
-
-        }
-
-        void recolor_rotate(node_pointer node)
-		{
-			node_pointer uncle, parent, grandparent;
-
-			parent = node->parent;
-			do
-			{
-				if (parent->color == BLACK)
-					return ;
-				//parent is RED
-				if ((grandparent = parent->parent) == 0)
-				{
-					parent->color = BLACK;
-					return ;
-				}
-				//parent is RED and grandparent exists
-				int side = node_side(parent);
-				uncle = grandparent->child[1 - side];
-				if (!uncle || is_sentinel(uncle) || uncle->color == BLACK)
-				{
-					if (node == parent->child[1 - side])
-					{
-						m_rotate(parent, side);
-						node = parent;
-						parent = grandparent->child[side];
-					}
-					m_rotate(grandparent, 1 - side);
-					parent->color = BLACK;
-					grandparent->color = RED;
-					return ;
-				}
-				//parent and uncle are RED
-				parent->color = BLACK;
-				uncle->color = BLACK;
-				grandparent->color = RED;
-				node = grandparent;
-			} while ((parent = node->parent) != 0);
-		}
-
-        // void rb_insert_fixup(node_pointer child)
-        // {
-        //     node_pointer y;
-        //     while (child->parent->color == RED)
-        //     {
-        //         if (child->parent == child->parent->parent->left)
-        //         {
-        //             y = child->parent->parent->right;
-        //             if (y->color == RED)
-        //             {
-        //                 child->parent->color = BLACK;
-        //                 y->color = BLACK;
-        //                 child->parent->parent->color = RED;
-        //                 child = child->parent->parent;
-        //             }
-        //         }
-        //         else if (child == child->parent->right)
-        //         {
-        //             child = child->parent;
-        //             m_rotate(child, LEFT);
-        //         }
-        //         child->parent->color = BLACK;
-        //         child->parent->parent->color = RED;
-        //         m_rotate(child->parent->parent, RIGHT);
-        //     }
-        //     _root->color = BLACK;
-        // }
-
 
         /***********************************************DISPLAY FUNCTIONS ***************************************************/
         /********************************************************************************************************************/
