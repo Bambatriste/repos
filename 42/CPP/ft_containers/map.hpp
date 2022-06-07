@@ -358,7 +358,7 @@ namespace ft
                 {
                     //_end->parent->right = 0;
                     std::cout << "node value :" << key << std::endl;
-                    simple_delete(node_test);
+                    rb_delete(node_test);
                     return (1);
                 }
             }
@@ -409,6 +409,45 @@ namespace ft
                 transplant(z, y); //delete z and replace it by y
                 y->left = z->left; // transplant z->left into y
                 y->left->parent = y;
+            }
+            delete_node(z);
+        }
+
+            void    rb_delete(node_pointer z)
+        {
+            node_pointer y = z;
+            node_pointer x;
+            bool y_original_color = y->color;
+
+            if (z->left == NULL)
+            {   
+                x = z->right;
+                rb_transplant(z, z->right);
+            }
+                
+            else if (z->right == NULL)
+            {
+                x = z->left;
+                transplant(z, z->left);
+            }
+            else
+            {
+                y = z->in_order_successor(); // y never has a left child.
+                x = y->right;
+                y_original_color = y->color;
+                if (x && y->parent == z)
+                    x->parent = z;
+                else
+                {
+                    rb_transplant(y, y->right);
+                    y->right = z->right;
+                    if (y->right)
+                        y->right->parent = y; // r->y->x becomes y->r->x 
+                }
+                rb_transplant(z, y); //delete z and replace it by y
+                y->left = z->left; // transplant z->left into y
+                y->left->parent = y;
+                y->color = z->color;
             }
             delete_node(z);
         }
@@ -522,14 +561,14 @@ namespace ft
 						else
 							std::cout << "\033[37m";
 						std::cout << (*i2)->content->first;
-                        if ((*i2)->parent)
-                        {
-                            std::cout << "("<<(*i2)->parent->content->first << ")";
-                            if (node_side((*i2)) == LEFT)
-                                std::cout << "L";
-                            else
-                                std::cout << "R";
-                        }
+                        // if ((*i2)->parent)
+                        // {
+                        //     std::cout << "("<<(*i2)->parent->content->first << ")";
+                        //     if (node_side((*i2)) == LEFT)
+                        //         std::cout << "L";
+                        //     else
+                        //         std::cout << "R";
+                        // }
                             
                         std::cout << padding;
 					}
