@@ -26,6 +26,14 @@ namespace ft {
 		node_pointer parent;
 		Node_color color;
 		node_pointer child[2];
+
+		node_pointer in_order_successor()
+		{
+			node_pointer node = node->right;
+			while (node->left && !is_sentinel(node->left))
+				node = node->left;
+			return node;
+		}
 	};
 }
 
