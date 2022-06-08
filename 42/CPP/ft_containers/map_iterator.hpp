@@ -44,26 +44,31 @@ namespace ft
 		typedef				node*											node_pointer;
 
 		node_pointer _p;
+		node_pointer _root;
+		node_pointer _nil;
 
-		map_iterator()
-		{
-			_p = NULL;
-		}
 
-		map_iterator(node_pointer p)
-		:
-		_p(p)
+		map_iterator(void)
+		: _p(NULL), _root(NULL), _nil(NULL) 
+		{}
+
+		map_iterator(node_pointer node, node_pointer root, node_pointer nil)
+		: _p(node), _root(root), _nil(nil) 
 		{}
 
 		map_iterator(map_iterator const &src)
-		:
-		_p (src._p)
+		: _p(src._p), _root(src._root), _nil(src._nil)
 		{}
 
-		map_iterator& operator=(const map_iterator& src)
+		map_iterator	&operator=(map_iterator const &rhs) 
 		{
-			_p = src._p;
-			return *this;
+			if (this != &rhs) 
+			{
+				this->_p = rhs._p;
+				this->_root = rhs._root;
+				this->_nil = rhs._nil;
+			}
+		return (*this);
 		}
 
 		~map_iterator()
@@ -73,10 +78,10 @@ namespace ft
 
 		map_iterator& operator++()
 		{
-			if (_p->right)
+			if (_p->right != _nil)
 			{
 				_p = _p->right;
-				while(_p->left)
+				while(_p->left && _p->left != _nil)
 				{
 					_p = _p->left;
 				}
@@ -84,14 +89,14 @@ namespace ft
 			else
 			{
 				node_pointer tmp = _p;
-				while(tmp)
+				while(tmp != _nil)
 				{
-					if  (!tmp->parent)
+					if  (tmp->parent == _nil)
 					{
 						_p = _p->right;
 						return *this;
 					}
-					else if (tmp == tmp->parent->left)
+					else if (tmp == tmp->parent->left && tmp)
 					{
 						_p = tmp->parent;
 						return *this;
@@ -113,18 +118,18 @@ namespace ft
 		{
 			if (is_sentinel(_p))
 				_p = _p->parent;
-			else if (_p->left)
+			else if (_p->left != _nil)
 			{
 				_p = _p->left;
-				while (_p->right)
+				while (_p->right != _nil)
 					_p = _p->right;
 			}
 			else
 			{
 				node_pointer tmp = _p;
-				while (tmp)
+				while (tmp != _nil)
 				{
-					if (!tmp->parent)
+					if (tmp->parent == _nil)
 					{
 						_p = _p->left;
 						break ;

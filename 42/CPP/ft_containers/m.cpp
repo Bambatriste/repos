@@ -519,15 +519,15 @@ int main(int ac, char **av)
 		int_map.insert(arraypair[i]);
 	}
 
-	// for (int_map_iterator = int_map.begin() ; int_map_iterator != int_map.end(); int_map_iterator++)
-    // {
-    //     std::cout << int_map_iterator->first << " ";
-    // }
-	// for (rev_int_map_iterator = int_map.rbegin() ; rev_int_map_iterator != int_map.rend(); rev_int_map_iterator++)
-    // {
+	for (int_map_iterator = int_map.begin() ; int_map_iterator != int_map.end(); int_map_iterator++)
+	{
+	    std::cout << int_map_iterator->first << " ";
+	}
+	for (rev_int_map_iterator = int_map.rbegin() ; rev_int_map_iterator != int_map.rend(); rev_int_map_iterator++)
+    {
 		
-	// 	std::cout << rev_int_map_iterator->first << " ";
-    // }
+		std::cout << rev_int_map_iterator->first << " ";
+    }
 
 
 	//int_map_iterator--;
@@ -537,11 +537,11 @@ int main(int ac, char **av)
 	//int_map.display_self();
 	//int_map.display_self();
 	//int_map.display_self();
-	std::cout << std::endl;
-	std::cout << std::endl;
-	std::cout << std::endl;
-	std::cout << std::endl;
-	std::cout << std::endl;
+	// std::cout << std::endl;
+	// std::cout << std::endl;
+	// std::cout << std::endl;
+	// std::cout << std::endl;
+	// std::cout << std::endl;
 	// int_map.erase(33);
 	// int_map.erase(39);
 	// int_map.erase(10);
@@ -563,22 +563,11 @@ int main(int ac, char **av)
 	// int_map.erase(9);
 	// int_map.erase(5);
 
-	std::cout << int_map.size();
+	// //std::cout << int_map.size();
 
-
-	//int_map.display_self();
 	//int_map.printTree();
 
-	std::cout << std::endl;
-	std::cout << std::endl;
-	std::cout << std::endl;
-	int_map.print_tree_ascii();
-
-	std::cout << std::endl;
-	std::cout << std::endl;
-	std::cout << std::endl;
-	std::cout << std::endl;
-	std::cout << std::endl;
+	//int_map.print_tree_ascii();
 
 	
 
@@ -601,15 +590,6 @@ int main(int ac, char **av)
     // }
 	//int_map.print_tree_ascii();
 	//int_map.printTree();
-
-
-
-
-
-
-
-
-
 
 	//vector2.resize(36, 0);
 

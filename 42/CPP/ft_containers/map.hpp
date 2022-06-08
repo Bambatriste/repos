@@ -86,7 +86,7 @@ namespace ft
         _size(0),
         _comp(comp)
 		{
-            TNULL = new node;
+            TNULL = _node_allocator.allocate(1);
             TNULL->color = BLACK;
             TNULL->left = TNULL;
             TNULL->right = TNULL;
@@ -136,7 +136,7 @@ namespace ft
         //ACCESSORS
 
         iterator begin()
-        {return (iterator(get_leftmost_node()));}
+        {return (iterator(get_leftmost_node(), _root, TNULL));}
 
         const_iterator begin() const
         {
@@ -145,7 +145,7 @@ namespace ft
             return (const_iterator(get_leftmost_node()));}
 
         iterator end()
-        {return(iterator(_end));}
+        {return(iterator(_end, _root, TNULL));}
 
         const_iterator end() const
         {return(const_iterator(_end));}
@@ -188,6 +188,7 @@ namespace ft
         {
             _end = _node_allocator.allocate(1);
             _end->content = 0;
+            _end->color = BLACK;
             _end->left = TNULL;
             _end->right = TNULL;
             _end->parent = TNULL;
@@ -258,7 +259,7 @@ namespace ft
                 _root = create_node(content, TNULL);
                 _root->color = BLACK;
                 update_end_node();
-                return ft::make_pair(iterator(_root), true);
+                return ft::make_pair(iterator(_root, _root, TNULL), true);
             }
             node_pointer tmp = _root;
             while (tmp != TNULL)
@@ -272,7 +273,7 @@ namespace ft
                         //rb_insert_fixup(tmp->right);
                         rotate_colorflip(tmp->left);
                         //recolor_rotate(tmp->left);
-                        return ft::make_pair(iterator(tmp->left), true);
+                        return ft::make_pair(iterator(tmp->left, _root, TNULL), true);
                     }
                     tmp = tmp->left;
                 }
@@ -286,14 +287,14 @@ namespace ft
                         rotate_colorflip(tmp->right);
                         update_end_node();
                         
-                        return ft::make_pair(iterator(tmp->right), true);
+                        return ft::make_pair(iterator(tmp->right, NULL, NULL), true);
                     }
                     tmp = tmp->right;
                 }
                 else
                     break;
             }
-            return ft::make_pair(iterator(tmp), false);
+            return ft::make_pair(iterator(tmp, _root, TNULL), false);
         }
 
         void m_rotate(node_pointer x, int side) //x = parent
@@ -301,7 +302,7 @@ namespace ft
 
             node_pointer y = x->child[1 - side]; // set y
             x->child[1 - side] = y->child[side]; // turn y’s left subtree into x’s right subtree
-            if (y->child[side] != 0)
+            if (y->child[side] != TNULL)
                 y->child[side]->parent = x;
             y->parent = x->parent;
             if (x->parent == TNULL)
@@ -370,7 +371,7 @@ namespace ft
                 else
                 {
                     //_end->parent->right = 0;
-                    std::cout << "node value :" << key << std::endl;
+                    //std::cout << "node value :" << key << std::endl;
                     rb_delete(node_test);
                     return (1);
                 }
@@ -393,7 +394,7 @@ namespace ft
         void    rb_delete(node_pointer z)
         {
             node_pointer y = z;
-            node_pointer x;
+            node_pointer x = TNULL;
 
             bool y_original_color = y->color;
 
@@ -410,8 +411,8 @@ namespace ft
             else
             {
                 y = tree_minimum(z->right); // y never has a left child.
-                x = y->right;
                 y_original_color = y->color;
+                x = y->right;
                 if (y->parent == z)
                     x->parent = y;
                 else
@@ -421,6 +422,7 @@ namespace ft
                     y->right->parent = y; // r->y->x becomes y->r->x 
                 }
                 rb_transplant(z, y); //delete z and replace it by y
+                //std::cout << "y content" << y->content->first << std::endl;
                 y->left = z->left; // transplant z->left into y
                 y->left->parent = y;
                 y->color = z->color;
@@ -433,10 +435,14 @@ namespace ft
         void deleteFix(node_pointer x) 
         {
             node_pointer s;
+
+            //std::cout << "x parent : "<< x->parent->content->first << std::endl;
+            //std::cout << "x color : "<< x->color << std::endl;
             while (x != _root && x->color == BLACK) 
             {
                 if (x == x->parent->left) 
                 {
+                    //std::cout << "x parent : "<< x->parent->content->first << std::endl;
                     s = x->parent->right;
                     if (s->color == RED) 
                     {
@@ -468,6 +474,7 @@ namespace ft
                 } 
                 else 
                 {
+                    
                     s = x->parent->left;
                     if (s->color == RED) 
                     {
@@ -483,11 +490,16 @@ namespace ft
                     } 
                     else 
                     {
+                        
                         if (s->left->color == BLACK) 
                         {
                             s->right->color = BLACK;
                             s->color = RED;
+                            //std::cout << "s content :" << s->content->first << std::endl;
+                            //std::cout << "x content :" << x->parent->content->first << std::endl;
                             m_rotate(s, LEFT);
+                            //std::cout << "s content :" << s->content->first << std::endl;
+                            //std::cout << "x content :" << x->parent->content->first << std::endl;
                             s = x->parent->left;
                         }
                     s->color = x->parent->color;
@@ -526,53 +538,31 @@ namespace ft
         /********************************************************************************************************************/
         /********************************************************************************************************************/
 
-          void printTree() {
+        void printTree() {
             if (_root) {
             printHelper(this->_root, "", true);
             }
         }
 
-
-          void printHelper(node_pointer root, std::string indent, bool last) {
-            if (root != TNULL) {
+        void printHelper(node_pointer root, std::string indent, bool last) 
+        {
+        if (root != TNULL && root->content) 
+        {
             std::cout << indent;
             if (last) {
                 std::cout << "R----";
                 indent += "   ";
-            } else {
+            } 
+            else {
                 std::cout << "L----";
                 indent += "|  ";
-            }
-
-            std::string sColor;
-            if( root->color == RED)
-                sColor = "RED";
-            else if (root->color == BLACK)
-                sColor ="BLACK";
-            printHelper(root->left, indent, false);
-            printHelper(root->right, indent, true);
-            }
         }
-
-        public:
-        void    display_self(node_pointer node = 0)
-        {
-            if (!node)
-            {
-                node = _root;
-                if (node == TNULL)
-                    return;
-            }
-            if (node->left != TNULL && !is_sentinel(node->left))
-            {
-                display_self(node->left);
-            }
-            std::cout << node->content->first << " ";
-            if (node->right != TNULL && !is_sentinel(node->right))
-            {
-                display_self(node->right);
-            }
+        std::string sColor = root->color ? "RED" : "BLACK";
+        std::cout << root->content->first << "(" << sColor << ")" << std::endl;
+        printHelper(root->left, indent, false);
+        printHelper(root->right, indent, true);
         }
+  }
 
         void print_node(node_pointer node)
 		{
