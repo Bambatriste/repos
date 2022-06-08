@@ -4,7 +4,6 @@
 
 # include "pair.hpp"
 
-enum Node_color { BLACK, RED };
 
 # define LEFT 0
 # define RIGHT 1
@@ -24,7 +23,7 @@ namespace ft {
 
 		pointer content;
 		node_pointer parent;
-		Node_color color;
+		int color;
 		node_pointer child[2];
 
 		node_pointer in_order_successor()

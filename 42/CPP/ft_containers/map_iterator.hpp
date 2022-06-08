@@ -40,7 +40,7 @@ namespace ft
 		typedef typename 	value_type::first_type							key_type;
 		typedef const 		key_type										const_key_type;
 		typedef typename	value_type::second_type							mapped_type;
-		typedef				Node<const_key_type, mapped_type>						node;
+		typedef				Node<const_key_type, mapped_type>				node;
 		typedef				node*											node_pointer;
 
 		node_pointer _p;

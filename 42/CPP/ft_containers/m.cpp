@@ -1,5 +1,7 @@
 //#define STD
 
+
+
 #ifdef STD
  #include <vector>
  #include <map>
@@ -497,7 +499,7 @@ int main(int ac, char **av)
 	// 	std::cout << keys[i] << std::endl;
 	// }
 
-	int values[20] = {2, 2,  8 , 6 , 10 , 3 , 1 , 7 , 9, 4, 5, 16 , 33 , 12 ,15 ,14 , 36 ,54 ,22 , 23};
+	int values[20] = {39, 2,  8 , 6 , 10 , 3 , 1 , 7 , 9, 4, 5, 16 , 33 , 12 ,15 ,14 , 36 ,54 ,22 , 23};
 	//int values[10] = {1, 2 , 3 , 5 , 7 , 8 , 9 , 10, 11, 12};
 
 	//int values[10] = {1, 2 , 3 , 4 , 5 , 6 , 7 , 8, 9, 10};
@@ -517,15 +519,15 @@ int main(int ac, char **av)
 		int_map.insert(arraypair[i]);
 	}
 
-	for (int_map_iterator = int_map.begin() ; int_map_iterator != int_map.end(); int_map_iterator++)
-    {
-        std::cout << int_map_iterator->first << " ";
-    }
-	for (rev_int_map_iterator = int_map.rbegin() ; rev_int_map_iterator != int_map.rend(); rev_int_map_iterator++)
-    {
+	// for (int_map_iterator = int_map.begin() ; int_map_iterator != int_map.end(); int_map_iterator++)
+    // {
+    //     std::cout << int_map_iterator->first << " ";
+    // }
+	// for (rev_int_map_iterator = int_map.rbegin() ; rev_int_map_iterator != int_map.rend(); rev_int_map_iterator++)
+    // {
 		
-		std::cout << rev_int_map_iterator->first << " ";
-    }
+	// 	std::cout << rev_int_map_iterator->first << " ";
+    // }
 
 
 	//int_map_iterator--;
@@ -540,15 +542,36 @@ int main(int ac, char **av)
 	std::cout << std::endl;
 	std::cout << std::endl;
 	std::cout << std::endl;
-	//int_map.erase(33);
-	// int_map.erase(4);
+	// int_map.erase(33);
+	// int_map.erase(39);
+	// int_map.erase(10);
+	// int_map.erase(12);
+	// int_map.erase(22);
+	// int_map.erase(36);
 	// int_map.erase(3);
-	// int_map.erase(5);
+	// int_map.erase(4);
+	// int_map.erase(6);
 	// int_map.erase(1);
-	//int_map.erase(14);
-	//int_map.erase(33);
-	//int_map.erase(22);
-	//int_map.erase(23);
+	// int_map.erase(14);
+	// int_map.erase(23);
+	// int_map.erase(15);
+	// int_map.erase(8);
+	// int_map.erase(54);
+	// int_map.erase(7);
+	// int_map.erase(2);
+	// int_map.erase(16);
+	// int_map.erase(9);
+	// int_map.erase(5);
+
+	std::cout << int_map.size();
+
+
+	//int_map.display_self();
+	//int_map.printTree();
+
+	std::cout << std::endl;
+	std::cout << std::endl;
+	std::cout << std::endl;
 	int_map.print_tree_ascii();
 
 	std::cout << std::endl;
@@ -576,6 +599,8 @@ int main(int ac, char **av)
     // {
     //    std::cout << i->second << " ";
     // }
+	//int_map.print_tree_ascii();
+	//int_map.printTree();
 
 
 
