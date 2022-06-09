@@ -1,10 +1,11 @@
-#ifndef MAP_ITERATOR_HPP
-# define MAP_ITERATOR_HPP
+#ifndef CONST_MAP_ITERATOR_HPP
+# define CONST_MAP_ITERATOR_HPP
 
 # include "Node.hpp"
 # include "iterators_traits.hpp"
 #include "map.hpp"
 #include "pair.hpp"
+#include "map_iterator.hpp"
 
 namespace ft
 
@@ -14,23 +15,22 @@ namespace ft
 				class Distance = std::ptrdiff_t,
 				class Pointer = T*,
 				class Reference = T&>
-	class iterator {
+	class const_iterator {
 	public:
 
 		typedef	Category	iterator_category;
-		typedef	T			value_type;
+		typedef	const T		value_type;
 		typedef	Distance	difference_type;
-		typedef	T*			pointer;
-		typedef	T&			reference;
+		typedef	const T*	pointer;
+		typedef	const T&	reference;
 
 	};
 
 	template < class T>
-	class map_iterator
+	class const_map_iterator
 	{
 		public:
-
-		typedef iterator<std::bidirectional_iterator_tag , T> 				iterator;
+		typedef const_iterator<std::bidirectional_iterator_tag , T> 		iterator;
 		typedef	ft::iterator_traits<iterator>								iterator_traits;
 		typedef	typename 	iterator_traits::difference_type				difference_type;
 		typedef typename 	iterator_traits::value_type						value_type;
@@ -48,19 +48,23 @@ namespace ft
 		node_pointer _nil;
 
 
-		map_iterator(void)
+		const_map_iterator(void)
 		: _p(NULL), _root(NULL), _nil(NULL) 
 		{}
 
-		map_iterator(node_pointer node, node_pointer root, node_pointer nil)
+		const_map_iterator(node_pointer node, node_pointer root, node_pointer nil)
 		: _p(node), _root(root), _nil(nil) 
 		{}
 
-		map_iterator(map_iterator const &src)
+		const_map_iterator(const_map_iterator const &src)
+		: _p(src._p), _root(src._root), _nil(src._nil)
+		{}
+        
+        const_map_iterator(map_iterator<T> const &src)
 		: _p(src._p), _root(src._root), _nil(src._nil)
 		{}
 
-		map_iterator	&operator=(map_iterator const &rhs) 
+		const_map_iterator	&operator=(const_map_iterator const &rhs) 
 		{
 			if (this != &rhs) 
 			{
@@ -71,50 +75,55 @@ namespace ft
 		return (*this);
 		}
 
-		node_pointer get_base() const
-        {
-            return(_p);
-        }
-
-		~map_iterator()
+		~const_map_iterator()
 		{}
 
 		//operator map_iterator<const value_type> () const { return _p; }
 
-		map_iterator& operator++()
+        node_pointer get_base() const
+        {
+            return(_p);
+        }
+
+		const_map_iterator& operator++()
 		{
-			if(_p == _nil || is_sentinel(_p))
-				return *this;
 			if (_p->right != _nil)
 			{
 				_p = _p->right;
-				while(_p->left != _nil)
+				while(_p->left && _p->left != _nil)
 				{
 					_p = _p->left;
 				}
-				return *this;
 			}
-			node_pointer tmp = _p;
-			while(tmp != _nil)
+			else
 			{
-				if  (node_side(tmp) == LEFT)
+				node_pointer tmp = _p;
+				while(tmp != _nil)
 				{
-					_p= tmp->parent;
-					return *this;
+					if  (tmp->parent == _nil)
+					{
+						_p = _p->right;
+						return *this;
+					}
+					else if (tmp == tmp->parent->left && tmp)
+					{
+						_p = tmp->parent;
+						return *this;
+					}
+					tmp = tmp->parent;
 				}
-				tmp = tmp->parent;
 			}
 			return *this;
 		}
 
-		map_iterator operator++(int)
+		const_map_iterator operator++(int)
 		{
-			map_iterator ret = *this;
+			const_map_iterator ret = *this;
 			++(*this);
 			return ret;
 		}
 
-		map_iterator& operator--()
+		const_map_iterator& operator--()
 		{
 			if (is_sentinel(_p))
 				_p = _p->parent;
@@ -145,25 +154,26 @@ namespace ft
 			return *this;
 		}
 
-		map_iterator operator--(int)
+		const_map_iterator operator--(int)
 		{
-			map_iterator ret = *this;
+			const_map_iterator ret = *this;
 			--(*this);
 			return ret;
 		}
 
 		reference operator*() const { return *_p->content; }
 		pointer operator->() const{ return &(*_p->content); }
+
 		//template <typename U>
-		bool operator==(const map_iterator<T>& rhs) const { return _p == rhs._p; }
+		bool operator==(const const_map_iterator<T>& rhs) const { return _p == rhs._p; }
 		//template <typename U>
-		bool operator!=(const map_iterator<T>& rhs) const { return _p != rhs._p; }
+		bool operator!=(const const_map_iterator<T>& rhs) const { return _p != rhs._p; }
 	};
 
-	// template <typename U, typename T>
-    // bool operator==(map_iterator<T> &lhs ,map_iterator<U>& rhs) { return lhs.get_base() == rhs.get_base(); }
-    // template <typename U, typename T>
-    // bool operator!=(map_iterator<T> &lhs, map_iterator<U>& rhs) { return lhs.get_base() != rhs.get_base(); }
+    template <typename U, typename T>
+    bool operator==(const_map_iterator<T> &lhs ,const_map_iterator<U>& rhs) { return lhs.get_base() == rhs.get_base(); }
+    template <typename U, typename T>
+    bool operator!=(const_map_iterator<T> &lhs, const_map_iterator<U>& rhs) { return lhs.get_base() != rhs.get_base(); }
 
 
 }

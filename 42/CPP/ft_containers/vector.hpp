@@ -9,8 +9,6 @@
 # include "iterators_traits.hpp"
 # include "algorithms.hpp"
 
-
-
 namespace ft 
 {
 	template <class T, class Allocator = std::allocator<T> >
@@ -109,7 +107,7 @@ namespace ft
 		}
 
 		template< class InputIt >
-		void assign( InputIt first, InputIt last )
+		void assign( InputIt first, InputIt last , typename ft::enable_if<!ft::is_integral<InputIt>::value, bool>::type = true)
 		{
 			clear();
 			insert(begin(), first, last);
@@ -256,7 +254,7 @@ namespace ft
         }
 		
 		template< class InputIt >
-		void insert( iterator pos,typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type first, InputIt last )
+		void insert( iterator pos, InputIt first, InputIt last , typename ft::enable_if<!ft::is_integral<InputIt>::value, bool>::type = true)
 		{
 			if (first == last)
 				return ;
@@ -394,13 +392,13 @@ namespace ft
 		{return reverse_iterator(end());}
 
 		const_reverse_iterator rbegin() const
-		{return reverse_iterator(end());}
+		{return const_reverse_iterator(end());}
 
 		reverse_iterator rend()
 		{return reverse_iterator(begin());}
 
 		const_reverse_iterator rend() const
-		{return reverse_iterator(begin());}
+		{return const_reverse_iterator(begin());}
 	};
 
 	template< class T, class Alloc >

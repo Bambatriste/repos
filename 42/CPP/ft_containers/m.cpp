@@ -1,7 +1,5 @@
 //#define STD
 
-
-
 #ifdef STD
  #include <vector>
  #include <map>
@@ -10,7 +8,7 @@
 #else
  #include "vector.hpp"
  #include "map.hpp"
-//#include "stack.hpp"
+ #include "stack.hpp"
  #include "pair.hpp"
  #include "is_integral.hpp"
  #include "enable_if.hpp"
@@ -20,13 +18,12 @@
  #include "vector.hpp"
 #endif
 
-#include <utility>
+
 #include <string>
 #include <iostream>
-
-#include <stdio.h>
+#include <time.h>
 #include <stdlib.h>
-#include<time.h>
+#include <list>
 
 // template<class T>
 // void wrapper_insert(ft::vector<T>& vect, size_t count, T& value) {
@@ -69,105 +66,39 @@ int main(int ac, char **av)
 
 	/*********************************** PAIR TESTS **********************************/
 
-	// std::pair<int, std::string>p1;
-	// ft::pair<int , std::string>p2;
-
-	// std::cout << p1.first << std::endl;
-	// std::cout << p1.second << std::endl;
-
-	// std::cout << p2.first << std::endl;
-	// std::cout << p2.second << std::endl;
-
+	ft::pair<int , std::string>p1;
+	std::cout << p1.first << std::endl;
+	std::cout << p1.second << std::endl;
 	// // assignation constructor
-
-	// std::pair <int , std::string>p3(42,"abc");
-
-	// std::cout << p3.first << std::endl;
-	// std::cout << p3.second << std::endl;
-
-	// ft::pair <int, std::string>p4(42, "abc");
-
-	// std::cout << p4.first << std::endl;
-	// std::cout << p4.second << std::endl;
-
-	// // copy constructor
-
-	// std::pair <int , std::string>p6(p3);
-
-	// std::cout << p6.first << std::endl;
-	// std::cout << p6.second << std::endl;
-
-	// ft::pair <int , std::string>p7(p4);
-
-	// std::cout << p7.first << std::endl;
-	// std::cout << p7.second << std::endl;
-
+	ft::pair <int , std::string>p2(42,"abc");
+	std::cout << p2.first << std::endl;
+	std::cout << p2.second << std::endl;
+	// copy constructor
+	ft::pair <int , std::string>p4(p2);
+	std::cout << p4.first << std::endl;
+	std::cout << p4.second << std::endl;
 	// // operator=
-
-	// p6=p1;
-
-	// std::cout << p6.first << std::endl;
-	// std::cout << p6.second << std::endl;
-
-	// p7 = p2;
-
-	// std::cout << p7.first << std::endl;
-	// std::cout << p7.second << std::endl;
-
-	// //comparison operators :
-
-	// // ==
-
-	// std::cout << (p2 ==p7) << std::endl;
-	// //p7.first = 2;
-	// //p7.second = 33;
-	// std::cout << (p2 ==p7) << std::endl;
-
+	p4=p1;
+	std::cout << p4.first << std::endl;
+	std::cout << p4.second << std::endl;
+	//comparison operators :
+	std::cout << (p2 == p4) << std::endl;
+	std::cout << (p1 ==p4) << std::endl;
 	// // !=
-
-	// std::cout << (p2 !=p7) << std::endl;
-	// //p7.first = 2;
-	// //p7.second = 33;
-	// std::cout << (p2 !=p7) << std::endl;
-
-
-
-	// p2.first = 0;
-	// p7.first = 0;
-	// p2.second = "abc";
-	// p7.second = "abc";
-
-	// std::cout << "== :" << (p2 == p7) << std::endl;
-	// std::cout << "!= :" << (p2 != p7) << std::endl;
-	// std::cout << "< :" << (p2 <p7) << std::endl;
-	// std::cout << "<= :" << (p2 <=p7) << std::endl;
-	// std::cout << "> :" << (p2 >p7) << std::endl;
-	// std::cout << ">= :" << (p2 >=p7) << std::endl;
-
-
-	// std::pair<int, int> p9 = std::make_pair(12,13);
-
-	// std::cout << p9.first << std::endl;
-	// std::cout << p9.second << std::endl;
-
-
-	// ft::pair<int, int> p10 = ft::make_pair(12,13);
-
-	// std::cout << p10.first << std::endl;
-	// std::cout << p10.second << std::endl;
-
-
+	std::cout << (p2 !=p1) << std::endl;
+	std::cout << (p1 !=p4) << std::endl;
+	ft::pair<int, int> p5 = ft::make_pair(12,13);
+	std::cout << p5.first << std::endl;
+	std::cout << p5.second << std::endl;
 
 	/*********************************** IS INTEGRAL TESTS **********************************/
 
-	// std::cout << std::boolalpha;
- 	// std::cout << "char: " << ft::is_integral<char>::value << std::endl;
-	// std::cout << "int: " << ft::is_integral<int>::value << std::endl;
-	// std::cout << "float: " << ft::is_integral<float>::value << std::endl;
-	// std::cout << "long int: " << ft::is_integral<long int>::value << std::endl;
+	std::cout << std::boolalpha;
+ 	std::cout << "char: " << ft::is_integral<char>::value << std::endl;
+	std::cout << "int: " << ft::is_integral<int>::value << std::endl;
+	std::cout << "float: " << ft::is_integral<float>::value << std::endl;
+	std::cout << "long int: " << ft::is_integral<long int>::value << std::endl;
 
-	/*********************************** ENABLE_IF TESTS **********************************/
-	
 
 	/*********************************** VECTOR TESTS *************************************/
 
@@ -176,8 +107,6 @@ int main(int ac, char **av)
 
 	ft::vector<int> vector1;
 	ft::vector<int> vector2(allocator_int);
-	//ft::vector<float>vector3;
-
 
 	vector2.push_back(100);
 	std::cout << vector2.back();
@@ -201,26 +130,11 @@ int main(int ac, char **av)
 	vector2.push_back(48);
 	display_vector(vector2);
 
-	
-
-	ft::vector<int>::iterator insert_test = vector2.insert(vector2.begin() + 2, 36); //segv if begin is out of range , but std too
+	ft::vector<int>::iterator insert_test = vector2.insert(vector2.begin() + 2, 36);
 	std::cout << "return value for insert test : " << *insert_test << std::endl;
 
-
-
 	vector2.insert(vector2.begin(), 5, 77);
-
-
-
-	//std::cout <<  "before insert capacity :" << vector2.capacity() << std::endl;
-	//std::cout <<  "before insert size :" << vector2.size() << std::endl;
-
 	vector2.insert(vector2.begin() + 2, 5, 33);
-
-	//std::cout <<  "after insert capacity :" << vector2.capacity() << std::endl;
-	//std::cout <<  "after insert size :" << vector2.size() << std::endl;
-
-	
 	vector1.push_back(1);
 	vector1.push_back(2);
 	vector1.push_back(3);
@@ -231,30 +145,22 @@ int main(int ac, char **av)
 	vector1.push_back(8);
 	vector1.erase(vector1.begin());
 
-
 	ft::vector<int>::iterator test = vector1.erase(vector1.begin() +2, vector1.begin() + 4);
 
-	
 	std::cout << "return value for erase : " << *test << std::endl;
-	vector2.resize(36, 0); // problem due to insert when resizing to bigger (invalid write : 1)
+	vector2.resize(36, 0);
 	std::cout <<  "before insert capacity : :" << vector2.capacity() << std::endl;
 	std::cout <<  "before insert size :" << vector2.size() << std::endl;
-
-
 	std::cout <<  "before insert size : :" << vector2.size() << std::endl;
 	std::cout <<  "before insert capacity : :" << vector2.capacity() << std::endl;
-	// std::cout << "number of elements to add : " << vector1.end() - vector1.begin() << std :: endl;
-	// display_vector(vector2);
+	display_vector(vector2);
 	vector2.insert(vector2.begin(), vector1.begin(), vector1.end()); // problem for erase and insert if vector1.end() + 1 probably just undefined behavior
 	std::cout <<  "after insert capacity : :" << vector2.capacity() << std::endl;
 	std::cout <<  "after insert size : :" << vector2.size() << std::endl;
-
-
-	//std::cout <<  "before resize size :" << vector2.size() << std::endl;
-	//vector2.resize(36, 0);
-	//std::cout <<  "after resize capacity : :" << vector2.capacity() << std::endl;
-	//std::cout <<  "after resize size :" << vector2.size() << std::endl;
-	
+	std::cout <<  "before resize size :" << vector2.size() << std::endl;
+	vector2.resize(36, 0);
+	std::cout <<  "after resize capacity : :" << vector2.capacity() << std::endl;
+	std::cout <<  "after resize size :" << vector2.size() << std::endl;
 	display_vector(vector2);
 	vector2.assign(4, 99);
 	display_vector(vector2);
@@ -269,64 +175,39 @@ int main(int ac, char **av)
 	vector4.push_back(c1);
 	vector4.push_back(c2);
 	vector4.push_back(c1);
-
 	vector3.push_back(c1);
 	vector3.push_back(c2);
 
 	vector3.insert(vector3.end(), c2);
-
 	std::cout <<  "before insert :" << vector3.capacity() << std::endl;
 	std::cout <<  "before insert size :" << vector3.size() << std::endl;
 	vector3.insert(vector3.end(), 5, c2);
-
 	std::cout <<  "after insert capacity :" << vector3.capacity() << std::endl;
 	std::cout <<  "after insert  size :" << vector3.size() << std::endl;
 
 	vector3.insert(vector3.begin() +1, vector4.begin(), vector4.end());
-
 	display_vector(vector3);
-
 	vector3.erase(vector3.begin());
 	vector3.erase(vector3.begin(), vector3.end() - 1);
 	
-	//std::cout << ptr << std::endl;
-
-//std::cout << "last vector 3 display" << std::endl;
 	display_vector(vector3);
-	//std::cout << "vector3 capacity :" << vector3.capacity() << std::endl;
-	//std::cout << "vector3 size :" << vector3.size() << std::endl;
+	std::cout << "vector3 capacity :" << vector3.capacity() << std::endl;
+	std::cout << "vector3 size :" << vector3.size() << std::endl;
 
-	//int i = 0;
-	//while (i < 15)
-	//{
 	vector3.insert(vector3.begin(), 17, Observable(1));
-	// std::cout << "vector 3 size before resize :" << vector3.size() <<  std::endl;
-	// std::cout << "vector 3 capacity before resize :" << vector3.capacity() <<  std::endl;
+	std::cout << "vector 3 size before resize :" << vector3.size() <<  std::endl;
+	std::cout << "vector 3 capacity before resize :" << vector3.capacity() <<  std::endl;
 	vector3.resize(33, Observable());
-	// std::cout << "vector 3 size after resize :" << vector3.size() <<  std::endl;
-	// std::cout << "vector 3 capacity after resize :" << vector3.capacity() <<  std::endl;
+	std::cout << "vector 3 size after resize :" << vector3.size() <<  std::endl;
+	std::cout << "vector 3 capacity after resize :" << vector3.capacity() <<  std::endl;
 
-	
-	
 	display_vector(vector3);
-
-
 	display_vector(vector1);
 	display_vector(vector2);
 	vector1.swap(vector2);
 	display_vector(vector1);
 	display_vector(vector2);
-
-	std::cout << *vector1.rbegin() << std::endl;
-	std::cout << *vector1.rend() << std::endl; 
-
-	
-
-
-	//vector3.push_back(c1);
-	//std::cout << "vector3 capacity :" << vector3.capacity() << std::endl;
-	//std::cout << "vector3 size :" << vector3.size() << std::endl;
-
+	std::cout << *vector1.rbegin() << std::endl; 
 
 	ft::vector<int> foo (3,100);   // three ints with a value of 100
 	ft::vector<int> bar (5,200);   // five ints with a value of 200
@@ -463,51 +344,21 @@ int main(int ac, char **av)
 		std::cout << *tmp3 << '\n';
 
 }
-
-	ft::pair<int, std::string> pair_test(1, "bonjour");
-	ft::pair<int, std::string> pair_test2(2, "xonjour");
-	ft::pair<int, std::string> pair_test3(0, "abcd");
-
-	ft::map<int, std::string> map_test;
-
-	// map_test.insert_node(pair_test);
-	// map_test.insert_node(pair_test2);
-	// map_test.insert_node(pair_test2);
-	// map_test.insert_node(pair_test2);
-	// map_test.insert_node(pair_test);
-	// map_test.insert_node(pair_test3);
-	//map_test.display_self();
-
-	
-
-
-	
+	/////////////////MAP TESTS////////////////////////////////////////////////////////////
 	ft::map<int, int > int_map;
 	ft::map<int , int>::iterator int_map_iterator;
 	ft::map<int , int>::reverse_iterator rev_int_map_iterator;
 	rev_int_map_iterator = int_map.rbegin();
 
-	int nb_keys = 20;
+	int nb_keys = 10000;
 	int keys[nb_keys];
 	ft::pair <int , int> arraypair[nb_keys];
 
-	//srand(time(0));
-
-	// for (int i = 0; i < nb_keys; i++)
-	// {
-	// 	keys[i] = ( rand() % 100);
-	// 	std::cout << keys[i] << std::endl;
-	// }
-
-	int values[20] = {39, 2,  8 , 6 , 10 , 3 , 1 , 7 , 9, 4, 5, 16 , 33 , 12 ,15 ,14 , 36 ,54 ,22 , 23};
-	//int values[10] = {1, 2 , 3 , 5 , 7 , 8 , 9 , 10, 11, 12};
-
-	//int values[10] = {1, 2 , 3 , 4 , 5 , 6 , 7 , 8, 9, 10};
+	srand(time(0));
 
 	for (int i = 0; i < nb_keys; i++)
 	{
-		//keys[i] = ( rand() % 100);
-		keys[i] = values[i];
+		keys[i] = ( rand() % nb_keys);
 		std::cout << keys[i] << std::endl;
 	}
 	for (int i = 0; i < nb_keys; i++)
@@ -525,76 +376,53 @@ int main(int ac, char **av)
 	}
 	for (rev_int_map_iterator = int_map.rbegin() ; rev_int_map_iterator != int_map.rend(); rev_int_map_iterator++)
     {
-		
 		std::cout << rev_int_map_iterator->first << " ";
     }
+	std::cout << std::endl;
 
+	std::list<ft::pair<const int , std::string> > lst;
+	unsigned int lst_size = 10;
+	for (unsigned int i = 0; i < lst_size; ++i)
+		lst.push_back(ft::pair<const int, std::string>(i, std::string((lst_size - i), i + 65)));
+	ft::map<int, std::string> mp(lst.begin(), lst.end());
 
-	//int_map_iterator--;
+	mp.erase(++mp.begin());
+	mp.erase(mp.begin());
+	mp.erase(--mp.end());
 
-	//std::cout << int_map_iterator->first << " ";
-
-	//int_map.display_self();
-	//int_map.display_self();
-	//int_map.display_self();
-	// std::cout << std::endl;
-	// std::cout << std::endl;
-	// std::cout << std::endl;
-	// std::cout << std::endl;
-	// std::cout << std::endl;
-	// int_map.erase(33);
-	// int_map.erase(39);
-	// int_map.erase(10);
-	// int_map.erase(12);
-	// int_map.erase(22);
-	// int_map.erase(36);
-	// int_map.erase(3);
-	// int_map.erase(4);
-	// int_map.erase(6);
-	// int_map.erase(1);
-	// int_map.erase(14);
-	// int_map.erase(23);
-	// int_map.erase(15);
-	// int_map.erase(8);
-	// int_map.erase(54);
-	// int_map.erase(7);
-	// int_map.erase(2);
-	// int_map.erase(16);
-	// int_map.erase(9);
-	// int_map.erase(5);
-
-	// //std::cout << int_map.size();
-
-	//int_map.printTree();
-
-	//int_map.print_tree_ascii();
+	mp.erase(mp.begin(), ++(++(++mp.begin())));
+	std::cout << int_map.size() << std::endl;
 
 	
 
-	//ft::map<int , std::string> pouet;
-	//ft::map<int , std::string>::iterator j;
-	//ft::map<int , std::string>::iterator k;
-	//j = pouet.insert(pair_test).first;
-	//j = pouet.begin();
+	ft::map<char,int> mymap;
 
-	//std::cout << j->second;
+	mymap['x']=100;
+	mymap['y']=200;
+	mymap['z']=300;
 
-	// pouet.insert(pair_test2);
-	
-	// //vector<int>::iterator i;
-	// std::map<int , std::string>::iterator i;
+  	std::cout << "mymap contains:\n";
+  	for (ft::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+    	std::cout << it->first << " => " << it->second << '\n';
 
-	// for (i = pouet.begin(); i != pouet.end(); ++i)
-    // {
-    //    std::cout << i->second << " ";
-    // }
-	//int_map.print_tree_ascii();
+	mymap.clear();
+	mymap['a']=1101;
+	mymap['b']=2202;
+
+  	std::cout << "mymap contains:\n";
+  	for (ft::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+    std::cout << it->first << " => " << it->second << '\n';
+
+
+	std::cout << std::endl;
+	std::cout << std::endl;
+	std::cout << std::endl;
+	std::cout << std::endl;
 	//int_map.printTree();
+	std::cout << std::endl;
+	std::cout << std::endl;
+	std::cout << std::endl;
+	std::cout << std::endl;
+	//int_map.print_tree_ascii();
 
-	//vector2.resize(36, 0);
-
-	//vector3.reserve(200);
-
-	//std::cout << vector4[0]<< std::endl;
-	//std::cout << vector3[0]<< std::endl;
 }

@@ -15,8 +15,9 @@
 # include "algorithms.hpp"
 # include "Node.hpp"
 # include "map_iterator.hpp"
-#include <vector>
-#include <math.h>
+# include "const_map_iterator.hpp"
+// # include <vector>
+// # include "math.h"
 
 namespace ft 
 {
@@ -41,7 +42,7 @@ namespace ft
         typedef typename Allocator::pointer						            pointer;
         typedef typename Allocator::const_pointer				            const_pointer;
         typedef ft::map_iterator<value_type>                                iterator;
-        typedef const iterator	                                            const_iterator;
+        typedef ft::const_map_iterator<value_type>	                        const_iterator;
         typedef ft::reverse_iterator<iterator>					            reverse_iterator;
         typedef ft::reverse_iterator<const_iterator>	                    const_reverse_iterator;
         typedef Node<key_type, mapped_type>                                 node;
@@ -98,7 +99,9 @@ namespace ft
         template< class InputIt >
         map( InputIt first, InputIt last,
         const Compare& comp = Compare(),
-        const Allocator& alloc = Allocator() )
+        const Allocator& alloc = Allocator() , 
+        typename ft::enable_if<!ft::is_integral<InputIt>::value, bool>::type = true
+        )
         :
         _allocator(alloc),
         _node_allocator(alloc),
@@ -146,7 +149,18 @@ namespace ft
             if (this == &other)
                 return (*this);
             this->clear();
+            delete_node(_end);
+            delete_node(TNULL);
+            TNULL = _node_allocator.allocate(1);
+            TNULL->color = BLACK;
+            TNULL->left = TNULL;
+            TNULL->right = TNULL;
+            TNULL->parent = TNULL;
+            _root = TNULL;
+            create_end_node();
+            _size = 0;
             this->insert(other.begin(), other.end());
+            return (*this);
         }
 
         // GETTER 
@@ -208,29 +222,20 @@ namespace ft
         void clear()
         {
             _clear(_root);
+            _root = TNULL;
         }
-
-        void _clear(node_pointer node)
-        {
-            if (node == TNULL || is_sentinel(node))
-                return;
-            if (node->left)
-                _clear(node->left);
-            if (node->right)
-                _clear(node->right);
-            delete_node(node);
-        }
-
         void erase( iterator pos )
         {
             erase(pos->first);
         }
         void erase( iterator first, iterator last )
         {
+            iterator tmp;
             while (first != last)
             {
-                erase(first);
+                tmp = first;
                 first++;
+                erase(tmp);
             }
         }
 
@@ -297,14 +302,20 @@ namespace ft
         {
             while (first != last)
             {
-                insert(*first++);
+                insert(*first);
                 first++;
             }
         }
 
+        iterator insert( iterator pos, const value_type& value )
+        {
+            (void)pos;
+            return(insert(value)).first;
+        }
+
         void swap( map& other )
         {
-            ft::swap(_root, other.root);
+            ft::swap(_root, other._root);
             ft::swap(TNULL, other.TNULL);
             ft::swap(_end, other._end);
             ft::swap(_size, other._size);
@@ -323,7 +334,7 @@ namespace ft
         {
             for (iterator it = begin(); it != end(); ++it) 
             {
-			if (!this->_compare(it->first, key))
+			if (!this->_comp(it->first, key))
 				return it;
 		    }
 		    return end();
@@ -332,9 +343,9 @@ namespace ft
         const_iterator lower_bound( const Key& key ) const
         {
 
-            for (iterator it = begin(); it != end(); ++it) 
+            for (const_iterator it = begin(); it != end(); ++it) 
             {
-			if (!this->_compare(it->first, key))
+			if (!this->_comp(it->first, key))
 				return it;
 		    }
 		    return end();
@@ -344,7 +355,7 @@ namespace ft
         {
             for (iterator it = begin(); it != end(); ++it) 
             {
-                if (this->_compare(key, it->first))
+                if (this->_comp(key, it->first))
                     return it;
             }
             return end();
@@ -353,18 +364,18 @@ namespace ft
         {
             for (const_iterator it = begin(); it != end(); ++it) 
             {
-                if (this->_compare(key, it->first))
+                if (this->_comp(key, it->first))
                     return it;
             }
             return end();
 	    }
 
-        std::pair<iterator,iterator> equal_range( const Key& key )
+        ft::pair<iterator,iterator> equal_range( const Key& key )
         {
             return ft::make_pair(lower_bound(key), upper_bound(key));
         }
 
-        std::pair<const_iterator,const_iterator> equal_range( const Key& key ) const
+        ft::pair<const_iterator,const_iterator> equal_range( const Key& key ) const
         {
             return ft::make_pair(lower_bound(key), upper_bound(key));
         }
@@ -378,19 +389,23 @@ namespace ft
         //ACCESSORS
 
         iterator begin()
-        {return (iterator(get_leftmost_node(), _root, TNULL));}
+        {
+            if (_root == TNULL)
+                return end();
+            return (iterator(get_leftmost_node(), _root, TNULL));
+        }
 
         const_iterator begin() const
         {
             if (this->empty())
 				return this->end();
-            return (const_iterator(get_leftmost_node()));}
+            return (const_iterator(get_leftmost_node(), _root, TNULL));}
 
         iterator end()
         {return(iterator(_end, _root, TNULL));}
 
         const_iterator end() const
-        {return(const_iterator(_end));}
+        {return(const_iterator(_end, _root, TNULL));}
 
         reverse_iterator rbegin()
         {
@@ -448,10 +463,10 @@ namespace ft
             }
         }
 
-        node_pointer get_rightmost_node()
+        node_pointer get_rightmost_node() const
         {
             if (this->empty())
-				return 0;
+				return TNULL;
             node_pointer tmp = _root;
             while (tmp->right != TNULL && (!is_sentinel(tmp->right)))
                 tmp = tmp->right;
@@ -459,31 +474,31 @@ namespace ft
             return tmp;
         }
 
-        node_pointer get_leftmost_node()
+        node_pointer get_leftmost_node() const
         {
             if (this->empty())
-				return 0;
+				return TNULL;
             node_pointer tmp = _root;
             while (tmp->left != TNULL && (!is_sentinel(tmp->left)))
                 tmp = tmp->left;
             return tmp;
         }
 
-        node_pointer tree_minimum(node_pointer x)
+        node_pointer tree_minimum(node_pointer x) const
         {
             while (x->left != TNULL)
                 x = x->left;
             return x;
         }
 
-        node_pointer tree_maximum(node_pointer x)
+        node_pointer tree_maximum(node_pointer x) const
         {
             while (x->right != TNULL && !is_sentinel(x->right))
                 x = x->right;
             return x;
         }
 
-        node_pointer in_order_successor(node_pointer node)
+        node_pointer in_order_successor(node_pointer node) const
 		{
 			node_pointer successor = node->right;
 			while (successor->left && successor->left != TNULL && !is_sentinel(successor->left))
@@ -699,6 +714,17 @@ namespace ft
             --_size;
         }
 
+        void _clear(node_pointer node)
+        {
+            if (!node || node == TNULL || is_sentinel(node))
+                return;
+            if (node->left != TNULL && !is_sentinel(node->left))
+                _clear(node->left);
+            if (node->right != TNULL && !is_sentinel(node->right))
+                _clear(node->right);
+            delete_node(node);
+        }
+
         /***********************************************DISPLAY FUNCTIONS ***************************************************/
         /********************************************************************************************************************/
         /********************************************************************************************************************/
@@ -712,113 +738,113 @@ namespace ft
         /********************************************************************************************************************/
         /********************************************************************************************************************/
 
-        void printTree() {
-            if (_root) {
-            printHelper(this->_root, "", true);
-            }
-        }
+//         void printTree() {
+//             if (_root) {
+//             printHelper(this->_root, "", true);
+//             }
+//         }
 
-        void printHelper(node_pointer root, std::string indent, bool last) 
-        {
-        if (root != TNULL && root->content) 
-        {
-            std::cout << indent;
-            if (last) {
-                std::cout << "R----";
-                indent += "   ";
-            } 
-            else {
-                std::cout << "L----";
-                indent += "|  ";
-        }
-        std::string sColor = root->color ? "RED" : "BLACK";
-        std::cout << root->content->first << "(" << sColor << ")" << std::endl;
-        printHelper(root->left, indent, false);
-        printHelper(root->right, indent, true);
-        }
-  }
+//         void printHelper(node_pointer root, std::string indent, bool last) 
+//         {
+//         if (root != TNULL && root->content) 
+//         {
+//             std::cout << indent;
+//             if (last) {
+//                 std::cout << "R----";
+//                 indent += "   ";
+//             } 
+//             else {
+//                 std::cout << "L----";
+//                 indent += "|  ";
+//         }
+//         std::string sColor = root->color ? "RED" : "BLACK";
+//         std::cout << root->content->first << "(" << sColor << ")" << std::endl;
+//         printHelper(root->left, indent, false);
+//         printHelper(root->right, indent, true);
+//         }
+//   }
 
-        void print_node(node_pointer node)
-		{
-			if (node->color == RED)
-				std::cout << "\033[31m";
-			else
-				std::cout << "\033[30m";
-			std::cout << node->content->first;
-		}
+//         void print_node(node_pointer node)
+// 		{
+// 			if (node->color == RED)
+// 				std::cout << "\033[31m";
+// 			else
+// 				std::cout << "\033[30m";
+// 			std::cout << node->content->first;
+// 		}
 
-		int get_max_depth(node_pointer root)
-		{
-			if (!root || root == TNULL|| is_sentinel(root))
-				return 0;
-			int depth1 = get_max_depth(root->left);
-			int depth2 = get_max_depth(root->right);
-			return depth1 > depth2 ? depth1 + 1 : depth2 + 1;
-		}
+// 		int get_max_depth(node_pointer root)
+// 		{
+// 			if (root == TNULL || !root || is_sentinel(root))
+// 				return 0;
+// 			int depth1 = get_max_depth(root->left);
+// 			int depth2 = get_max_depth(root->right);
+// 			return depth1 > depth2 ? depth1 + 1 : depth2 + 1;
+// 		}
 
-		void get_nodes_by_depth(std::vector<std::vector<node_pointer> > & nodes, node_pointer node = 0, int depth = 0)
-		{
-			if (!node && depth == 0)
-			{
-				node = _root;
-				if (!node)
-					return ; //empty
-			}
-			if (node && !is_sentinel(node->left))
-				get_nodes_by_depth(nodes, node->left, depth + 1);
-			else if ((size_t)(depth + 1) < nodes.size())
-				get_nodes_by_depth(nodes, 0, depth + 1);
-			nodes[depth].push_back(node);
-			if (node && node->right && !is_sentinel(node->right))
-				get_nodes_by_depth(nodes, node->right, depth + 1);
-			else if ((size_t)(depth + 1) < nodes.size())
-				get_nodes_by_depth(nodes, 0, depth + 1);
-		}
+// 		void get_nodes_by_depth(std::vector<std::vector<node_pointer> > & nodes, node_pointer node = 0, int depth = 0)
+// 		{
+// 			if (!node && depth == 0)
+// 			{
+// 				node = _root;
+// 				if (node == TNULL || !node || is_sentinel(node))
+// 					return ; //empty
+// 			}
+// 			if (node != TNULL && node &&  node->left != TNULL && !is_sentinel(node->left))
+// 				get_nodes_by_depth(nodes, node->left, depth + 1);
+// 			else if ((size_t)(depth + 1) < nodes.size())
+// 				get_nodes_by_depth(nodes, 0, depth + 1);
+// 			nodes[depth].push_back(node);
+// 			if (node != TNULL && node && node->right &&  node->right != TNULL && !is_sentinel(node->right))
+// 				get_nodes_by_depth(nodes, node->right, depth + 1);
+// 			else if ((size_t)(depth + 1) < nodes.size())
+// 				get_nodes_by_depth(nodes, 0, depth + 1);
+// 		}
 
-		size_t sp2(int x) //sum of power of 2
-		{
-			if (x == 0) return 0;
-			size_t r = 1;
-			while (--x > 0)
-				r += pow(2, x);
-			return r;
-		}
+// 		size_t sp2(int x) //sum of power of 2
+// 		{
+// 			if (x == 0) return 0;
+// 			size_t r = 1;
+// 			while (--x > 0)
+// 				r += pow(2, x);
+// 			return r;
+// 		}
 
-		void print_tree_ascii()
-		{
-			int elem_size = 1;
-			int depth = get_max_depth(_root);
-			std::vector<std::vector<node_pointer> > v;
-			for (int i = 0; i < depth; ++i)
-				v.push_back(std::vector<node_pointer>()); //filing v with depth
-			get_nodes_by_depth(v);
-			int i = depth - 1;
-			std::string padding;
-			for (typename std::vector<std::vector<node_pointer> >::iterator i1 = v.begin(); i1 != v.end(); ++i1)
-			{
-				padding.append(sp2(i) * elem_size, ' ');
-				std::cout << padding;
-				padding.clear();
-				padding.append(sp2(i + 1) * elem_size, ' ');
-				for (typename std::vector<node_pointer>::iterator i2 = (*i1).begin(); i2 != (*i1).end(); ++i2)
-				{
-					if (*i2)
-					{
-						if ((*i2)->color == RED)
-							std::cout << "\033[31m";
-						else
-							std::cout << "\033[37m";
-						std::cout << (*i2)->content->first << padding;
-					}
-					else
-						std::cout << "\033[37m " << padding;
-				}
-				std::cout << std::endl;
-				--i;
-				padding.clear();
-			}
-			std::cout << "\033[0m" << std::endl; //back to normal
-		}
+// 		void print_tree_ascii()
+// 		{
+// 			int elem_size = 1;
+// 			int depth = get_max_depth(_root);
+// 			std::vector<std::vector<node_pointer> > v;
+// 			for (int i = 0; i < depth; ++i)
+// 				v.push_back(std::vector<node_pointer>()); //filing v with depth
+// 			get_nodes_by_depth(v);
+// 			int i = depth - 1;
+// 			std::string padding;
+// 			for (typename std::vector<std::vector<node_pointer> >::iterator i1 = v.begin(); i1 != v.end(); ++i1)
+// 			{
+// 				padding.append(sp2(i) * elem_size, ' ');
+// 				std::cout << padding;
+// 				padding.clear();
+// 				padding.append(sp2(i + 1) * elem_size, ' ');
+// 				for (typename std::vector<node_pointer>::iterator i2 = (*i1).begin(); i2 != (*i1).end(); ++i2)
+// 				{
+// 					if (*i2)
+// 					{
+// 						if ((*i2)->color == RED)
+// 							std::cout << "\033[31m";
+// 						else
+// 							std::cout << "\033[37m";
+// 						std::cout << (*i2)->content->first << padding;
+// 					}
+// 					else
+// 						std::cout << "\033[37m " << padding;
+// 				}
+// 				std::cout << std::endl;
+// 				--i;
+// 				padding.clear();
+// 			}
+// 			std::cout << "\033[0m" << std::endl; //back to normal
+//          }
 	};
 
     template<class K, class V, class Compare, class Alloc>
