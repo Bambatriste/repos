@@ -95,24 +95,107 @@ namespace ft
 			create_end_node();
 		}
 
+        template< class InputIt >
+        map( InputIt first, InputIt last,
+        const Compare& comp = Compare(),
+        const Allocator& alloc = Allocator() )
+        :
+        _allocator(alloc),
+        _node_allocator(alloc),
+        _end(0),
+        _size(0),
+        _comp(comp)
+        {
+            TNULL = _node_allocator.allocate(1);
+            TNULL->color = BLACK;
+            TNULL->left = TNULL;
+            TNULL->right = TNULL;
+            TNULL->parent = TNULL;
+            _root = TNULL;
+            create_end_node();
+            this->insert(first, last);
+        }
+
+        map( const map& other )
+        :
+        _allocator(other._allocator),
+        _node_allocator(other._node_allocator),
+        _end(0),
+        _size(0),
+        _comp(other._comp)
+        {
+            TNULL = _node_allocator.allocate(1);
+            TNULL->color = BLACK;
+            TNULL->left = TNULL;
+            TNULL->right = TNULL;
+            TNULL->parent = TNULL;
+            _root = TNULL;
+            create_end_node();
+            this->insert(other.begin(), other.end());
+        }
+
         ~map()
-        {}
+        {
+            clear();
+            delete_node(_end);
+            delete_node(TNULL);
+        }
 
-        // explicit map (key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type())
-		// : 
-        // _allocator(alloc),
-        // _node_allocator(alloc),
-        // _root(0),
-        // _end(0),
-        // _comp(comp)
-		// {
-		// 	create_end_node();
-		// }
+        map& operator=( const map& other )
+        {
+            if (this == &other)
+                return (*this);
+            this->clear();
+            this->insert(other.begin(), other.end());
+        }
 
-        // template< class InputIt >
-        // map( InputIt first, InputIt last,
-        // const Compare& comp = Compare(),
-        // const Allocator& alloc = Allocator() );
+        // GETTER 
+
+        allocator_type get_allocator() const
+        {
+            return this->_allocator;
+        }
+
+        // ELEMENT ACCESS
+
+        iterator find( const Key& key )
+        {
+            node_pointer tmp = _root;
+
+            while (tmp != TNULL && !is_sentinel(tmp))
+            {
+                if (_comp(key, tmp->content->first))
+                    tmp = tmp->left;
+                else if (_comp(tmp->content->first, key))
+                    tmp = tmp->right;
+                else
+                    return(iterator(tmp, _root, TNULL));
+            }
+            return iterator(_end, _root, TNULL);
+        }
+
+        const_iterator find( const Key& key ) const
+        {
+            node_pointer tmp = _root;
+            while (tmp != TNULL && !is_sentinel(tmp))
+            {
+                if (_comp(key, tmp->content->first))
+                    tmp = tmp->left;
+                else if (_comp(tmp->content->first, key))
+                    tmp = tmp->right;
+                else
+                    return(iterator(tmp, _root, TNULL));
+            }
+            return const_iterator(_end, _root, TNULL);
+        }
+
+        T& operator[]( const Key& key )
+        {
+            iterator it = this->find(key);
+            if (it == this->end())
+					it = this->insert(ft::make_pair(key, mapped_type())).first;
+            return (it->second);
+        }
 
         // CAPACITY
 
@@ -120,18 +203,177 @@ namespace ft
         size_type size() const { return _size; }
 		size_type max_size() const { return _node_allocator.max_size(); }
 
-        //explicit map( const Compare& comp, const Allocator& alloc = Allocator() );
-
-
         //MODIFIERS
 
+        void clear()
+        {
+            _clear(_root);
+        }
 
+        void _clear(node_pointer node)
+        {
+            if (node == TNULL || is_sentinel(node))
+                return;
+            if (node->left)
+                _clear(node->left);
+            if (node->right)
+                _clear(node->right);
+            delete_node(node);
+        }
 
+        void erase( iterator pos )
+        {
+            erase(pos->first);
+        }
+        void erase( iterator first, iterator last )
+        {
+            while (first != last)
+            {
+                erase(first);
+                first++;
+            }
+        }
 
-        // ft::pair<iterator, bool> insert( const value_type& value )
-        // {
-        //     insert_node(value);
-        // }
+        size_type erase( const Key& key )
+        {
+            node_pointer node_test = _root;
+            while (node_test != TNULL && !is_sentinel(node_test))
+            {
+                if (_comp(key, node_test->content->first))
+					node_test = node_test->left;
+				else if (_comp(node_test->content->first, key))
+					node_test = node_test->right;
+                else
+                {
+                    rb_delete(node_test);
+                    return (1);
+                }
+            }
+            return (0);
+        }
+
+        pair<iterator, bool> insert(const value_type& content)
+        {
+            if (_root == TNULL)
+            {
+                _root = create_node(content, TNULL);
+                _root->color = BLACK;
+                update_end_node();
+                return ft::make_pair(iterator(_root, _root, TNULL), true);
+            }
+            node_pointer tmp = _root;
+            while (tmp != TNULL)
+            {
+                if (_comp(content.first, tmp->content->first))
+                {
+                    if (tmp->left == TNULL)
+                    {
+                        tmp->left = create_node(content, tmp);
+                        rotate_colorflip(tmp->left);
+                        return ft::make_pair(iterator(tmp->left, _root, TNULL), true);
+                    }
+                    tmp = tmp->left;
+                }
+                else if (_comp(tmp->content->first, content.first))
+                {
+                    if (tmp->right == TNULL || is_sentinel(tmp->right))
+                    {
+                        tmp->right = create_node(content, tmp);
+                        rotate_colorflip(tmp->right);
+                        update_end_node();
+                        
+                        return ft::make_pair(iterator(tmp->right, NULL, NULL), true);
+                    }
+                    tmp = tmp->right;
+                }
+                else
+                    break;
+            }
+            return ft::make_pair(iterator(tmp, _root, TNULL), false);
+        }
+
+        template< class InputIt >
+        void insert( InputIt first, InputIt last )
+        {
+            while (first != last)
+            {
+                insert(*first++);
+                first++;
+            }
+        }
+
+        void swap( map& other )
+        {
+            ft::swap(_root, other.root);
+            ft::swap(TNULL, other.TNULL);
+            ft::swap(_end, other._end);
+            ft::swap(_size, other._size);
+        }
+
+        //LOOKUP
+
+        size_type count( const Key& key ) const
+        {
+            if (find(key) != this->end())
+                return (1);
+            return (0);
+        }
+
+        iterator lower_bound( const Key& key )
+        {
+            for (iterator it = begin(); it != end(); ++it) 
+            {
+			if (!this->_compare(it->first, key))
+				return it;
+		    }
+		    return end();
+        }
+
+        const_iterator lower_bound( const Key& key ) const
+        {
+
+            for (iterator it = begin(); it != end(); ++it) 
+            {
+			if (!this->_compare(it->first, key))
+				return it;
+		    }
+		    return end();
+        }
+
+        iterator upper_bound(const Key& key) 
+        {
+            for (iterator it = begin(); it != end(); ++it) 
+            {
+                if (this->_compare(key, it->first))
+                    return it;
+            }
+            return end();
+	    }
+        const_iterator upper_bound(const Key& key) const 
+        {
+            for (const_iterator it = begin(); it != end(); ++it) 
+            {
+                if (this->_compare(key, it->first))
+                    return it;
+            }
+            return end();
+	    }
+
+        std::pair<iterator,iterator> equal_range( const Key& key )
+        {
+            return ft::make_pair(lower_bound(key), upper_bound(key));
+        }
+
+        std::pair<const_iterator,const_iterator> equal_range( const Key& key ) const
+        {
+            return ft::make_pair(lower_bound(key), upper_bound(key));
+        }
+
+        //OBSERVERS
+
+        key_compare key_comp() const { return _comp; }
+		value_compare value_comp() const { return value_compare(key_compare()); };
+
 
         //ACCESSORS
 
@@ -251,52 +493,6 @@ namespace ft
     
         public:
 
-
-        pair<iterator, bool> insert(const value_type& content)
-        {
-            if (_root == TNULL)
-            {
-                _root = create_node(content, TNULL);
-                _root->color = BLACK;
-                update_end_node();
-                return ft::make_pair(iterator(_root, _root, TNULL), true);
-            }
-            node_pointer tmp = _root;
-            while (tmp != TNULL)
-            {
-                if (_comp(content.first, tmp->content->first))
-                {
-                    if (tmp->left == TNULL)
-                    {
-                        tmp->left = create_node(content, tmp);
-                        //update_end_node();
-                        //rb_insert_fixup(tmp->right);
-                        rotate_colorflip(tmp->left);
-                        //recolor_rotate(tmp->left);
-                        return ft::make_pair(iterator(tmp->left, _root, TNULL), true);
-                    }
-                    tmp = tmp->left;
-                }
-                else if (_comp(tmp->content->first, content.first))
-                {
-                    if (tmp->right == TNULL || is_sentinel(tmp->right))
-                    {
-                        tmp->right = create_node(content, tmp);
-                        //rb_insert_fixup(tmp->right);
-                        //recolor_rotate(tmp->right);
-                        rotate_colorflip(tmp->right);
-                        update_end_node();
-                        
-                        return ft::make_pair(iterator(tmp->right, NULL, NULL), true);
-                    }
-                    tmp = tmp->right;
-                }
-                else
-                    break;
-            }
-            return ft::make_pair(iterator(tmp, _root, TNULL), false);
-        }
-
         void m_rotate(node_pointer x, int side) //x = parent
         {
 
@@ -356,28 +552,6 @@ namespace ft
             _root->color = BLACK;
         }
         public:
-
-        void erase( iterator pos );
-        void erase( iterator first, iterator last );
-        size_type erase( const Key& key )
-        {
-            node_pointer node_test = _root;
-            while (node_test != TNULL && !is_sentinel(node_test))
-            {
-                if (_comp(key, node_test->content->first))
-					node_test = node_test->left;
-				else if (_comp(node_test->content->first, key))
-					node_test = node_test->right;
-                else
-                {
-                    //_end->parent->right = 0;
-                    //std::cout << "node value :" << key << std::endl;
-                    rb_delete(node_test);
-                    return (1);
-                }
-            }
-            return (0);
-        }
 
         void rb_transplant(node_pointer u, node_pointer v)
         {
@@ -515,7 +689,7 @@ namespace ft
 
         void    delete_node(node_pointer node)
         {
-            if (node->content)
+            if (node != TNULL && !is_sentinel(node))
             {
                 _allocator.destroy(node->content);
                 _allocator.deallocate(node->content, 1);
@@ -645,8 +819,66 @@ namespace ft
 			}
 			std::cout << "\033[0m" << std::endl; //back to normal
 		}
-		};
+	};
+
+    template<class K, class V, class Compare, class Alloc>
+    bool operator==(const map<K, V, Compare, Alloc>& lhs, const map<K, V, Compare, Alloc>& rhs)
+    {
+	    if (lhs.size() != rhs.size())
+		    return false;
+	    typename ft::map<K, V, Compare, Alloc>::const_iterator it = lhs.begin();
+	    for (typename ft::map<K, V, Compare, Alloc>::const_iterator jt = rhs.begin(); jt != rhs.end(); ++it, ++jt) {
+		    if (*it != *jt)
+			    return false;
+	}
+	return true;
 }
+
+    template< class Key, class T, class Compare, class Alloc >
+    bool operator!=( const ft::map<Key,T,Compare,Alloc>& lhs,
+                    const ft::map<Key,T,Compare,Alloc>& rhs )
+    {
+        return !(lhs == rhs);
+    }
+
+    template< class Key, class T, class Compare, class Alloc >
+    bool operator<( const ft::map<Key,T,Compare,Alloc>& lhs,
+                    const ft::map<Key,T,Compare,Alloc>& rhs )
+    {
+        return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+    }
+
+    template< class Key, class T, class Compare, class Alloc >
+    bool operator<=( const ft::map<Key,T,Compare,Alloc>& lhs,
+                    const ft::map<Key,T,Compare,Alloc>& rhs )
+    {
+        return !(rhs < lhs);
+    }
+            
+    template< class Key, class T, class Compare, class Alloc >
+    bool operator>( const ft::map<Key,T,Compare,Alloc>& lhs,
+                    const ft::map<Key,T,Compare,Alloc>& rhs )
+    {
+        return (rhs < lhs);
+    }
+
+    template< class Key, class T, class Compare, class Alloc >
+    bool operator>=( const ft::map<Key,T,Compare,Alloc>& lhs,
+                    const ft::map<Key,T,Compare,Alloc>& rhs )
+    {
+        return !(lhs < rhs);
+    }
+
+    template< class Key, class T, class Compare, class Alloc >
+    void swap(ft::map<Key,T,Compare,Alloc>& lhs,
+            ft::map<Key,T,Compare,Alloc>& rhs )
+    {
+        lhs.swap(rhs);
+    }
+}
+
+
+
 
 
 
